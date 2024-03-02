@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const authMiddleware = require('../middleware/authenticateUser');
 const User = require('../models/User');
+const Post = require('../models/Post');
+const Review = require('../models/Review');
+const Notification = require('../models/Notification');
 
 // User registration
 router.post('/register', async (req, res) => {
@@ -13,6 +16,7 @@ router.post('/register', async (req, res) => {
     const {
       name,
       rollNumber,
+      regNumber,
       password,
       email,
       mobileNumber,
@@ -24,7 +28,7 @@ router.post('/register', async (req, res) => {
       twelfthMarkSheet,
       cgpa,
       firstSemMarkSheet,
-      secndSemMarkSheet,
+      secondSemMarkSheet,
       thirdSemMarkSheet,
       forthSemMarkSheet,
       fifthSemMarkSheet,
@@ -47,6 +51,7 @@ router.post('/register', async (req, res) => {
     const newUser = new User({
       name,
       rollNumber,
+      regNumber,
       password: hashedPassword,
       email,
       mobileNumber,
@@ -58,13 +63,14 @@ router.post('/register', async (req, res) => {
       twelfthMarkSheet,
       cgpa,
       firstSemMarkSheet,
-      secndSemMarkSheet,
+      secondSemMarkSheet,
       thirdSemMarkSheet,
       forthSemMarkSheet,
       fifthSemMarkSheet,
       sixthSemMarkSheet,
       cv,
       stream,
+      notifications: [], // Initialize notifications array
     });
 
     // Save the new user to the database
@@ -106,13 +112,130 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Get user profile (requires authentication)
+// Forget password - Reset password with roll, name, and phone number
+router.post('/forgetPassword', async (req, res) => {
+  try {
+    const { rollNumber, name, mobileNumber,email,newPassword } = req.body;
+
+    // Check if the user with the provided details exists
+    const user = await User.findOne({ rollNumber, name, mobileNumber,email});
+
+    if (user) {
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      // Update the user's password and clear the reset OTP
+      user.password = hashedPassword;
+      await user.save();
+
+      res.status(200).json({ message: 'Password reset initiated successfully' });
+    } else {
+      res.status(404).json({ message: 'User not found with provided details' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// See posts in feed
+router.get('/seePosts', authMiddleware, async (req, res) => {
+  try {
+    // Fetch the authenticated user's stream
+    const user = await User.findById(req.user._id).select('stream');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Fetch posts that target the user's stream
+    const posts = await Post.find({ targetedStreams: user.stream }).sort({ createdAt: -1 });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+// Get notifications for the authenticated user
+router.get('/notification', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Fetch unread notifications for the user
+    const notifications = await Notification.find({ userId, read: false });
+
+    res.status(200).json(notifications);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// User profile (requires authentication)
 router.get('/profile', authMiddleware, async (req, res) => {
   try {
     // Fetch user profile data based on the authenticated user
     const userProfile = await User.findById(req.user._id).select('-password');
 
     res.status(200).json(userProfile);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Update user profile (requires authentication)
+router.put('/updateProfile', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Update user profile data based on the authenticated user
+    await User.findByIdAndUpdate(userId, { $set: req.body }, { new: true });
+
+    res.status(200).json({ message: 'User profile updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Add a comment to a post (requires authentication)
+router.post('/addComment/:postId', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const postId = req.params.postId;
+    const { content } = req.body;
+
+    // Create a new comment
+    const newComment = new Comment({ userId, postId, content });
+
+    // Save the new comment to the database
+    await newComment.save();
+
+    res.status(201).json({ message: 'Comment added successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Add a review to a post (requires authentication)
+router.post('/addReview/:postId', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const postId = req.params.postId;
+    const { content } = req.body;
+
+    // Create a new review
+    const newReview = new Review({ userId, postId, content });
+
+    // Save the new review to the database
+    await newReview.save();
+
+    res.status(201).json({ message: 'Review added successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });

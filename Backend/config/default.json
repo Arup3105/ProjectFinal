@@ -1,6 +1,6 @@
 {
     "mongoURI": "mongodb+srv://devrup31051:devrup31051%40@cluster0.x8yubfb.mongodb.net/Placement",
     "jwtSecret": "2uX3zZ5yP&g$B*D(G+KbPeShVmYq3t6w9z$C&F)J@NcRfUjXn2r5u8x/A?D(G+",
-    "adminSecretCode": "Admin@BCRAPC"
+    "adminCreatAuthCode": "Admin@BCRAPC"
   }
   
