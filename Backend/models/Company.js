@@ -8,6 +8,7 @@ const sessionSchema = new mongoose.Schema({
 const companySchema = new mongoose.Schema({
   name: String,
   sessions: [sessionSchema],
+  targetedStreams: [{ type: String }]
 });
 
 const Company = mongoose.model('Company', companySchema);

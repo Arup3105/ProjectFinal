@@ -183,6 +183,7 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
 
     const existingCompany = await Company.findOne({
       name: capitalizedCompany,
+      targetedStreams: streamsArray,
       sessions: { $elemMatch: { startYear: sessionStartYear, endYear: sessionEndYear } }
     });
 
@@ -190,6 +191,7 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
       const newCompany = new Company({
         name: capitalizedCompany,
         sessions: [{ startYear: sessionStartYear, endYear: sessionEndYear }],
+        targetedStreams: streamsArray,
       });
       await newCompany.save();
     }
