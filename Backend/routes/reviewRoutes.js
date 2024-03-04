@@ -5,33 +5,41 @@ const authMiddleware = require('../middleware/authenticateUser');
 const Review = require('../models/Review');
 
 // Create a new review
-router.post('/create', authMiddleware, async (req, res) => {
+router.post('/addreview', authMiddleware, async (req, res) => {
   try {
     const { postId, content } = req.body;
 
+    // Ensure the req.user object contains the username property
+    if (!req.user || !req.user.username) {
+      return res.status(401).json({ message: 'Invalid user information' });
+    }
+
+    // Get the username from the authenticated user
+    const username = req.user.username;
+
     // Create a new review
     const newReview = new Review({
+      username,
       postId,
       content,
-      userId: req.user._id, // Assuming you have user information in the request after authentication
-      // Add other fields as needed
     });
 
     // Save the review to the database
     await newReview.save();
 
-    res.status(201).json({ message: 'Review created successfully' });
+    res.status(201).json({ message: 'Review added successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
+
 // Get all reviews (for admin approval)
-router.get('/all', async (req, res) => {
+router.get('/all',authMiddleware, async (req, res) => {
   try {
     // Retrieve all reviews from the database
-    const allReviews = await Review.find();
+    const allReviews = await Review.find({ approved: true });
 
     res.status(200).json(allReviews);
   } catch (error) {

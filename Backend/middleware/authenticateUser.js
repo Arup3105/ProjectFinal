@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/default.json'); // Change path if needed
+const config = require('../config/default.json');
 const User = require('../models/User');
 
 const authenticateUser = async (req, res, next) => {
@@ -12,11 +12,18 @@ const authenticateUser = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, config.jwtSecret);
 
-    req.user = await User.findById(decoded.userId);
+    console.log('Decoded Token:', decoded,); // Log the decoded token to check its contents
 
-    if (!req.user) {
-      return res.status(401).json({ message: 'Invalid token, user not found' });
+    // Ensure that decoded token contains userId and username
+    if (!decoded.userId || !decoded.username) {
+      return res.status(401).json({ message: 'Invalid token, user information missing' });
     }
+
+    // Set the req.user object with decoded information
+    req.user = {
+      _id: decoded.userId,
+      username: decoded.username,
+    };
 
     next();
   } catch (error) {

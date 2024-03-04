@@ -139,24 +139,7 @@ router.post('/forgetPassword', async (req, res) => {
 });
 
 // See posts in feed
-router.get('/seePosts', authMiddleware, async (req, res) => {
-  try {
-    // Fetch the authenticated user's stream
-    const user = await User.findById(req.user._id).select('stream');
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Fetch posts that target the user's stream
-    const posts = await Post.find({ targetedStreams: user.stream }).sort({ createdAt: -1 });
-
-    res.status(200).json(posts);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
 
 
 // Get notifications for the authenticated user
@@ -236,6 +219,21 @@ router.post('/addReview/:postId', authMiddleware, async (req, res) => {
     await newReview.save();
 
     res.status(201).json({ message: 'Review added successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.get('/notifications', authMiddleware, async (req, res) => {
+  try {
+    // Fetch the authenticated user's notifications
+    const userId = req.user._id;
+
+    // Fetch notifications for the user
+    const userNotifications = await Notification.find({ userId }).sort({ createdAt: -1 });
+
+    res.status(200).json(userNotifications);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
