@@ -1,28 +1,34 @@
-import React from "react";
-import "./login.css";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import '../Components/login.css';
+import ApiService from '../Components/ApiServer/ApiServer.jsx';
 
 const Login = () => {
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const [rollNumber, setRollNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate(); // Corrected hook
 
-    const username = event.target.username.value;
-    const password = event.target.password.value;
-
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-      const response = await fetch("http://your-backend-url/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-      console.log(data); // Handle the response accordingly (e.g., store token, redirect, etc.)
+      // Make a request to the server to authenticate the user
+      const response = await ApiService.login({ rollNumber, password });
+  
+      // Check if the response has a token
+      if (response.token) {
+        // Handle successful login
+        console.log('Login successful:', response);
+  
+        // Redirect the user to the home page or another page after login
+        navigate('/feed'); // Use navigate instead of history
+      }
     } catch (error) {
-      console.error("Error during login:", error);
-    }
+
+      console.log("this is the response",error.message)
+          setError(error.message);
+      }
+    
   };
 
   return (
@@ -31,43 +37,54 @@ const Login = () => {
         <div className="logo">
           <div className="spinner"></div>Logo
         </div>
-        <Link to="register" className="navbtn">
-          SignUp
+        <Link to='Admin' className="navbtn">
+          Admin Login
         </Link>
       </nav>
       <main>
         <div className="container">
           <div className="left">
-            <div className="imagecontainer">
+            <div className="login-imagecontainer">
               <div className="overlay">
                 <h2>Welcome Back</h2>
                 <p>
-                  Lorem ipsum dolor sit amet,Lorem, ipsum dolor sit <br /> amet
+                  Lorem ipsum dolor sit amet, Lorem, ipsum dolor sit <br /> amet
                   consectetur adipisicing elit. Quae, id!
                 </p>
               </div>
             </div>
           </div>
           <div className="form">
-            <form action="#">
+            <form onSubmit={handleLogin}>
               <h2>Login Here</h2>
-              <div className="formstyle">
-                <div className="username">
-                  <label htmlFor="username">Username</label>
-                  <input type="text" placeholder="Enter your username here" />
+              <div className="login-formstyle">
+                <div className="rollNumber">
+                  <label htmlFor="rollNumber">Roll Number</label>
+                  <input
+                    type="number" 
+                    placeholder='Enter your Roll Number here'
+                    value={rollNumber}
+                    onChange={(e) => setRollNumber(e.target.value)}
+                  />
                 </div>
                 <div className="password">
                   <label htmlFor="password">Password</label>
-                  <input type="password" placeholder="Enter Password" />
+                  <input
+                    type="password"
+                    placeholder='Enter Password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </div>
-                <a href="#" className="fpassword">
+                <a href="#" className='fpassword'>
                   Forgot Password?
-                </a>{" "}
+                </a>{' '}
                 <br />
-                <button>Login</button> <br />
+                <button type="submit">Login</button> <br />
+                {error && <p style={{ color: 'red' }}>{error}</p>}
                 <p>
-                  Don't have a account{" "}
-                  <Link to="register" className="signin">
+                  Don't have an account{' '}
+                  <Link to='register' className='signin'>
                     Register
                   </Link>
                 </p>

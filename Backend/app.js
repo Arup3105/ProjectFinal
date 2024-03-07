@@ -3,16 +3,27 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const {mongoURI}= require("./config/default.json")
 
 const app = express();
 const PORT = 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests from the same host
+    if (!origin || origin === 'http://localhost:5173') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
 app.use(bodyParser.json());
 
 // MongoDB Connection
-const mongoURI = 'mongodb+srv://devrup31051:devrup31051%40@cluster0.x8yubfb.mongodb.net/Placement';
+const mongourl = mongoURI;
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const connection = mongoose.connection;

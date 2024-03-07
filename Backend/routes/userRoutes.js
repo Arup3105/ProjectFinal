@@ -90,7 +90,7 @@ router.post('/login', async (req, res) => {
 
     // Fetch user credentials from the database based on the rollNumber
     const user = await User.findOne({ rollNumber });
-
+    
     if (user) {
       // Compare the provided password with the hashed password stored in the database
       const passwordMatch = await bcrypt.compare(password, user.password);
@@ -98,7 +98,7 @@ router.post('/login', async (req, res) => {
       if (passwordMatch) {
         // Generate a JWT token for authentication
         const token = jwt.sign({ userId: user._id }, config.get('jwtSecret'), { expiresIn: '1h' });
-
+        
         res.status(200).json({ message: 'User login successful', token });
       } else {
         res.status(401).json({ message: 'Invalid credentials' });

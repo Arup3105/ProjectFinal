@@ -62,7 +62,7 @@ main {
     border: .2px solid #fff;
 }
 
-.imagecontainer {
+.login-imagecontainer {
     position: relative;
     width: 100%;
     height: 100%;
@@ -97,8 +97,8 @@ form h2 {
     font-weight: bolder;
 }
 
-.formstyle {
-    padding: 50px 60px;
+.login-formstyle {
+    padding: 40px 60px;
 
 }
 
