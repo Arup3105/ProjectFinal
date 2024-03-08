@@ -151,6 +151,10 @@ a {
     font-size: 20px;
 }
 
+.form a:nth-child(1){
+    color: black;
+}
+
 .signin {
     margin-left: 5px;
 }

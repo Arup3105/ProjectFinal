@@ -36,7 +36,7 @@ const Register = () => {
                                     <label htmlFor="password">Confirm Password</label>
                                     <input type="password" placeholder='Confirm Password' />
                                 </div>
-                                <button className='register-btn'>Register</button> <br />
+                                <button>Register</button> <br />
                                 <p>Already have a account <Link to='/' className='signin'>Login</Link></p>
                             </div>
                         </form>

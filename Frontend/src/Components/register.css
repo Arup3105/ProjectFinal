@@ -45,7 +45,7 @@ nav .navbtn:hover{
 }
 
 main {
-    position: relative;
+    /* position: relative; */
     width: 100%;
     height: 100vh;
     background: linear-gradient(180deg, #211c7e, #12ac9f);
@@ -53,6 +53,8 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    z-index: -3;
 }
 
 .container {
@@ -98,7 +100,8 @@ form h2 {
 }
 
 .formstyle {
-    padding: 40px 60px;
+    padding: 10px 60px;
+
 
 }
 
@@ -131,14 +134,7 @@ input::placeholder {
     color: #fff;
 }
 
-.register-btn {
-    border: none;
-    padding: 10px 210px;
-    margin-top: 35px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    border-radius: 20px;
-}
+
 
 
 .form p,
