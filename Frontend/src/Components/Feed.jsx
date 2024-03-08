@@ -3,7 +3,6 @@ import '../Components/Feed.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ApiService from '../Components/ApiServer/ApiServer.jsx';
 
-
 const Feed = () => {
   const [years, setYears] = useState([]);
   const navigate = useNavigate();
@@ -30,7 +29,8 @@ const Feed = () => {
     <div>
       <div className="feed">
         {years.map((year, index) => (
-          <Link to={`/${year.startYear}-${year.endYear}`} key={index}>
+          <Link to={`/seeCompany/${year.startYear}/${year.endYear}`} key={index}>
+            {/* Update the link to navigate to the new endpoint */}
             <div className="card">
               <h4>{`${year.startYear}-${year.endYear}`}</h4>
             </div>

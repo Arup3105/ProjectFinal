@@ -97,7 +97,16 @@ router.post('/login', async (req, res) => {
 
       if (passwordMatch) {
         // Generate a JWT token for authentication
-        const token = jwt.sign({ userId: user._id }, config.get('jwtSecret'), { expiresIn: '1h' });
+        const token = jwt.sign(
+          {
+            userId: user._id,
+            username: user.name,
+            rollNumber: user.rollNumber,
+          },
+          config.get('jwtSecret'),
+          { expiresIn: '1d' }
+        );
+
         
         res.status(200).json({ message: 'User login successful', token });
       } else {

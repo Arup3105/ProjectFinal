@@ -91,7 +91,7 @@ router.get('/seeCompany/:startYear/:endYear', authMiddleware, async (req, res) =
       targetedStreams: userStream
     });
 
-    // Extract only the relevant details from each matching company
+    // Extract company details with sessions
     const companyDetails = matchingCompanies.map(company => ({
       _id: company._id,
       name: company.name,
@@ -108,6 +108,7 @@ router.get('/seeCompany/:startYear/:endYear', authMiddleware, async (req, res) =
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 router.get('/postsByCompany/:companyName/:startYear/:endYear', authMiddleware, async (req, res) => {
   try {

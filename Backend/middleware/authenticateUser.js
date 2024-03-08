@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'); // Add this line to import the jwt module
 const config = require('../config/default.json');
 const User = require('../models/User');
 
@@ -14,19 +14,17 @@ const authenticateUser = async (req, res, next) => {
   try {
     const decoded = jwt.verify(actualToken, config.jwtSecret);
 
-    console.log('Decoded Token:', decoded,); // Log the decoded token to check its contents
-
     // Fetch user from database using decoded userId
     const user = await User.findById(decoded.userId);
 
     if (!user) {
       return res.status(401).json({ message: 'User not found for the provided token' });
     }
-
     // Set the req.user object with decoded information
     req.user = {
       _id: decoded.userId,
-      username: decoded.username,
+      username: user.name,
+      stream: user.stream,
     };
 
     next();

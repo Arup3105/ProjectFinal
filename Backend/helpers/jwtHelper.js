@@ -6,7 +6,7 @@ const JWT_SECRET_KEY = config.get('jwtSecret');
 
 // Generate a JWT for a given payload
 const generateToken = (payload) => {
-  return jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '1h' });
+  return jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '1d' });
 };
 
 // Verify and decode a JWT
