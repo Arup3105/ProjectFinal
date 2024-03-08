@@ -21,6 +21,28 @@ const ApiService = {
       throw error.response.data;
     }
   },
+
+  ShortByYear: async () => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+
+      if (!token) {
+        throw { message: 'No token, authorization denied' };
+      }
+
+      const response = await axios.get(`${ApiService.baseURL}/posts/shortByYear`, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      throw error.response.data;
+    }
+  },
 };
 
 export default ApiService;

@@ -18,8 +18,8 @@ const Login = () => {
       // Check if the response has a token
       if (response.token) {
         // Handle successful login
-        console.log('Login successful:', response);
-  
+        //console.log('Login successful:', response);
+        localStorage.setItem('jwtToken', response.token);
         // Redirect the user to the home page or another page after login
         navigate('/feed'); // Use navigate instead of history
       }
