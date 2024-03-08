@@ -7,11 +7,13 @@ import Admin from './Components/Admin';
 import SeeCompany from './Components/SeeCompany';
 import PostsByCompany from './Components/PostByCompany'
 import { Route, Routes } from 'react-router-dom';
+import NavBar from './Components/NavBar';
 
 
 const App = () => {
   return (
     <div>
+      <NavBar/>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="register" element={<Register />} />
