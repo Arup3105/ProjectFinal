@@ -1,7 +1,7 @@
 // PostsByCompany.jsx
-import React, { useEffect, useState } from 'react';
-import ApiService from '../Components/ApiServer/ApiServer.jsx';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import ApiService from "../Components/ApiServer/ApiServer.jsx";
+import { useParams } from "react-router-dom";
 
 const PostsByCompany = () => {
   const { companyName, startYear, endYear } = useParams();
@@ -12,14 +12,14 @@ const PostsByCompany = () => {
   useEffect(() => {
     // Fetch posts for the selected company based on companyName, startYear, and endYear
     ApiService.getPostsByCompany(companyName, startYear, endYear)
-      .then(data => {
+      .then((data) => {
         // Reverse the order of posts
         setPosts(data.reverse());
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle errors
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
         setError(error);
         setLoading(false);
       });
@@ -41,6 +41,17 @@ const PostsByCompany = () => {
           <h4>{post.title}</h4>
           <p>{post.content}</p>
           <img src={post.imageUrl} alt={post.title} />
+          <p>
+            Created at:{" "}
+            {new Date(post.createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
+
           {/* Add more details as needed */}
         </div>
       ))}
