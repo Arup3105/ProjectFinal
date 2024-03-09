@@ -8,12 +8,16 @@ import SeeCompany from './Components/SeeCompany';
 import PostsByCompany from './Components/PostByCompany'
 import { Route, Routes } from 'react-router-dom';
 import NavBar from './Components/NavBar';
+import AdminRegister from './Components/AdminRegister';
+// import AdminPostCreation from './Components/AdminPostCreation';
 
 
 const App = () => {
   return (
     <div>
       <NavBar/>
+      {/* <AdminPostCreation/> */}
+      {/* <AdminRegister/> */}
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="register" element={<Register />} />

@@ -16,6 +16,10 @@ const NavBar = () => {
           <span></span>
           <span></span>
         </div>
+        <div className="search">
+          <input type="search" placeholder='Search here'/>
+          {/* <div className="searchbtn"><button>Search</button></div> */}
+        </div>
         <ul className={menuopen ? "open" : ""}>
             <li><Link to='/'>Home</Link></li>
             <li><NavLink to='/about'>About</NavLink></li>

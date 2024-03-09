@@ -40,6 +40,16 @@ nav .menu span {
     border-radius: 0.2rem;
 }
 
+.search input{
+    border: 1px solid white;
+    border-radius: 15px;
+
+}
+
+.search input::placeholder{
+    color: #fff;
+}
+
 @media (max-width: 500px) {
     nav .menu {
         display: flex;
