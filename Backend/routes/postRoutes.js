@@ -1,7 +1,7 @@
 // routes/postRoutes.js
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/authenticateUser');
+const authMiddleware = require('../middleware/authenticate');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const Company = require('../models/Company')
@@ -78,6 +78,7 @@ router.get('/shortByYear', authMiddleware, async (req, res) => {
   }
 });
 
+
 router.get('/seeCompany/:startYear/:endYear', authMiddleware, async (req, res) => {
   try {
     const { startYear, endYear } = req.params;
@@ -85,16 +86,20 @@ router.get('/seeCompany/:startYear/:endYear', authMiddleware, async (req, res) =
     // Fetch the user's stream
     const userStream = req.user.stream;
 
+    // Check if the request comes from an admin (no stream property)
+    const isAdminRequest = !req.user.stream;
+
     // Fetch companies that match the specified startYear and endYear
     const matchingCompanies = await Company.find({
       sessions: { $elemMatch: { startYear: parseInt(startYear), endYear: parseInt(endYear) } },
-      targetedStreams: userStream
+      ...(isAdminRequest ? {} : { targetedStreams: userStream })
     });
 
     // Extract company details with sessions
     const companyDetails = matchingCompanies.map(company => ({
       _id: company._id,
       name: company.name,
+      targetedStreams: company.targetedStreams,
       sessions: company.sessions.filter(session =>
         session.startYear === parseInt(startYear) && session.endYear === parseInt(endYear)
       ),

@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
     try {
       // Make a request to the server to authenticate the user
-      const response = await ApiService.login({ rollNumber, password });
+      const response = await ApiService.userLogin({ rollNumber, password });
   
       // Check if the response has a token
       if (response.token) {

@@ -5,7 +5,7 @@ const ApiService = {
   baseURL: "http://localhost:5000",
 
   // Function to perform login
-  login: async (credentials) => {
+  userLogin: async (credentials) => {
     try {
       const response = await axios.post(
         `${ApiService.baseURL}/user/login`,
@@ -95,6 +95,19 @@ const ApiService = {
     }
   },
 
+  adminLogin: async (employeeId, password, secretCode) => {
+    try {
+      const response = await axios.post(
+        `${ApiService.baseURL}/admin/login`,
+        { employeeId, password, secretCode },
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error during admin login:', error);
+      throw error;
+    }
+  },
 
 };
 

@@ -11,7 +11,7 @@ const Review = require('../models/Review');
 const Company = require('../models/Company');
 const config = require('config');
 
-const authenticateAdmin = require('../middleware/authenticateAdmin');
+const authenticateAdmin = require('../middleware/authenticate');
 
 // Secret code for admin creation
 const AUTH_CODE = config.get('adminCreatAuthCode'); // Replace with your actual secret code

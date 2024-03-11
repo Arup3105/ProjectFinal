@@ -11,7 +11,7 @@ const PostsByCompany = () => {
 
   useEffect(() => {
     // Fetch posts for the selected company based on companyName, startYear, and endYear
-    ApiService.getPostsByCompany(companyName, startYear, endYear)
+    ApiService.getPostsByCompany(companyName, startYear, endYear,targetedStreams)
       .then((data) => {
         // Reverse the order of posts
         setPosts(data.reverse());
