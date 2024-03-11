@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import '../Components/NavBar.css'
+import { CiSearch } from "react-icons/ci";
 
 const NavBar = () => {
  const [menuopen,setMenuopen] = useState(false);
@@ -18,7 +19,7 @@ const NavBar = () => {
         </div>
         <div className="search">
           <input type="search" placeholder='Search here'/>
-          {/* <div className="searchbtn"><button>Search</button></div> */}
+          <CiSearch color='white' fontSize="4.5rem"/>
         </div>
         <ul className={menuopen ? "open" : ""}>
             <li><Link to='/'>Home</Link></li>

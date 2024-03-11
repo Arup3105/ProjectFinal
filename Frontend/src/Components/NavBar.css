@@ -50,6 +50,11 @@ nav .menu span {
     color: #fff;
 }
 
+.search{
+    display: flex;
+    gap: 8px;
+}
+
 @media (max-width: 500px) {
     nav .menu {
         display: flex;
