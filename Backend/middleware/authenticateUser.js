@@ -25,6 +25,7 @@ const authenticateUser = async (req, res, next) => {
       _id: decoded.userId,
       username: user.name,
       stream: user.stream,
+      userRole: 'user',
     };
 
     next();

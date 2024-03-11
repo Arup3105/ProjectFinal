@@ -9,7 +9,9 @@ const NavBar = () => {
   return (
     <div>
       <nav>
-        <div className="logo">Logo</div>
+        <div className="logo">
+        <div className="spinner"></div>Logo
+        </div>
         <div className="menu" onClick={()=>{
           setMenuopen(!menuopen);
         }}>
@@ -21,6 +23,9 @@ const NavBar = () => {
           <input type="search" placeholder='Search here'/>
           <CiSearch color='white' fontSize="4.5rem"/>
         </div>
+        <Link to='Admin' className="navbtn">
+          Admin
+        </Link>
         <ul className={menuopen ? "open" : ""}>
             <li><Link to='/'>Home</Link></li>
             <li><NavLink to='/about'>About</NavLink></li>

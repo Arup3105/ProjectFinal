@@ -33,14 +33,14 @@ const Login = () => {
 
   return (
     <div>
-      <nav>
-        <div className="logo">
+      {/*<nav>
+         <div className="logo">
           <div className="spinner"></div>Logo
         </div>
         <Link to='Admin' className="navbtn">
-          Admin Login
+          Admin
         </Link>
-      </nav>
+      </nav> */}
       <main>
         <div className="container">
           <div className="left">

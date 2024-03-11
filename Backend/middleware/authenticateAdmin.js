@@ -21,6 +21,11 @@ const authenticateAdmin = async (req, res, next) => {
     if (!req.admin) {
       return res.status(401).json({ message: 'Invalid token, admin not found' });
     }
+    req.user = {
+      _id: decoded.userId,
+      username: user.name,
+      userRole: 'admin',
+    };
 
     next();
   } catch (error) {
