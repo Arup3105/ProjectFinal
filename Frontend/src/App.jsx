@@ -23,7 +23,7 @@ const App = () => {
         <Route path="register" element={<Register />} />
         <Route path="feed" element={<Feed />} />
         <Route path="seeCompany/:startYear/:endYear" element={<SeeCompany />} />
-        <Route path="/postsByCompany/:companyName/:startYear/:endYear" element={<PostsByCompany />} />
+        <Route path="/postsByCompany/:companyName/:startYear/:endYear/:targetedStreams" element={<PostsByCompany />} />
         <Route path="admin" element={<Admin />} />
       </Routes>
     </div>

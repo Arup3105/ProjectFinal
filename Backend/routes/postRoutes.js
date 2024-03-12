@@ -115,22 +115,25 @@ router.get('/seeCompany/:startYear/:endYear', authMiddleware, async (req, res) =
 });
 
 
-router.get('/postsByCompany/:companyName/:startYear/:endYear', authMiddleware, async (req, res) => {
+router.get('/postsByCompany/:companyName/:startYear/:endYear/:targetedStreams', authMiddleware, async (req, res) => {
   try {
-    const { companyName, startYear, endYear } = req.params;
+    const { companyName, startYear, endYear, targetedStreams } = req.params;
 
     const userStream = req.user.stream;
 
-    // Fetch posts that match the specified company and session
+    // Split the targetedStreams into an array
+    const targetedStreamsArray = targetedStreams.split(',');
+
+    // Fetch posts that match the specified company, session, and targeted streams
     const posts = await Post.find({
       company: companyName,
       'session.startYear': parseInt(startYear),
       'session.endYear': parseInt(endYear),
-      targetedStreams: userStream
+      targetedStreams: { $in: targetedStreamsArray }
     }).sort({ createdAt: -1 });
 
     if (posts.length === 0) {
-      return res.status(404).json({ message: 'No posts found for the specified company and session' });
+      return res.json({ message: 'No posts found for the specified company and session' });
     }
 
     res.status(200).json(posts);
@@ -139,6 +142,7 @@ router.get('/postsByCompany/:companyName/:startYear/:endYear', authMiddleware, a
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 
 module.exports = router;

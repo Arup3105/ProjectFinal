@@ -76,11 +76,11 @@ const ApiService = {
     }
   },
 
-  getPostsByCompany: async (companyName, startYear, endYear, token) => {
+  getPostsByCompany: async (companyName, startYear, endYear, targetedStreams) => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await axios.get(
-        `${ApiService.baseURL}/posts/postsByCompany/${companyName}/${startYear}/${endYear}`,
+        `${ApiService.baseURL}/posts/postsByCompany/${companyName}/${startYear}/${endYear}/${targetedStreams}`,
         {
           withCredentials: true,
           headers: {
