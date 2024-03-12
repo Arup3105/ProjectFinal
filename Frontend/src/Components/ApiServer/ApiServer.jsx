@@ -109,6 +109,15 @@ const ApiService = {
     }
   },
 
+  fetchUserRole: async () => {
+    try {
+      const response = await axios.get(`${ApiService.baseURL}/user/role`);
+      return response.data.role;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
+
 
 export default ApiService;

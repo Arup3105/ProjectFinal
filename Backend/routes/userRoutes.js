@@ -249,4 +249,5 @@ router.get('/notifications', authMiddleware, async (req, res) => {
   }
 });
 
+
 module.exports = router;

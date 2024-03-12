@@ -19,7 +19,7 @@ const AUTH_CODE = config.get('adminCreatAuthCode'); // Replace with your actual 
 // Admin login
 router.post('/login', async (req, res) => {
   try {
-    const { employeeId, password} = req.body;
+    const { employeeId, password,secretCode} = req.body;
 
     // Fetch admin credentials from the database based on the username
     const admin = await Admin.findOne({ employeeId });
@@ -27,12 +27,13 @@ router.post('/login', async (req, res) => {
     if (admin) {
       // Compare the provided password with the hashed password stored in the database
       const passwordMatch = await bcrypt.compare(password, admin.password);
+      const secretCodeMatch = secretCode === admin.secretCode;
 
-      if (passwordMatch) {
+      if (passwordMatch && secretCodeMatch) {
         // Redirect to admin dashboard if both credentials match
         const isAdmin = true;
         const token = jwt.sign({ adminId: admin._id }, config.get('jwtSecret'), { expiresIn: '1h' });
-        res.status(200).json({ message: 'Admin login successful', token , redirect: '/admin/dashboard' });
+        res.status(200).json({ message: 'Admin login successful', token ,isAdmin, redirect: '/admin/dashboard' });
       } else {
         // Redirect to user dashboard if credentials don't match
         res.status(401).json({ message: 'Invalid credentials', redirect: '/user/dashboard' });
@@ -374,6 +375,5 @@ router.delete('/deleteComment/:commentId', authenticateAdmin, async (req, res) =
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
 
 module.exports = router;

@@ -7,6 +7,7 @@ const NavBar = ({ isAdmin }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
 
+  const isRestrictedPage = location.pathname === '/' || location.pathname === '/register' || location.pathname === '/admin' || location.pathname === '/createadmin';
 
   return (
     <div>
@@ -20,8 +21,8 @@ const NavBar = ({ isAdmin }) => {
           <span></span>
         </div>
 
-        {/* Conditionally render search bar for admin and not on the login page */}
-        {isAdmin && location.pathname !== '/' && (
+        {/* Conditionally render search bar for admin and not on restricted pages */}
+        {isAdmin && !isRestrictedPage && (
           <div className="search">
             <input type="search" placeholder="Search here" />
             <CiSearch color="white" fontSize="4.5rem" />

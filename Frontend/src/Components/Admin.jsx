@@ -8,6 +8,7 @@ const Admin = () => {
   const [employeeId, setEmployeeId] = useState('');
   const [password, setPassword] = useState('');
   const [secretCode, setSecretCode] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = async () => {
     try {
@@ -17,18 +18,23 @@ const Admin = () => {
       // Check if login was successful
       if (response && response.token) {
         // Store the JWT token in localStorage
+        localStorage.clear();
         localStorage.setItem('jwtToken', response.token);
-        //console.log(response.token)
+        localStorage.setItem('isAdmin', response.isAdmin);
 
         // Redirect to the feed page on successful login
         navigate('/feed');
-      } else {
-        // Handle unsuccessful login (show error message, etc.)
-        console.error('Login failed:', response.message);
       }
     } catch (error) {
-      // Handle any unexpected errors
-      console.error('Error during login:', error);
+      // Handle login errors
+      if (error.response && error.response.status === 401) {
+        // Handle invalid credentials
+        setErrorMessage('Invalid credentials');
+      } else {
+        // Handle other errors
+        console.error('Error during login:', error);
+        setErrorMessage('An unexpected error occurred');
+      }
     }
   };
 
@@ -37,6 +43,7 @@ const Admin = () => {
       <div className="form">
         <div className="admin">
           <div className="admin-formstyle">
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             <div className="Employee ID">
               <input
                 type="text"
