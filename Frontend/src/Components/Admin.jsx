@@ -18,7 +18,7 @@ const Admin = () => {
       if (response && response.token) {
         // Store the JWT token in localStorage
         localStorage.setItem('jwtToken', response.token);
-        console.log(response.token)
+        //console.log(response.token)
 
         // Redirect to the feed page on successful login
         navigate('/feed');

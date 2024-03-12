@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
 import '../Components/NavBar.css';
 
 const NavBar = ({ isAdmin }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+
 
   return (
     <div>
@@ -17,18 +19,22 @@ const NavBar = ({ isAdmin }) => {
           <span></span>
           <span></span>
         </div>
-        
-        {/* Conditionally render search bar for admin */}
-        {isAdmin && (
+
+        {/* Conditionally render search bar for admin and not on the login page */}
+        {isAdmin && location.pathname !== '/' && (
           <div className="search">
             <input type="search" placeholder="Search here" />
             <CiSearch color="white" fontSize="4.5rem" />
           </div>
         )}
 
-        <Link to="Admin" className="navbtn">
-          Admin
-        </Link>
+        {/* Conditionally render Admin button based on location */}
+        {location.pathname === '/' && (
+          <Link to="/admin" className="navbtn">
+            Admin
+          </Link>
+        )}
+
         <ul className={menuOpen ? 'open' : ''}>
           <li>
             <Link to="/">Home</Link>

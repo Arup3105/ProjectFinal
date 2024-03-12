@@ -30,6 +30,7 @@ router.post('/login', async (req, res) => {
 
       if (passwordMatch) {
         // Redirect to admin dashboard if both credentials match
+        const isAdmin = true;
         const token = jwt.sign({ adminId: admin._id }, config.get('jwtSecret'), { expiresIn: '1h' });
         res.status(200).json({ message: 'Admin login successful', token , redirect: '/admin/dashboard' });
       } else {

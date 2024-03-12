@@ -16,8 +16,6 @@ const App = () => {
   return (
     <div>
       <NavBar/>
-      {/* <AdminPostCreation/> */}
-      {/* <AdminRegister/> */}
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="register" element={<Register />} />
