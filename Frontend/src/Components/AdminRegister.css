@@ -1,0 +1,15 @@
+.admin-reg{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(180deg, #211c7e, #12ac9f);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-regbtn{
+    display: flex;
+    justify-content: center;
+}

@@ -47,7 +47,7 @@ nav .navbtn:hover{
 main {
     /* position: relative; */
     width: 100%;
-    height: 100vh;
+    height: 200vh;
     background: linear-gradient(180deg, #211c7e, #12ac9f);
     overflow: hidden;
     display: flex;
@@ -147,4 +147,49 @@ a {
 
 .signin {
     margin-left: 5px;
+}
+
+.numbers{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.contact{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.tenth{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.twelve{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.sem-marks{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 15px;
+    row-gap: 20px;
+}
+
+.password{
+    margin-top: 20px;
+}
+
+.reg-btn{
+    padding: 10px 300px;
+    display: flex;
+    justify-content: center;
 }

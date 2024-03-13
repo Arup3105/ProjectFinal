@@ -41,7 +41,7 @@ const Login = () => {
           Admin
         </Link>
       </nav> */}
-      <main>
+      <main className='log-main'>
         <div className="container">
           <div className="left">
             <div className="login-imagecontainer">

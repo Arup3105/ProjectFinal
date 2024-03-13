@@ -60,3 +60,8 @@ button::before{
 button:hover::before{
     height: 180%;
 }
+
+.admin-btn{
+    display: flex;
+    justify-content: center;
+}

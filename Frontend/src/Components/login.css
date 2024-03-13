@@ -44,7 +44,7 @@ nav .navbtn:hover{
     background-color: #12ac9f;
 }
 
-main {
+.log-main {
     position: relative;
     width: 100%;
     height: 100vh;

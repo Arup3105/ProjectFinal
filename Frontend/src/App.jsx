@@ -27,6 +27,7 @@ const App = () => {
   return (
     <div>
       <NavBar isAdmin={isAdmin} />
+      {/* <AdminRegister/> */}
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="register" element={<Register />} />

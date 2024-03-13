@@ -68,9 +68,11 @@ const Admin = () => {
                 onChange={(e) => setSecretCode(e.target.value)}
               />
             </div>
-            <button className='adminbtn' onClick={handleLogin}>
+            <div className="admin-btn">
+            <button onClick={handleLogin}>
               Login
             </button>
+            </div>
           </div>
         </div>
       </div>
