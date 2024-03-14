@@ -143,8 +143,7 @@ const ApiService = {
   
       return response.data;
     } catch (error) {
-      console.error('Error during registration:', error);
-      throw new Error(error.response.data.message || 'Failed to register user');
+      throw new Error(error.response.data.message);
     }
   },
   

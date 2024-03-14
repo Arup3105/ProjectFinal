@@ -106,11 +106,8 @@ const Register = () => {
         setError("Token not received from the server");
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        setError(error.response.data.message);
-      } else {
-        setError("Failed to register user");
-      }
+      console.error(error);
+      setError(error.message);
     }
   };
 
@@ -316,7 +313,7 @@ const Register = () => {
                     <label htmlFor="tenthMarkSheet">10th Marksheet</label>
                     <input
                       type="file"
-                      accept="image/*, .pdf"
+                      accept="image/*,"
                       onChange={(e) => setTenthMarkSheet(e.target.files[0])}
                       id="tenthMarkSheet"
                       name="tenthMarkSheet"
@@ -339,7 +336,7 @@ const Register = () => {
                     <label htmlFor="twelfthMarkSheet">12th Marksheet</label>
                     <input
                       type="file"
-                      accept="image/*, .pdf"
+                      accept="image/*"
                       onChange={(e) => setTwelfthMarkSheet(e.target.files[0])}
                       id="twelfthMarkSheet"
                       name="twelfthMarkSheet"
@@ -351,7 +348,7 @@ const Register = () => {
                     <label htmlFor="firstSemMarkSheet">First Sem Marksheet</label>
                     <input
                       type="file"
-                      accept="image/*, .pdf"
+                      accept="image/*"
                       onChange={(e) => setFirstSemMarkSheet(e.target.files[0])}
                       id="firstSemMarkSheet"
                       name="firstSemMarkSheet"
@@ -361,7 +358,7 @@ const Register = () => {
                     <label htmlFor="secondSemMarkSheet">Second Sem Marksheet</label>
                     <input
                       type="file"
-                      accept="image/*, .pdf"
+                      accept="image/*"
                       onChange={(e) => setSecondSemMarkSheet(e.target.files[0])}
                       id="secondSemMarkSheet"
                       name="secondSemMarkSheet"
@@ -371,7 +368,7 @@ const Register = () => {
                     <label htmlFor="thirdSemMarkSheet">Third Sem Marksheet</label>
                     <input
                       type="file"
-                      accept="image/*, .pdf"
+                      accept="image/*"
                       onChange={(e) => setThirdSemMarkSheet(e.target.files[0])}
                       id="thirdSemMarkSheet"
                       name="thirdSemMarkSheet"
@@ -381,7 +378,7 @@ const Register = () => {
                     <label htmlFor="fourthSemMarkSheet">Fourth Sem Marksheet</label>
                     <input
                       type="file"
-                      accept="image/*, .pdf"
+                      accept="image/*"
                       onChange={(e) => setFourthSemMarkSheet(e.target.files[0])}
                       id="fourthSemMarkSheet"
                       name="fourthSemMarkSheet"
@@ -391,7 +388,7 @@ const Register = () => {
                     <label htmlFor="fifthSemMarkSheet">Fifth Sem Marksheet</label>
                     <input
                       type="file"
-                      accept="image/*, .pdf"
+                      accept="image/*"
                       onChange={(e) => setFifthSemMarkSheet(e.target.files[0])}
                       id="fifthSemMarkSheet"
                       name="fifthSemMarkSheet"
@@ -401,7 +398,7 @@ const Register = () => {
                     <label htmlFor="sixthSemMarkSheet">Sixth Sem Marksheet</label>
                     <input
                       type="file"
-                      accept="image/*, .pdf"
+                      accept="image/*"
                       onChange={(e) => setSixthSemMarkSheet(e.target.files[0])}
                       id="sixthSemMarkSheet"
                       name="sixthSemMarkSheet"
