@@ -101,7 +101,7 @@ const Register = () => {
       if (response && response.token) {
         localStorage.clear();
         localStorage.setItem("jwtToken", response.token);
-        navigate('/Login');
+        navigate('/');
         setError("");
       } else {
         setError("Token not received from the server");
