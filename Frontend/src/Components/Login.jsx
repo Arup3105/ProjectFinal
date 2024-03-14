@@ -7,7 +7,7 @@ const Login = () => {
   const [rollNumber, setRollNumber] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Corrected hook
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();

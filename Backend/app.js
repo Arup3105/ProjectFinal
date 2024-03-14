@@ -21,6 +21,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(bodyParser.json());
+app.use(express.json({ limit: '10mb' }));
 
 // MongoDB Connection
 const mongourl = mongoURI;

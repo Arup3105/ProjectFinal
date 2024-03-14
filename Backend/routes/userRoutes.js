@@ -9,9 +9,15 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 const Review = require('../models/Review');
 const Notification = require('../models/Notification');
+const multer = require('multer');
+const upload = multer({
+  limits: {
+    fieldSize: 1024 * 1024 * 20, // Adjust the value as needed (e.g., 20 MB)
+  },
+});
 
 // User registration
-router.post('/register', async (req, res) => {
+router.post('/register', authMiddleware, upload.none(), async (req, res) => {
   try {
     const {
       name,
@@ -41,7 +47,7 @@ router.post('/register', async (req, res) => {
     const existingUser = await User.findOne({ rollNumber });
 
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists with this roll number' });
+      return res.status(400).json({ message: 'User already exists ' });
     }
 
     // Hash the password before saving it to the database
@@ -76,7 +82,17 @@ router.post('/register', async (req, res) => {
     // Save the new user to the database
     await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    const token = jwt.sign(
+      {
+        userId: newUser._id,
+        username: newUser.name,
+        rollNumber: newUser.rollNumber,
+      },
+      config.get('jwtSecret'),
+      { expiresIn: '1d' }
+    );
+
+    res.status(201).json({ message: 'User registered successfully',token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });

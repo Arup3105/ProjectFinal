@@ -20,16 +20,27 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   password: { type: String, required: true },
-  regNumber: { type: Number, unique: true },
+  regNumber: { type: String, unique: true },
   email: { type: String, unique: true, required: true },
   mobileNumber: { type: String, unique: true, required: true },
   address: String,
   photo: String,
-  tenthMarks: { type: Number, required: true },
+  tenthMarks: { type: Number, required: true ,
+    validate: {
+      validator: value => value > 0 && value < 100,
+      message: props => `${props.value} is not a valid tenth mark. Tenth marks should be greater than 0 and less than 100.`
+    }},
   tenthMarkSheet:  { type: String, required: true },
-  twelfthMarks: { type: Number, required: true },
+  twelfthMarks: { type: Number, required: true ,
+    validate: {
+      validator: value => value > 0 && value < 100,
+      message: props => `${props.value} is not a valid twerlfth mark. Tenth marks should be greater than 0 and less than 100.`
+    }},
   twelfthMarkSheet: { type: String, required: true },
-  cgpa: Number,
+  cgpa:{ type: Number, required: true,validate: {
+    validator: value => value > 0 && value < 10,
+    message: props => `${props.value} is not a valid CGPA. Tenth marks should be greater than 0 and less than 10.`
+  } },
   firstSemMarkSheet: { type: String, required: true },
   secondSemMarkSheet: { type: String, required: true },
   thirdSemMarkSheet: { type: String, required: true },

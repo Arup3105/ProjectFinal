@@ -109,14 +109,46 @@ const ApiService = {
     }
   },
 
-  fetchUserRole: async () => {
+  register: async (formData) => {
     try {
-      const response = await axios.get(`${ApiService.baseURL}/user/role`);
-      return response.data.role;
+      const token = localStorage.getItem("jwtToken");
+  
+      // Create headers for the request
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        // Do not set Content-Type as the form data will automatically set it
+      };
+  
+      // Create a new FormData object
+      const formDataObj = new FormData();
+  
+      // Convert formData to object and append each key-value pair to formDataObj
+      for (const [key, value] of formData.entries()) {
+        formDataObj.append(key, value);
+      }
+  
+      // Send the formDataObj directly without converting it to an object
+      const response = await axios.post(
+        `${ApiService.baseURL}/user/register`,
+        formDataObj,
+        {
+          withCredentials: true,
+          headers: headers,
+          onUploadProgress: progressEvent => {
+            console.log('Upload Progress:', (progressEvent.loaded / progressEvent.total) * 100);
+            // You can handle upload progress here if needed
+          }
+        }
+      );
+  
+      return response.data;
     } catch (error) {
-      throw error;
+      console.error('Error during registration:', error);
+      throw new Error(error.response.data.message || 'Failed to register user');
     }
   },
+  
+  
 };
 
 
