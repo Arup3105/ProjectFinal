@@ -147,7 +147,7 @@ const ApiService = {
           'Content-Type': 'application/json',
         },
       });
-
+      console.log(response.data)
       // Return the response data
       return response.data;
     } catch (error) {

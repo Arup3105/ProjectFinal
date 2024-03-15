@@ -184,7 +184,7 @@ const Register = () => {
         navigate("/");
         setError("");
       } else {
-        setError("Token not received from the server");
+        setError("Somthing Went Wrong");
       }
     } catch (error) {
       console.error(error);

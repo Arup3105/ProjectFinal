@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './AdminRegister.css';
 import ApiService from '../Components/ApiServer/ApiServer.jsx';
-
+import { useNavigate } from "react-router-dom";
 const AdminRegister = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [employeeId, setEmployeeId] = useState('');
   const [password, setPassword] = useState('');
@@ -12,9 +13,37 @@ const AdminRegister = () => {
   const [authCode, setAuthCode] = useState('');
   const [error, setError] = useState('');
 
+  const validatePhoneNumber = (phoneNumber) => {
+    return /^\d{10}$/.test(phoneNumber);
+  };
+
+  const validateUsername = (username) => {
+    return /^[a-zA-Z\s]+$/.test(username);
+  };
+
+  const validatePassword = (password) => {
+    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[ -~]{8,}$/.test(password);
+};
+
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
+      if (!validatePhoneNumber(mobileNumber)) {
+        setError('Phone number must be 10 digits.');
+        return;
+      }
+
+      if (!validateUsername(username)) {
+        setError('Username can only contain alphabetic characters and spaces.');
+        return;
+      }
+
+      if (!validatePassword(password)) {
+        setError('Password must be alphanumeric and contain at least 1 number, 1 capital letter, and be at least 8 characters long.');
+        return;
+      }
+
       const formData = {
         username,
         employeeId,
@@ -25,15 +54,20 @@ const AdminRegister = () => {
         authCode
       };
 
-      // Assuming ApiService.register sends a request to the backend
+      // Assuming ApiService.adminregister sends a request to the backend
       const response = await ApiService.adminregister(formData);
 
-      // Handle success response
-      console.log('Admin registered successfully:', response);
+      if (response) {
+        localStorage.clear();
+        //localStorage.setItem("jwtToken", response.token);
+        navigate("/admin");
+        setError("");
+      } else {
+        setError("Somthing Went Wrong");
+      }
     } catch (error) {
-      // Handle error response
-      console.error('Error registering admin:', error);
-      setError(error.message || 'Failed to register admin');
+      console.error(error);
+      setError(error.message);
     }
   };
 
