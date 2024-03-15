@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import "../Components/register.css";
 import ApiService from "../Components/ApiServer/ApiServer.jsx";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
-
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [rollNumber, setRollNumber] = useState("");
   const [regNumber, setRegNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); 
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [photo, setPhoto] = useState(null); 
+  const [photo, setPhoto] = useState(null);
   const [tenthMarks, setTenthMarks] = useState("");
   const [tenthMarkSheet, setTenthMarkSheet] = useState(null);
   const [twelfthMarks, setTwelfthMarks] = useState("");
@@ -53,6 +52,63 @@ const Register = () => {
         return;
       }
 
+      // Validation for rollNumber
+      if (!/^323\d{8}$/.test(rollNumber)) {
+        setError("Roll number must be 11 digits and start with '323'.");
+        return;
+      }
+      // Validation for regNumber
+      if (!/^\d{15}$/.test(regNumber)) {
+        setError("Registration number must be exactly 15 digits.");
+        return;
+      }
+
+      // Validation for mobileNumber
+      if (!/^\d{10}$/.test(mobileNumber)) {
+        setError("Mobile number must be exactly 10 digits.");
+        return;
+      }
+
+      // Validation for password matching
+      if (password !== confirmPassword) {
+        setError("Passwords do not match.");
+        return;
+      }
+      // Validation for tenthMarks
+      const tenthMarksFloat = parseFloat(tenthMarks);
+      if (
+        isNaN(tenthMarksFloat) ||
+        tenthMarksFloat < 0 ||
+        tenthMarksFloat > 100
+      ) {
+        setError("Tenth marks must be between 0 and 100.");
+        return;
+      }
+
+      // Validation for twelfthMarks
+      const twelfthMarksFloat = parseFloat(twelfthMarks);
+      if (
+        isNaN(twelfthMarksFloat) ||
+        twelfthMarksFloat < 0 ||
+        twelfthMarksFloat > 100
+      ) {
+        setError("Twelfth marks must be between 0 and 100.");
+        return;
+      }
+
+      // Validation for cgpa
+      const cgpaFloat = parseFloat(cgpa);
+      if (isNaN(cgpaFloat) || cgpaFloat < 0 || cgpaFloat > 10) {
+        setError("CGPA must be between 0 and 10.");
+        return;
+      }
+
+      // Validation for username (alphabetic characters and spaces)
+      if (!/^[a-zA-Z\s]+$/.test(name)) {
+        setError("Username can only contain alphabetic characters and spaces.");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("name", name);
       formData.append("rollNumber", rollNumber);
@@ -66,42 +122,66 @@ const Register = () => {
       }
       formData.append("tenthMarks", tenthMarks);
       if (tenthMarkSheet) {
-        formData.append("tenthMarkSheet", await compressAndConvertToBase64(tenthMarkSheet));
+        formData.append(
+          "tenthMarkSheet",
+          await compressAndConvertToBase64(tenthMarkSheet)
+        );
       }
       formData.append("twelfthMarks", twelfthMarks);
       if (twelfthMarkSheet) {
-        formData.append("twelfthMarkSheet", await compressAndConvertToBase64(twelfthMarkSheet));
+        formData.append(
+          "twelfthMarkSheet",
+          await compressAndConvertToBase64(twelfthMarkSheet)
+        );
       }
       if (firstSemMarkSheet) {
-        formData.append("firstSemMarkSheet", await compressAndConvertToBase64(firstSemMarkSheet));
+        formData.append(
+          "firstSemMarkSheet",
+          await compressAndConvertToBase64(firstSemMarkSheet)
+        );
       }
       if (secondSemMarkSheet) {
-        formData.append("secondSemMarkSheet", await compressAndConvertToBase64(secondSemMarkSheet));
+        formData.append(
+          "secondSemMarkSheet",
+          await compressAndConvertToBase64(secondSemMarkSheet)
+        );
       }
       if (thirdSemMarkSheet) {
-        formData.append("thirdSemMarkSheet", await compressAndConvertToBase64(thirdSemMarkSheet));
+        formData.append(
+          "thirdSemMarkSheet",
+          await compressAndConvertToBase64(thirdSemMarkSheet)
+        );
       }
       if (fourthSemMarkSheet) {
-        formData.append("fourthSemMarkSheet", await compressAndConvertToBase64(fourthSemMarkSheet));
+        formData.append(
+          "fourthSemMarkSheet",
+          await compressAndConvertToBase64(fourthSemMarkSheet)
+        );
       }
       if (fifthSemMarkSheet) {
-        formData.append("fifthSemMarkSheet", await compressAndConvertToBase64(fifthSemMarkSheet));
+        formData.append(
+          "fifthSemMarkSheet",
+          await compressAndConvertToBase64(fifthSemMarkSheet)
+        );
       }
       if (sixthSemMarkSheet) {
-        formData.append("sixthSemMarkSheet", await compressAndConvertToBase64(sixthSemMarkSheet));
+        formData.append(
+          "sixthSemMarkSheet",
+          await compressAndConvertToBase64(sixthSemMarkSheet)
+        );
       }
       if (cv) {
         formData.append("cv", await compressAndConvertToBase64(cv));
       }
-      formData.append("stream", stream);
+      formData.append("stream", stream.toUpperCase());
       formData.append("cgpa", cgpa);
 
       const response = await ApiService.register(formData);
 
       if (response && response.token) {
         localStorage.clear();
-        localStorage.setItem("jwtToken", response.token);
-        navigate('/');
+        //localStorage.setItem("jwtToken", response.token);
+        navigate("/");
         setError("");
       } else {
         setError("Token not received from the server");
@@ -117,16 +197,16 @@ const Register = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = (event) => {
-        if (file.type.startsWith('image')) {
+        if (file.type.startsWith("image")) {
           const img = new Image();
           img.src = event.target.result;
           img.onload = () => {
-            const canvas = document.createElement('canvas');
+            const canvas = document.createElement("canvas");
             const maxWidth = 800;
             const maxHeight = 600;
             let width = img.width;
             let height = img.height;
-  
+
             if (width > height) {
               if (width > maxWidth) {
                 height *= maxWidth / width;
@@ -138,33 +218,37 @@ const Register = () => {
                 height = maxHeight;
               }
             }
-  
+
             canvas.width = width;
             canvas.height = height;
-  
-            const ctx = canvas.getContext('2d');
+
+            const ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0, width, height);
-  
-            canvas.toBlob((blob) => {
-              const compressedFile = new File([blob], file.name, {
-                type: 'image/jpeg',
-                lastModified: Date.now(),
-              });
-  
-              const compressedReader = new FileReader();
-              compressedReader.readAsDataURL(compressedFile);
-              compressedReader.onloadend = () => {
-                resolve(compressedReader.result);
-              };
-            }, 'image/jpeg', 0.8);
+
+            canvas.toBlob(
+              (blob) => {
+                const compressedFile = new File([blob], file.name, {
+                  type: "image/jpeg",
+                  lastModified: Date.now(),
+                });
+
+                const compressedReader = new FileReader();
+                compressedReader.readAsDataURL(compressedFile);
+                compressedReader.onloadend = () => {
+                  resolve(compressedReader.result);
+                };
+              },
+              "image/jpeg",
+              0.8
+            );
           };
           img.onerror = (error) => {
             reject(error);
           };
-        } else if (file.type === 'application/pdf') {
+        } else if (file.type === "application/pdf") {
           resolve(event.target.result);
         } else {
-          reject(new Error('Unsupported file type'));
+          reject(new Error("Unsupported file type"));
         }
       };
       reader.onerror = (error) => {
@@ -279,7 +363,7 @@ const Register = () => {
                   <label htmlFor="stream">Stream</label>
                   <input
                     type="text"
-                    placeholder="Enter Your Stream Here"
+                    placeholder="Stream E.g. BCA, BBA, BHM ..."
                     value={stream}
                     onChange={(e) => setStream(e.target.value)}
                     id="stream"
@@ -346,7 +430,9 @@ const Register = () => {
                 </div>
                 <div className="sem-marks">
                   <div className="first">
-                    <label htmlFor="firstSemMarkSheet">First Sem Marksheet</label>
+                    <label htmlFor="firstSemMarkSheet">
+                      First Sem Marksheet
+                    </label>
                     <input
                       type="file"
                       accept="image/*"
@@ -356,7 +442,9 @@ const Register = () => {
                     />
                   </div>
                   <div className="second">
-                    <label htmlFor="secondSemMarkSheet">Second Sem Marksheet</label>
+                    <label htmlFor="secondSemMarkSheet">
+                      Second Sem Marksheet
+                    </label>
                     <input
                       type="file"
                       accept="image/*"
@@ -366,7 +454,9 @@ const Register = () => {
                     />
                   </div>
                   <div className="third">
-                    <label htmlFor="thirdSemMarkSheet">Third Sem Marksheet</label>
+                    <label htmlFor="thirdSemMarkSheet">
+                      Third Sem Marksheet
+                    </label>
                     <input
                       type="file"
                       accept="image/*"
@@ -376,7 +466,9 @@ const Register = () => {
                     />
                   </div>
                   <div className="fourth">
-                    <label htmlFor="fourthSemMarkSheet">Fourth Sem Marksheet</label>
+                    <label htmlFor="fourthSemMarkSheet">
+                      Fourth Sem Marksheet
+                    </label>
                     <input
                       type="file"
                       accept="image/*"
@@ -386,7 +478,9 @@ const Register = () => {
                     />
                   </div>
                   <div className="fifth">
-                    <label htmlFor="fifthSemMarkSheet">Fifth Sem Marksheet</label>
+                    <label htmlFor="fifthSemMarkSheet">
+                      Fifth Sem Marksheet
+                    </label>
                     <input
                       type="file"
                       accept="image/*"
@@ -396,7 +490,9 @@ const Register = () => {
                     />
                   </div>
                   <div className="sixth">
-                    <label htmlFor="sixthSemMarkSheet">Sixth Sem Marksheet</label>
+                    <label htmlFor="sixthSemMarkSheet">
+                      Sixth Sem Marksheet
+                    </label>
                     <input
                       type="file"
                       accept="image/*"
@@ -428,12 +524,11 @@ const Register = () => {
                     name="confirmPassword"
                   />
                 </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p style={{ color: "red" }}>{error}</p>}
                 <div className="reg-btn">
                   <button type="submit">Register</button> <br />
-                  
                 </div>
-                
+
                 <p>
                   Already have an account{" "}
                   <Link to="/" className="signin">

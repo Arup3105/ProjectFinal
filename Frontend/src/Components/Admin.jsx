@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ApiService from '../Components/ApiServer/ApiServer.jsx';
 import '../Components/Admin.css';
 
@@ -73,6 +73,11 @@ const Admin = () => {
               Login
             </button>
             </div>
+            <p>
+                  <Link to='/AdminRegister' className='signin'>
+                    Register as ADMIN
+                  </Link>
+                </p>
           </div>
         </div>
       </div>
