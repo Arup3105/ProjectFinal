@@ -35,6 +35,7 @@ const App = () => {
         <Route path="seeCompany/:startYear/:endYear" element={<SeeCompany />} />
         <Route path="/postsByCompany/:companyName/:startYear/:endYear/:targetedStreams" element={<PostsByCompany />} />
         <Route path="admin" element={<Admin />} />
+        <Route path="AdminRegister" element={<AdminRegister />} />
       </Routes>
     </div>
   );
