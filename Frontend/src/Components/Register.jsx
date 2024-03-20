@@ -51,7 +51,7 @@ const Register = () => {
         setError("Please fill in all required fields.");
         return;
       }
-
+  
       // Validation for rollNumber
       if (!/^323\d{8}$/.test(rollNumber)) {
         setError("Roll number must be 11 digits and start with '323'.");
@@ -62,13 +62,13 @@ const Register = () => {
         setError("Registration number must be exactly 15 digits.");
         return;
       }
-
+  
       // Validation for mobileNumber
       if (!/^\d{10}$/.test(mobileNumber)) {
         setError("Mobile number must be exactly 10 digits.");
         return;
       }
-
+  
       // Validation for password matching
       if (password !== confirmPassword) {
         setError("Passwords do not match.");
@@ -84,7 +84,7 @@ const Register = () => {
         setError("Tenth marks must be between 0 and 100.");
         return;
       }
-
+  
       // Validation for twelfthMarks
       const twelfthMarksFloat = parseFloat(twelfthMarks);
       if (
@@ -95,20 +95,20 @@ const Register = () => {
         setError("Twelfth marks must be between 0 and 100.");
         return;
       }
-
+  
       // Validation for cgpa
       const cgpaFloat = parseFloat(cgpa);
       if (isNaN(cgpaFloat) || cgpaFloat < 0 || cgpaFloat > 10) {
         setError("CGPA must be between 0 and 10.");
         return;
       }
-
+  
       // Validation for username (alphabetic characters and spaces)
       if (!/^[a-zA-Z\s]+$/.test(name)) {
         setError("Username can only contain alphabetic characters and spaces.");
         return;
       }
-
+  
       const formData = new FormData();
       formData.append("name", name);
       formData.append("rollNumber", rollNumber);
@@ -118,143 +118,54 @@ const Register = () => {
       formData.append("mobileNumber", mobileNumber);
       formData.append("address", address);
       if (photo) {
-        formData.append("photo", await compressAndConvertToBase64(photo));
+        formData.append("photo", photo);
       }
       formData.append("tenthMarks", tenthMarks);
       if (tenthMarkSheet) {
-        formData.append(
-          "tenthMarkSheet",
-          await compressAndConvertToBase64(tenthMarkSheet)
-        );
+        formData.append("tenthMarkSheet", tenthMarkSheet);
       }
       formData.append("twelfthMarks", twelfthMarks);
       if (twelfthMarkSheet) {
-        formData.append(
-          "twelfthMarkSheet",
-          await compressAndConvertToBase64(twelfthMarkSheet)
-        );
+        formData.append("twelfthMarkSheet", twelfthMarkSheet);
       }
       if (firstSemMarkSheet) {
-        formData.append(
-          "firstSemMarkSheet",
-          await compressAndConvertToBase64(firstSemMarkSheet)
-        );
+        formData.append("firstSemMarkSheet", firstSemMarkSheet);
       }
       if (secondSemMarkSheet) {
-        formData.append(
-          "secondSemMarkSheet",
-          await compressAndConvertToBase64(secondSemMarkSheet)
-        );
+        formData.append("secondSemMarkSheet", secondSemMarkSheet);
       }
       if (thirdSemMarkSheet) {
-        formData.append(
-          "thirdSemMarkSheet",
-          await compressAndConvertToBase64(thirdSemMarkSheet)
-        );
+        formData.append("thirdSemMarkSheet", thirdSemMarkSheet);
       }
       if (fourthSemMarkSheet) {
-        formData.append(
-          "fourthSemMarkSheet",
-          await compressAndConvertToBase64(fourthSemMarkSheet)
-        );
+        formData.append("fourthSemMarkSheet", fourthSemMarkSheet);
       }
       if (fifthSemMarkSheet) {
-        formData.append(
-          "fifthSemMarkSheet",
-          await compressAndConvertToBase64(fifthSemMarkSheet)
-        );
+        formData.append("fifthSemMarkSheet", fifthSemMarkSheet);
       }
       if (sixthSemMarkSheet) {
-        formData.append(
-          "sixthSemMarkSheet",
-          await compressAndConvertToBase64(sixthSemMarkSheet)
-        );
+        formData.append("sixthSemMarkSheet", sixthSemMarkSheet);
       }
       if (cv) {
-        formData.append("cv", await compressAndConvertToBase64(cv));
+        formData.append("cv", cv);
       }
       formData.append("stream", stream.toUpperCase());
       formData.append("cgpa", cgpa);
-
+  
       const response = await ApiService.register(formData);
-
+  
       if (response && response.token) {
         localStorage.clear();
         //localStorage.setItem("jwtToken", response.token);
         navigate("/");
         setError("");
       } else {
-        setError("Somthing Went Wrong");
+        setError("Something Went Wrong");
       }
     } catch (error) {
       console.error(error);
       setError(error.message);
     }
-  };
-
-  const compressAndConvertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        if (file.type.startsWith("image")) {
-          const img = new Image();
-          img.src = event.target.result;
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const maxWidth = 800;
-            const maxHeight = 600;
-            let width = img.width;
-            let height = img.height;
-
-            if (width > height) {
-              if (width > maxWidth) {
-                height *= maxWidth / width;
-                width = maxWidth;
-              }
-            } else {
-              if (height > maxHeight) {
-                width *= maxHeight / height;
-                height = maxHeight;
-              }
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, width, height);
-
-            canvas.toBlob(
-              (blob) => {
-                const compressedFile = new File([blob], file.name, {
-                  type: "image/jpeg",
-                  lastModified: Date.now(),
-                });
-
-                const compressedReader = new FileReader();
-                compressedReader.readAsDataURL(compressedFile);
-                compressedReader.onloadend = () => {
-                  resolve(compressedReader.result);
-                };
-              },
-              "image/jpeg",
-              0.8
-            );
-          };
-          img.onerror = (error) => {
-            reject(error);
-          };
-        } else if (file.type === "application/pdf") {
-          resolve(event.target.result);
-        } else {
-          reject(new Error("Unsupported file type"));
-        }
-      };
-      reader.onerror = (error) => {
-        reject(error);
-      };
-    });
   };
 
   return (

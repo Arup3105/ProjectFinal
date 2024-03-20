@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
       if (passwordMatch && secretCodeMatch) {
         // Redirect to admin dashboard if both credentials match
         const isAdmin = true;
-        const token = jwt.sign({ adminId: admin._id }, config.get('jwtSecret'), { expiresIn: '1h' });
+        const token = jwt.sign({ adminId: admin._id }, config.get('jwtSecret'), { expiresIn: '1d' });
         res.status(200).json({ message: 'Admin login successful', token ,isAdmin, redirect: '/admin/dashboard' });
       } else {
         // Redirect to user dashboard if credentials don't match
@@ -167,8 +167,6 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
   try {
     const { title, content, imageUrl, company, targetedStreams } = req.body;
 
-    const streamsArray = targetedStreams.split(',').map(stream => stream.trim());
-
     const currentDate = getCurrentISTDate();
     const currentYear = currentDate.getFullYear();
     let sessionStartYear, sessionEndYear;
@@ -185,7 +183,7 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
 
     const existingCompany = await Company.findOne({
       name: capitalizedCompany,
-      targetedStreams: streamsArray,
+      targetedStreams,
       sessions: { $elemMatch: { startYear: sessionStartYear, endYear: sessionEndYear } }
     });
 
@@ -193,7 +191,7 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
       const newCompany = new Company({
         name: capitalizedCompany,
         sessions: [{ startYear: sessionStartYear, endYear: sessionEndYear }],
-        targetedStreams: streamsArray,
+        targetedStreams,
       });
       await newCompany.save();
     }
@@ -207,12 +205,12 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
         startYear: sessionStartYear,
         endYear: sessionEndYear,
       },
-      targetedStreams: streamsArray,
+      targetedStreams,
     });
 
     await newPost.save();
 
-    const usersInStreams = await User.find({ stream: { $in: streamsArray } });
+    const usersInStreams = await User.find({ stream: { $in: targetedStreams } });
 
     const notifications = usersInStreams.map(user => ({
       userId: user._id,

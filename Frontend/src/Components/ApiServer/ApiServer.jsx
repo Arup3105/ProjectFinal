@@ -147,12 +147,37 @@ const ApiService = {
           'Content-Type': 'application/json',
         },
       });
-      console.log(response.data)
       // Return the response data
       return response.data;
     } catch (error) {
       // If there's an error, throw it so it can be handled by the caller
       throw new Error(error.response.data.message);
+    }
+  },
+
+  createPost: async (postData) => {
+    try {
+
+// Stringify the postData object to calculate its length in bytes
+const postDataString = JSON.stringify(postData);
+
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.post(
+        `${ApiService.baseURL}/admin/createPost`,
+        postData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response)
+      return response;
+    } catch (error) {
+      console.error('Error creating post:', error);
+      throw error.response.data;
     }
   },
   

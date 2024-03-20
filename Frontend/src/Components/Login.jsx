@@ -9,6 +9,13 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Function to delete token from localStorage after 1 day
+  const deleteTokenAfterOneDay = (key) => {
+    setTimeout(() => {
+      localStorage.removeItem(key);
+    }, 24 * 60 * 60 * 1000); // 1 day in milliseconds
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -20,6 +27,10 @@ const Login = () => {
         // Handle successful login
         localStorage.clear();
         localStorage.setItem('jwtToken', response.token);
+        
+        // Set token deletion after 1 day
+        deleteTokenAfterOneDay('jwtToken');
+        
         // Redirect the user to the home page or another page after login
         navigate('/feed'); // Use navigate instead of history
       }

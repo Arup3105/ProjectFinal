@@ -10,10 +10,18 @@ const AdminPostCreation = () => {
   const [targetedStreams, setTargetedStreams] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // New loading state
 
   const handleAddPost = async (e) => {
     e.preventDefault();
     try {
+      if (!title || !content || !company || !targetedStreams) {
+        setError("Title, content, company, and targeted streams cannot be empty.");
+        return;
+      }
+
+      setLoading(true); // Set loading to true when the request starts
+      
       const postData = { title, content, files, company, targetedStreams };
 
       const response = await ApiService.createPost(postData);
@@ -21,12 +29,14 @@ const AdminPostCreation = () => {
       if (response.status === 201) {
         setMessage("Post created successfully");
         setTimeout(() => {
-          window.location.href = "/feed";
-        }, 5000);
+          window.location.href = "/feed"; // Redirect to feed page
+        }, 2000);
       }
     } catch (error) {
-      setError("Failed to create post");
+      setError(error.message);
       console.error("Error creating post:", error);
+    } finally {
+      setLoading(false); // Set loading to false when the request finishes
     }
   };
 
@@ -107,6 +117,7 @@ const AdminPostCreation = () => {
         </div>
         <button type="submit">Add Post</button>
       </form>
+      {loading && <p style={{ color: "blue" }}>This may take a while. Please wait...</p>}
       {message && <p style={{ color: "green" }}>{message}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>

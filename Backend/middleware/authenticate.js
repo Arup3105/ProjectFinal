@@ -5,7 +5,7 @@ const Admin = require('../models/Admin');
 
 const authenticate = async (req, res, next) => {
   const rawToken = req.header('Authorization') || req.header('token');
-
+  //console.log("received ")
   if (!rawToken || !rawToken.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }

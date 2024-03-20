@@ -20,8 +20,9 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.use(bodyParser.json());
-app.use(express.json({ limit: '10mb' }));
+app.use(bodyParser.json({ limit: '50mb' })); // Increase JSON payload limit
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // Increase URL-encoded payload limit
+app.use(bodyParser.raw({ limit: '50mb' })); // Increase raw payload limit
 
 // MongoDB Connection
 const mongourl = mongoURI;
