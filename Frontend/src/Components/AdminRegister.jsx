@@ -108,12 +108,12 @@ const AdminRegister = () => {
               <label htmlFor='adminCreateAuthCode'>Admin Create Auth Code</label>
               <input type='text' placeholder='Enter Admin Create Auth Code' value={authCode} onChange={(e) => setAuthCode(e.target.value)} />
             </div>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className='admin-regbtn'>
               <button type='submit'>Register</button>
             </div>
           </div>
         </form>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
     </div>
   );

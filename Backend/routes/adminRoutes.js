@@ -59,7 +59,7 @@ router.post('/create', async (req, res) => {
     }
 
     // Check if an admin with the given username already exists
-    const existingAdmin = await Admin.findOne({ username , employeeId });
+    const existingAdmin = await Admin.findOne({ employeeId });
 
     if (existingAdmin) {
       return res.status(400).json({ message: 'Admin already exists' });
