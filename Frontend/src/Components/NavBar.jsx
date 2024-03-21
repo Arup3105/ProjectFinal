@@ -13,6 +13,8 @@ const NavBar = ({ isAdmin }) => {
     location.pathname === "/admin" ||
     location.pathname === "/createadmin";
 
+    const isFeedPage = location.pathname === "/";
+
   return (
     <div>
       <nav>
@@ -55,11 +57,16 @@ const NavBar = ({ isAdmin }) => {
             <NavLink to="/about">About</NavLink>
           </li>
           <li>
-            <NavLink to="#">Services</NavLink>
-          </li>
-          <li>
             <NavLink to="#">Contacts</NavLink>
           </li>
+          {!isFeedPage && (
+            <li>
+              <Link to="/profile" className="navbtn">
+                Profile
+              </Link>
+            </li>
+          )}
+          
         </ul>
       </nav>
     </div>

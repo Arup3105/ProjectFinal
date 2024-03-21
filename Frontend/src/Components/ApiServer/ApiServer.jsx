@@ -119,7 +119,6 @@ const ApiService = {
       for (const [key, value] of formData.entries()) {
         formDataObj.append(key, value);
       }
-  
       // Send the formDataObj directly without converting it to an object
       const response = await axios.post(
         `${ApiService.baseURL}/user/register`,

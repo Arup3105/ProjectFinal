@@ -29,6 +29,16 @@ const Register = () => {
   const [stream, setStream] = useState("");
   const [error, setError] = useState("");
 
+  // Function to convert file to base64
+const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
+};
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -118,40 +128,51 @@ const Register = () => {
       formData.append("mobileNumber", mobileNumber);
       formData.append("address", address);
       if (photo) {
-        formData.append("photo", photo);
-      }
+      const photoBase64 = await fileToBase64(photo);
+      formData.append("photo", photoBase64);
+    }
       formData.append("tenthMarks", tenthMarks);
       if (tenthMarkSheet) {
-        formData.append("tenthMarkSheet", tenthMarkSheet);
+        const tenthMarkSheetBase64 = await fileToBase64(tenthMarkSheet);
+        formData.append("tenthMarkSheet", tenthMarkSheetBase64);
       }
       formData.append("twelfthMarks", twelfthMarks);
       if (twelfthMarkSheet) {
-        formData.append("twelfthMarkSheet", twelfthMarkSheet);
+        const twelfthMarkSheetBase64 = await fileToBase64(twelfthMarkSheet);
+        formData.append("twelfthMarkSheet", twelfthMarkSheetBase64);
       }
       if (firstSemMarkSheet) {
-        formData.append("firstSemMarkSheet", firstSemMarkSheet);
+        const firstSemMarkSheetBase64 = await fileToBase64(firstSemMarkSheet);
+        formData.append("firstSemMarkSheet", firstSemMarkSheetBase64);
       }
       if (secondSemMarkSheet) {
-        formData.append("secondSemMarkSheet", secondSemMarkSheet);
+        const secondSemMarkSheetBase64 = await fileToBase64(secondSemMarkSheet);
+        formData.append("secondSemMarkSheet", secondSemMarkSheetBase64);
       }
       if (thirdSemMarkSheet) {
-        formData.append("thirdSemMarkSheet", thirdSemMarkSheet);
+        const thirdSemMarkSheetBase64 = await fileToBase64(thirdSemMarkSheet);
+        formData.append("thirdSemMarkSheet", thirdSemMarkSheetBase64);
       }
       if (fourthSemMarkSheet) {
-        formData.append("fourthSemMarkSheet", fourthSemMarkSheet);
+        const fourthSemMarkSheetBase64 = await fileToBase64(fourthSemMarkSheet);
+        formData.append("fourthSemMarkSheet", fourthSemMarkSheetBase64);
       }
       if (fifthSemMarkSheet) {
-        formData.append("fifthSemMarkSheet", fifthSemMarkSheet);
+        const fifthSemMarkSheetBase64 = await fileToBase64(fifthSemMarkSheet);
+        formData.append("fifthSemMarkSheet", fifthSemMarkSheetBase64);
       }
       if (sixthSemMarkSheet) {
-        formData.append("sixthSemMarkSheet", sixthSemMarkSheet);
+        const sixthSemMarkSheetBase64 = await fileToBase64(sixthSemMarkSheet);
+        formData.append("sixthSemMarkSheet", sixthSemMarkSheetBase64);
       }
       if (cv) {
-        formData.append("cv", cv);
+        const cvBase64 = await fileToBase64(cv);
+        formData.append("cv", cvBase64);
       }
       formData.append("stream", stream.toUpperCase());
       formData.append("cgpa", cgpa);
-  
+      
+
       const response = await ApiService.register(formData);
   
       if (response && response.token) {

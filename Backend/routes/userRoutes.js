@@ -17,7 +17,7 @@ const upload = multer({
 });
 
 // User registration
-router.post('/register', upload.none(), async (req, res) => {
+router.post('/register', upload.any(), async (req, res) => {
   try {
     const {
       name,
