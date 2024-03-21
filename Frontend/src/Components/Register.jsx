@@ -319,7 +319,7 @@ const fileToBase64 = (file) => {
                     <label htmlFor="tenthMarks">10th Marks</label>
                     <input
                       type="number"
-                      placeholder="10th Marks Here"
+                      placeholder="10th Marks % Here"
                       value={tenthMarks}
                       onChange={(e) => setTenthMarks(e.target.value)}
                       id="tenthMarks"
@@ -342,7 +342,7 @@ const fileToBase64 = (file) => {
                     <label htmlFor="twelfthMarks">12th Marks</label>
                     <input
                       type="number"
-                      placeholder="12th Marks Here"
+                      placeholder="12th Marks % Here"
                       value={twelfthMarks}
                       onChange={(e) => setTwelfthMarks(e.target.value)}
                       id="twelfthMarks"

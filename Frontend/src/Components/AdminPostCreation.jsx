@@ -5,7 +5,7 @@ import "./AdminPostCreation.css";
 const AdminPostCreation = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [files, setFiles] = useState([]);
+  const [attachments, setAttachments] = useState([]); // Update state to hold attachments
   const [company, setCompany] = useState("");
   const [targetedStreams, setTargetedStreams] = useState("");
   const [message, setMessage] = useState("");
@@ -22,7 +22,7 @@ const AdminPostCreation = () => {
 
       setLoading(true); // Set loading to true when the request starts
       
-      const postData = { title, content, files, company, targetedStreams };
+      const postData = { title, content, attachments, company, targetedStreams };
 
       const response = await ApiService.createPost(postData);
 
@@ -45,7 +45,7 @@ const AdminPostCreation = () => {
 
     try {
       const base64Files = await Promise.all(selectedFiles.map(fileToBase64));
-      setFiles(base64Files);
+      setAttachments(base64Files);
     } catch (error) {
       setError("Failed to read files");
       console.error("Error reading files:", error);
@@ -56,10 +56,20 @@ const AdminPostCreation = () => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
-      reader.onload = () => resolve(reader.result);
+      reader.onload = () => {
+        // Verify if reader.result looks like a valid base64 string
+        console.log("Base64 string:", reader.result);
+        resolve({ data: reader.result, fileName: file.name });
+      };
       reader.onerror = (error) => reject(error);
       reader.readAsDataURL(file);
     });
+  };
+
+  const handleRemoveAttachment = (index) => {
+    const updatedAttachments = [...attachments];
+    updatedAttachments.splice(index, 1);
+    setAttachments(updatedAttachments);
   };
 
   return (
@@ -89,6 +99,12 @@ const AdminPostCreation = () => {
           <label htmlFor="attachment">Attachment</label>
           <input type="file" id="attachment" onChange={handleFileChange} multiple />
         </div>
+        {attachments.map((attachment, index) => (
+          <div key={index}>
+            <img src={attachment.data} alt={attachment.fileName} style={{ maxWidth: "100px" }} />
+            <button type="button" onClick={() => handleRemoveAttachment(index)}>Remove</button>
+          </div>
+        ))}
         <div>
           <label htmlFor="company">Company Name</label>
           <input

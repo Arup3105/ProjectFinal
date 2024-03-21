@@ -165,7 +165,16 @@ const getCurrentISTDate = () => {
 
 router.post('/createPost', authenticateAdmin, async (req, res) => {
   try {
-    const { title, content, imageUrl, company, targetedStreams } = req.body;
+    const { title, content, attachments, company, targetedStreams } = req.body;
+    // Function to determine the attachment type based on the file name or content
+    const getAttachmentType = (fileName) => {
+      const extension = fileName.split('.').pop().toLowerCase();
+      if (extension === 'jpg' || extension === 'jpeg' || extension === 'png' || extension === 'gif') {
+        return 'image';
+      } else {
+        return 'file';
+      }
+    };
 
     const currentDate = getCurrentISTDate();
     const currentYear = currentDate.getFullYear();
@@ -196,10 +205,16 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
       await newCompany.save();
     }
 
+    const attachmentsArray = attachments.map(attachment => ({
+      data: attachment.data,
+      fileName: attachment.fileName,
+      type: getAttachmentType(attachment.fileName)
+    }));
+
     const newPost = new Post({
       title,
       content,
-      imageUrl,
+      attachments: attachmentsArray,
       company: capitalizedCompany,
       session: {
         startYear: sessionStartYear,

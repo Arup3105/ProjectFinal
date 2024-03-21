@@ -12,7 +12,13 @@ const postSchema = new mongoose.Schema(
   {
     title: String,
     content: String,
-    imageUrl: String,
+    attachments: [
+      {
+        data: String, // Base64 encoded data
+        fileName: String, // Name of the file
+        type: { type: String } // Type of attachment (image or file)
+      }
+    ],
     company: String,
     session: {
       startYear: Number,

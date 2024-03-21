@@ -1,4 +1,3 @@
-// PostsByCompany.jsx
 import React, { useEffect, useState } from "react";
 import ApiService from "../Components/ApiServer/ApiServer.jsx";
 import { useParams } from "react-router-dom";
@@ -9,11 +8,32 @@ const PostsByCompany = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Function to decode base64 data
+  const decodeBase64 = (base64String, type) => {
+    try {
+      console.log('Retrieved Base64 String:', type); // Print retrieved base64 string
+      let decodedString;
+      if (type === 'image') {
+        decodedString = base64String;
+      } else {
+        console.log("File type:", type);
+        // Remove data URI prefix
+        const base64Data = base64String.split(',')[1];
+        // Decode base64 string
+        decodedString = atob(base64Data);
+      }
+      //console.log('Decoded String:', decodedString); // Print decoded result
+      return decodedString;
+    } catch (error) {
+      console.error('Error decoding base64:', error);
+      return 'Error decoding base64';
+    }
+  };
+
   useEffect(() => {
     // Fetch posts for the selected company based on companyName, startYear, and endYear
     ApiService.getPostsByCompany(companyName, startYear, endYear, targetedStreams)
       .then((data) => {
-  
         if (Array.isArray(data)) {
           // Reverse the order of posts
           setPosts(data.reverse());
@@ -36,7 +56,7 @@ const PostsByCompany = () => {
         setLoading(false);
       });
   }, [companyName, startYear, endYear, targetedStreams]);
-  
+
   if (loading) {
     return <div>Loading posts...</div>;
   }
@@ -56,7 +76,21 @@ const PostsByCompany = () => {
         <div key={index} className="post">
           <h4>{post.title}</h4>
           <p>{post.content}</p>
-          <img src={post.imageUrl} alt={post.title} />
+          {/* Displaying attachments */}
+          {post.attachments && post.attachments.map((attachment, index) => (
+            <div key={index}>
+              {attachment.type === "image" && (
+                <img src={decodeBase64(attachment.data, 'image')} alt={attachment.fileName} />
+              )}
+              {attachment.type === "file" && (
+                <div>
+                  <a href={URL.createObjectURL(new Blob([decodeBase64(attachment.data, 'file')], {type: 'application/pdf'}))} download={attachment.fileName}>
+                    Download File
+                  </a>
+                </div>
+              )}
+            </div>
+          ))}
           <p>
             Created at:{" "}
             {new Date(post.createdAt).toLocaleDateString("en-US", {

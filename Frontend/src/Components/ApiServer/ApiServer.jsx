@@ -161,6 +161,7 @@ const ApiService = {
 const postDataString = JSON.stringify(postData);
 
       const token = localStorage.getItem("jwtToken");
+      console.log(postData)
       const response = await axios.post(
         `${ApiService.baseURL}/admin/createPost`,
         postData,
