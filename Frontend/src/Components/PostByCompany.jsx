@@ -11,47 +11,62 @@ const PostsByCompany = () => {
   // Function to decode base64 data
   const decodeBase64 = (base64String, type) => {
     try {
-      console.log('Retrieved Base64 String:', type); // Print retrieved base64 string
       let decodedString;
-      if (type === 'image') {
+      if (type === "image") {
         decodedString = base64String;
       } else {
-        console.log("File type:", type);
         // Remove data URI prefix
-        const base64Data = base64String.split(',')[1];
-        // Decode base64 string
-        decodedString = atob(base64Data);
+        const base64Data = base64String.split(",")[1];
+        // Convert base64 string to ArrayBuffer
+        const binaryString = window.atob(base64Data);
+        const byteArray = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          byteArray[i] = binaryString.charCodeAt(i);
+        }
+        // Create a Blob from ArrayBuffer
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+        // Return the Blob
+        return blob;
       }
       //console.log('Decoded String:', decodedString); // Print decoded result
       return decodedString;
     } catch (error) {
-      console.error('Error decoding base64:', error);
-      return 'Error decoding base64';
+      console.error("Error decoding base64:", error);
+      return "Error decoding base64";
     }
   };
 
   useEffect(() => {
     // Fetch posts for the selected company based on companyName, startYear, and endYear
-    ApiService.getPostsByCompany(companyName, startYear, endYear, targetedStreams)
+    ApiService.getPostsByCompany(
+      companyName,
+      startYear,
+      endYear,
+      targetedStreams
+    )
       .then((data) => {
         if (Array.isArray(data)) {
           // Reverse the order of posts
           setPosts(data.reverse());
           setLoading(false);
-        } else if (data && data.message && data.message.startsWith('No posts found')) {
+        } else if (
+          data &&
+          data.message &&
+          data.message.startsWith("No posts found")
+        ) {
           // Handle the case when no posts are found
           setPosts([]); // Set an empty array for posts
           setLoading(false);
         } else {
           // Handle unexpected response
-          console.error('Invalid response from the server:', data);
-          setError(new Error('Invalid response from the server'));
+          console.error("Invalid response from the server:", data);
+          setError(new Error("Invalid response from the server"));
           setLoading(false);
         }
       })
       .catch((error) => {
         // Handle errors
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
         setError(error);
         setLoading(false);
       });
@@ -77,28 +92,41 @@ const PostsByCompany = () => {
           <h4>{post.title}</h4>
           <p>{post.content}</p>
           {/* Displaying attachments */}
-          {post.attachments && post.attachments.map((attachment, index) => (
-            <div key={index}>
-              {attachment.type === "image" && (
-                <img src={decodeBase64(attachment.data, 'image')} alt={attachment.fileName} />
-              )}
-              {attachment.type === "file" && (
-                <div>
-                  <a href={URL.createObjectURL(new Blob([decodeBase64(attachment.data, 'file')], {type: 'application/pdf'}))} download={attachment.fileName}>
-                    Download File
-                  </a>
-                </div>
-              )}
-            </div>
-          ))}
+          {post.attachments &&
+            post.attachments.map((attachment, index) => (
+              <div key={index}>
+                {attachment.type === "image" && (
+                  <img
+                    src={decodeBase64(attachment.data, "image")}
+                    alt={attachment.fileName}
+                  />
+                )}
+                {attachment.type === "file" && (
+                  <div>
+                    <a
+                      href={URL.createObjectURL(
+                        new Blob([decodeBase64(attachment.data, "file")], {
+                          type: "application/pdf",
+                        })
+                      )}
+                      download={attachment.fileName}
+                    >
+                      Download File
+                    </a>
+                  </div>
+                )}
+              </div>
+            ))}
           <p>
             Created at:{" "}
-            {new Date(post.createdAt).toLocaleDateString("en-US", {
-              year: "numeric",
+            {new Date(post.createdAt).toLocaleString("en-US", {
               month: "long",
               day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+              timeZone: "UTC", // Specify the timezone of the input date
             })}
           </p>
 
