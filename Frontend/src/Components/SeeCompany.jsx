@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ApiService from "../Components/ApiServer/ApiServer.jsx";
 import { useParams, useNavigate } from "react-router-dom";
+import '../Components/SeeCompany.css';
 
 const SeeCompany = () => {
   const { startYear, endYear } = useParams();
@@ -37,25 +38,27 @@ const SeeCompany = () => {
   }
 
   return (
-    <div className="feed">
+    <div className="seeCompanyFeed">
       {companyDetails.map((company, index) => (
-        <div key={index} className="card">
-          <h4
-            onClick={() =>
-              handleCompanyClick(company.name, company.targetedStreams)
-            }
-            style={{ cursor: "pointer" }}>
-            {company.name}
-          </h4>
-          <h6>{company.targetedStreams.join(' , ')}</h6>
-          <ul>
-            {company.sessions.map((session, sessionIndex) => (
-              <li key={sessionIndex}>
-                {`${session.startYear}-${session.endYear}`}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <a
+          key={index}
+          className="seeCompanyCard"
+          onClick={() => handleCompanyClick(company.name, company.targetedStreams)}
+          style={{ textDecoration: 'none' }} // Ensure no default anchor text decoration
+          href={`/postsByCompany/${company.name}/${startYear}/${endYear}/${company.targetedStreams}`}
+        >
+          <div>
+            <h4>{company.name}</h4>
+            <h6>{company.targetedStreams.join(', ')}</h6>
+            <ul>
+              {company.sessions.map((session, sessionIndex) => (
+                <li key={sessionIndex}>
+                  {`${session.startYear}-${session.endYear}`}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </a>
       ))}
     </div>
   );

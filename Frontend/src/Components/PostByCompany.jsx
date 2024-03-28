@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ApiService from "../Components/ApiServer/ApiServer.jsx";
 import { useParams } from "react-router-dom";
+import '../Components/PostByCompany.css';
 
 const PostsByCompany = () => {
   const { companyName, startYear, endYear, targetedStreams } = useParams();
@@ -85,7 +86,7 @@ const PostsByCompany = () => {
   }
 
   return (
-    <div>
+    <div className="posts-container">
       <h2>Posts for {companyName}</h2>
       {posts.map((post, index) => (
         <div key={index} className="post">
@@ -102,7 +103,7 @@ const PostsByCompany = () => {
                   />
                 )}
                 {attachment.type === "file" && (
-                  <div>
+                  <div className="download-box">
                     <a
                       href={URL.createObjectURL(
                         new Blob([decodeBase64(attachment.data, "file")], {
@@ -126,11 +127,9 @@ const PostsByCompany = () => {
               hour: "numeric",
               minute: "numeric",
               hour12: true,
-              timeZone: "UTC", // Specify the timezone of the input date
+              timeZone: "UTC", // Timezone is already in IST
             })}
           </p>
-
-          {/* Add more details as needed */}
         </div>
       ))}
     </div>

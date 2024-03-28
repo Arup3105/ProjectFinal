@@ -1,0 +1,86 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.posts-container {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.posts-container:hover {
+    transform: translateY(-5px);
+}
+
+.post {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.post:hover {
+    transform: translateY(-5px);
+}
+
+.post h4 {
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.post p {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    color: #666;
+}
+
+.post img {
+    max-width: calc(50% - 10px); /* Adjusted width with increased gap */
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    margin-right: 20px; /* Added margin to create gap between images */
+}
+
+.post img:last-child {
+    margin-right: 0; /* Remove margin from the last image */
+}
+
+.post img:hover {
+    transform: scale(1.05);
+}
+
+.post a {
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.post a:hover {
+    color: #0056b3;
+}
+
+.post .download-box {
+    display: inline-block;
+    padding: 12px 20px;
+    border: 1px solid #007bff;
+    border-radius: 12px;
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.post .download-box:hover {
+    background-color: white;
+}

@@ -1,4 +1,4 @@
-.admin{
+.admin {
     background: linear-gradient(180deg, #211c7e, #12ac9f);
     height: 100vh;
     width: 100%;
@@ -9,59 +9,68 @@
     align-items: center;
 }
 
-.admin-formstyle{
-    border: 1px solid;
+.admin-formstyle {
+    border: 2px solid #3498db; /* Adjusted border thickness and color */
     height: auto;
     width: 40%;
     border-radius: 15px;
-    padding: 20px;
+    padding: 30px; /* Increased padding for better spacing */
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Added box shadow for depth */
 }
 
-.admin input{
-    color: white;
+.admin input {
+    color: #333; /* Changed input text color */
+    border: none; /* Removed border for inputs */
+    border-bottom: 2px solid #3498db; /* Added bottom border */
+    background-color: transparent; /* Transparent background */
+    padding: 10px; /* Adjusted padding for inputs */
+    margin-bottom: 20px; /* Added margin bottom for spacing */
 }
 
-input::placeholder{
-    color: black;
+input::placeholder {
+    color: #999; /* Adjusted placeholder color */
 }
 
-button{
-    border: 1px solid #3498db;
-    background: none;
-    color: black;
-    padding: 10px 190px;
-    font-size: 20px;
+button {
+    border: none;
+    background: #3498db; /* Button background color */
+    color: white; /* Button text color */
+    padding: 15px 30px; /* Adjusted padding for better button size */
+    font-size: 18px; /* Decreased font size for better fit */
     cursor: pointer;
-    margin: 10px;
-    transition: 0.8s;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
+    margin: 10px 0; /* Adjusted margin for better spacing */
+    transition: background-color 0.3s, color 0.3s; /* Smooth color transition */
+    border-radius: 5px; /* Added border radius */
 }
 
-button:hover{
-    color: white;
+button:hover {
+    background-color: #2980b9; /* Darker background color on hover */
 }
 
-button::before{
+button::before {
     content: "";
     position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 0%;
-    background: #000;
-    z-index: -1;
-    border-radius: 50% 50% 0 0;
+    left: 50%;
+    bottom: -80%;
+    transform: translateX(-50%); /* Centered horizontally */
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    border-radius: 50%;
     transition: 0.8s;
+    z-index: -1;
 }
 
-button:hover::before{
-    height: 180%;
+button:hover::before {
+    bottom: -40%; /* Increased height on hover */
+}
+.signin {
+    color: white;
+    text-decoration: underline; /* Underline effect */
+    font-size: 16px; /* Adjust font size as needed */
 }
 
-.admin-btn{
-    display: flex;
-    justify-content: center;
+.signin:hover {
+    color: skyblue; /* Change color on hover */
 }
