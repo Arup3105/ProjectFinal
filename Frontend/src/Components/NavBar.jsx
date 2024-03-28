@@ -13,7 +13,7 @@ const NavBar = ({ isAdmin }) => {
     location.pathname === "/admin" ||
     location.pathname === "/createadmin";
 
-  const isFeedPage = location.pathname === "/";
+  // const isFeedPage = location.pathname === "/";
 
   return (
     <div>
@@ -60,7 +60,7 @@ const NavBar = ({ isAdmin }) => {
           <li>
             <NavLink to="#">Contacts</NavLink>
           </li>
-          {!isFeedPage && (
+          {!isRestrictedPage && (
             <li>
               <Link to="/profile" className="navbtn">
                 Profile

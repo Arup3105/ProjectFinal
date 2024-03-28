@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../Components/login.css';
-import logimg from '/public/login.jpg'
 import ApiService from '../Components/ApiServer/ApiServer.jsx';
 
 const Login = () => {
@@ -22,33 +21,40 @@ const Login = () => {
     try {
       // Make a request to the server to authenticate the user
       const response = await ApiService.userLogin({ rollNumber, password });
-
+  
       // Check if the response has a token
       if (response.token) {
         // Handle successful login
         localStorage.clear();
         localStorage.setItem('jwtToken', response.token);
-
+        
         // Set token deletion after 1 day
         deleteTokenAfterOneDay('jwtToken');
-
+        
         // Redirect the user to the home page or another page after login
         navigate('/feed'); // Use navigate instead of history
       }
     } catch (error) {
 
-      console.log("this is the response", error.message)
-      setError(error.message);
-    }
-
+      console.log("this is the response",error.message)
+          setError(error.message);
+      }
+    
   };
 
   return (
     <div>
-
-      <main id='log-main'>
+      {/*<nav>
+         <div className="logo">
+          <div className="spinner"></div>Logo
+        </div>
+        <Link to='Admin' className="navbtn">
+          Admin
+        </Link>
+      </nav> */}
+      <main className='log-main'>
         <div className="container">
-          {/* <div className="left">
+          <div className="left">
             <div className="login-imagecontainer">
               <div className="overlay">
                 <h2>Welcome Back</h2>
@@ -58,11 +64,7 @@ const Login = () => {
                 </p>
               </div>
             </div>
-          </div> */}
-          <div class="image">
-            <img src={logimg} alt="" />
           </div>
-
           <div className="form">
             <form onSubmit={handleLogin}>
               <h2>Login Here</h2>
@@ -70,7 +72,7 @@ const Login = () => {
                 <div className="rollNumber">
                   <label htmlFor="rollNumber">Roll Number</label>
                   <input
-                    type="number"
+                    type="number" 
                     placeholder='Enter your Roll Number here'
                     value={rollNumber}
                     onChange={(e) => setRollNumber(e.target.value)}
