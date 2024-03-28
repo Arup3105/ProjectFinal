@@ -55,6 +55,16 @@ nav .menu span {
     gap: 8px;
 }
 
+.con-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.createPost{
+    padding: 10px 50px;
+}
+
 @media (max-width: 500px) {
     nav .menu {
         display: flex;

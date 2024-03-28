@@ -73,29 +73,35 @@ const AdminPostCreation = () => {
   };
 
   return (
-    <div>
+    <div className="custom-container">
+      <div className="form">
       <form onSubmit={handleAddPost}>
-        <div>
-          <label htmlFor="title">Title</label>
+        <div className="input-box">
+          
           <input
             type="text"
             id="title"
-            placeholder="Enter Title"
+            // placeholder="Enter Title"
             value={title}
+            required="required"
             onChange={(e) => setTitle(e.target.value)}
           />
+          <span>Title</span>
         </div>
-        <div>
-          <label htmlFor="content">Content</label>
+        <div className="input-box">
+          
           <input
             type="text"
             id="content"
-            placeholder="Enter Content"
+            // placeholder="Enter Content"
             value={content}
+            required="required"
             onChange={(e) => setContent(e.target.value)}
           />
+          <span>Content</span>
+
         </div>
-        <div>
+        <div className="input-box">
           <label htmlFor="attachment">Attachment</label>
           <input type="file" id="attachment" onChange={handleFileChange} multiple />
         </div>
@@ -105,23 +111,26 @@ const AdminPostCreation = () => {
             <button type="button" onClick={() => handleRemoveAttachment(index)}>Remove</button>
           </div>
         ))}
-        <div>
-          <label htmlFor="company">Company Name</label>
+        <div className="input-box">
+          
           <input
             type="text"
             id="company"
-            placeholder="Company Name"
+            // placeholder="Company Name"
             value={company}
+            required="required"
             onChange={(e) => setCompany(e.target.value.toUpperCase())}
           />
+          <span>Company Name</span>
+
         </div>
-        <div>
-          <label htmlFor="streams">Targeted Streams</label>
-          <input
+        <div className="input-box">
+            <input
             type="text"
             id="streams"
-            placeholder="Enter Targeted Streams (comma-separated)"
+            // placeholder="Enter Targeted Streams (comma-separated)"
             value={targetedStreams}
+            required="required"
             onChange={(e) =>
               setTargetedStreams(
                 e.target.value
@@ -130,12 +139,14 @@ const AdminPostCreation = () => {
               )
             }
           />
+          <span>Stream Name</span>
         </div>
         <button type="submit">Add Post</button>
       </form>
       {loading && <p style={{ color: "blue" }}>This may take a while. Please wait...</p>}
       {message && <p style={{ color: "green" }}>{message}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
+    </div>
     </div>
   );
 };

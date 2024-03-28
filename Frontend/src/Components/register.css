@@ -11,17 +11,17 @@ nav {
     align-items: center;
     background-color: grey;
     height: 7vh;
-    
+
 }
 
-nav .logo{
+nav .logo {
     font-size: 25px;
     margin-left: 5%;
     display: flex;
     column-gap: 3px;
 }
 
-.spinner{
+.spinner {
     border: 5px solid black;
     height: 30px;
     width: 30px;
@@ -30,7 +30,7 @@ nav .logo{
     animation: spin .5s linear infinite;
 }
 
-nav .navbtn{
+nav .navbtn {
     border: 1px solid deeppink;
     padding: 4px 20px;
     margin-right: 5%;
@@ -39,7 +39,7 @@ nav .navbtn{
     color: #000;
 }
 
-nav .navbtn:hover{
+nav .navbtn:hover {
     color: white;
     background-color: #12ac9f;
 }
@@ -47,7 +47,7 @@ nav .navbtn:hover{
 main {
     /* position: relative; */
     width: 100%;
-    height: 200vh;
+    height: 250vh;
     background: linear-gradient(180deg, #211c7e, #12ac9f);
     overflow: hidden;
     display: flex;
@@ -58,9 +58,6 @@ main {
 }
 
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border: .2px solid #fff;
 }
 
@@ -94,7 +91,8 @@ main {
 
 form h2 {
     text-align: center;
-    margin-top: 30px;
+    /* margin-top: -30px; */
+    margin: 1%;
     color: #fff;
     font-weight: bolder;
 }
@@ -109,7 +107,7 @@ form h2 {
     margin: 20px 0;
 }
 
-.Re-password{
+.Re-password {
     margin-top: 20px;
 }
 
@@ -149,46 +147,46 @@ a {
     margin-left: 5px;
 }
 
-.numbers{
+.numbers {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     margin: 20px 0;
 }
 
-.contact{
+.contact {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     margin-bottom: 20px;
 }
 
-.tenth{
+.tenth {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     margin: 20px 0;
 }
 
-.twelve{
+.twelve {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     margin-bottom: 20px;
 }
 
-.sem-marks{
+.sem-marks {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 15px;
     row-gap: 20px;
 }
 
-.password{
+.password {
     margin-top: 20px;
 }
 
-.reg-btn{
+.reg-btn {
     padding: 10px 300px;
     display: flex;
     justify-content: center;

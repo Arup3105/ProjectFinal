@@ -13,7 +13,7 @@ const NavBar = ({ isAdmin }) => {
     location.pathname === "/admin" ||
     location.pathname === "/createadmin";
 
-    const isFeedPage = location.pathname === "/";
+  const isFeedPage = location.pathname === "/";
 
   return (
     <div>
@@ -29,18 +29,19 @@ const NavBar = ({ isAdmin }) => {
 
         {/* Conditionally render search bar for admin and not on restricted pages */}
         {isAdmin && !isRestrictedPage && (
-          <div>
+          <div className="con-btn">
             <div className="search">
               <input type="search" placeholder="Search here" />
-              <CiSearch color="white" fontSize="4.5rem" />
+              <CiSearch color="white" fontSize="2.6rem" />
             </div>
             <div className="createPost">
               <Link to="AdminPostCreation" className="navbtn">
-                Create Post
+                Create
               </Link>
             </div>
           </div>
         )}
+
 
         {/* Conditionally render Admin button based on location */}
         {location.pathname === "/" && (
@@ -66,7 +67,7 @@ const NavBar = ({ isAdmin }) => {
               </Link>
             </li>
           )}
-          
+
         </ul>
       </nav>
     </div>
