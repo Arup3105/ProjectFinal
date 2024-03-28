@@ -46,7 +46,7 @@ const Login = () => {
   return (
     <div>
 
-      <main className='log-main'>
+      <main id='log-main'>
         <div className="container">
           {/* <div className="left">
             <div className="login-imagecontainer">

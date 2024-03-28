@@ -44,10 +44,10 @@ nav .navbtn:hover{
     background-color: #12ac9f;
 }
 
-main {
+#log-main {
     position: relative;
     width: 100%;
-    /* height: 100vh; */
+    height: 130vh;
     background: linear-gradient(180deg, #211c7e, #12ac9f);
     overflow: hidden;
     display: flex;
@@ -62,9 +62,14 @@ main {
     border: .2px solid #fff;
 }
 
-/* .image{
-    background-image: url(/Frontend/public/login.jpg);
-} */
+ .image{
+    height: 30px;
+    width: 580px;
+} 
+
+.image img{
+    width: 100%;
+}
 
 .login-imagecontainer {
     position: relative;
@@ -94,11 +99,12 @@ main {
 }
 
 
-form h2 {
+#log-main form h2 {
     text-align: center;
-    /* margin-top: -30px; */
-    color: #fff;
+    margin-top: 300px;
+    color: black;
     font-weight: bolder;
+    font-size: 2.3rem;
 }
 
 .login-formstyle {
