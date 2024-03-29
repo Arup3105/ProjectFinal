@@ -17,7 +17,6 @@ const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const checkAdminStatus = () => {
-    // Read isAdmin status from localStorage
     const isAdminStored = localStorage.getItem('isAdmin') === 'true';
     setIsAdmin(isAdminStored);
   };

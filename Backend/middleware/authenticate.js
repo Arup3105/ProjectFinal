@@ -15,7 +15,6 @@ const authenticate = async (req, res, next) => {
     const decoded = jwt.verify(token, config.jwtSecret);
 
     if (decoded.userId) {
-      // If userId is present, it's a user token
       const user = await User.findById(decoded.userId);
       if (!user) {
         return res.status(401).json({ message: 'User not found for the provided token' });
@@ -28,7 +27,6 @@ const authenticate = async (req, res, next) => {
         userRole: 'user',
       };
     } else if (decoded.adminId) {
-      // If adminId is present, it's an admin token
       const admin = await Admin.findById(decoded.adminId);
       if (!admin) {
         return res.status(401).json({ message: 'Admin not found for the provided token' });
@@ -43,7 +41,6 @@ const authenticate = async (req, res, next) => {
       return res.status(401).json({ message: 'Invalid token' });
     }
 
-    // Include a property indicating whether the user is an admin or not
     req.user.isAdmin = req.user.userRole === 'admin';
 
     next();

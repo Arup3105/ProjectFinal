@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { z } = require('zod');
 
-// Zod validation schema for rollNumber
 const RollNumberSchema = z
   .string()
   .refine((value) => value.startsWith('323') && value.length === 11, {
@@ -9,7 +8,7 @@ const RollNumberSchema = z
   });
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  username: { type: String, required: true },
   rollNumber: {
     type: String,
     unique: true,
@@ -48,7 +47,7 @@ const userSchema = new mongoose.Schema({
   fifthSemMarkSheet: {type : String , default: null},
   sixthSemMarkSheet: {type : String , default: null},
   cv: { type: String, required: true },
-  stream: { type: String, required: true }, // Add a new field for the stream
+  stream: { type: String, required: true }, 
   notifications: [
     {
       message: String,

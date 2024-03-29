@@ -13,7 +13,6 @@ const config = require('config');
 
 const authenticateAdmin = require('../middleware/authenticate');
 
-// Secret code for admin creation
 const AUTH_CODE = config.get('adminCreatAuthCode'); // Replace with your actual secret code
 
 // Admin login
@@ -21,25 +20,20 @@ router.post('/login', async (req, res) => {
   try {
     const { employeeId, password,secretCode} = req.body;
 
-    // Fetch admin credentials from the database based on the username
     const admin = await Admin.findOne({ employeeId });
 
     if (admin) {
-      // Compare the provided password with the hashed password stored in the database
       const passwordMatch = await bcrypt.compare(password, admin.password);
       const secretCodeMatch = secretCode === admin.secretCode;
 
       if (passwordMatch && secretCodeMatch) {
-        // Redirect to admin dashboard if both credentials match
         const isAdmin = true;
         const token = jwt.sign({ adminId: admin._id }, config.get('jwtSecret'), { expiresIn: '1d' });
         res.status(200).json({ message: 'Admin login successful', token ,isAdmin, redirect: '/admin/dashboard' });
       } else {
-        // Redirect to user dashboard if credentials don't match
         res.status(401).json({ message: 'Invalid credentials', redirect: '/user/dashboard' });
       }
     } else {
-      // Redirect to user dashboard if admin not found
       res.status(401).json({ message: 'Admin not found', redirect: '/user/dashboard' });
     }
   } catch (error) {
@@ -53,12 +47,10 @@ router.post('/create', async (req, res) => {
   try {
     const { username, employeeId, password,email,mobileNumber, secretCode, authCode } = req.body;
 
-    // Verify the secret code before allowing admin creation
     if (authCode !== AUTH_CODE) {
       return res.status(403).json({ message: 'Unauthorized access' });
     }
 
-    // Check if an admin with the given username already exists
     const existingAdmin = await Admin.findOne({ employeeId });
 
     if (existingAdmin) {
@@ -91,15 +83,10 @@ router.post('/create', async (req, res) => {
 router.post('/forgetPassword', async (req, res) => {
   try {
     const { username,employeeId, secretCode, newPassword } = req.body;
-
-    // Check if the admin with the provided details exists
     const admin = await Admin.findOne({ username,employeeId, secretCode });
 
     if (admin) {
-      // Hash the new password
       const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-      // Update the admin's password
       admin.password = hashedPassword;
       await admin.save();
       
@@ -116,14 +103,10 @@ router.post('/forgetPassword', async (req, res) => {
 router.post('/searchUser', authenticateAdmin, async (req, res) => {
   try {
     const { searchQuery } = req.body;
-
-    // Create a regex pattern for partial matching
     const partialMatchPattern = new RegExp(searchQuery, 'i');
 
-    // Convert the searchQuery to a number if it is a valid number
     const rollNumberQuery = !isNaN(searchQuery) ? parseInt(searchQuery) : null;
 
-    // Define the search criteria for name, roll number, and stream
     const searchCriteria = {
       $or: [
         { name: { $regex: partialMatchPattern } },
@@ -132,7 +115,6 @@ router.post('/searchUser', authenticateAdmin, async (req, res) => {
       ],
     };
 
-    // Perform the search in the User collection
     const users = await User.find(searchCriteria).select('name rollNumber stream ');
 
     res.status(200).json(users);
@@ -144,7 +126,6 @@ router.post('/searchUser', authenticateAdmin, async (req, res) => {
 
 router.get('/seeAllUser', async (req, res) => {
   try {
-    // Fetch all users from the database
     const users = await User.find().select('name rollNumber stream');
 
     res.status(200).json(users);
@@ -154,10 +135,8 @@ router.get('/seeAllUser', async (req, res) => {
   }
 });
 
-
-// Assuming you have a getCurrentISTDate function to get the current IST date
 const getCurrentISTDate = () => {
-  const istOffset = 330; // Offset in minutes for Indian Standard Time
+  const istOffset = 330; 
   const now = new Date();
   const istDate = new Date(now.getTime() + istOffset * 60000);
   return istDate;
@@ -166,7 +145,6 @@ const getCurrentISTDate = () => {
 router.post('/createPost', authenticateAdmin, async (req, res) => {
   try {
     const { title, content, attachments, company, targetedStreams } = req.body;
-    // Function to determine the attachment type based on the file name or content
     const getAttachmentType = (fileName) => {
       const extension = fileName.split('.').pop().toLowerCase();
       if (extension === 'jpg' || extension === 'jpeg' || extension === 'png' || extension === 'gif') {
@@ -250,11 +228,10 @@ router.put('/updatePost/:postId', async (req, res) => {
   const { title, content, imageUrl, company, targetedStreams } = req.body;
 
   try {
-    // Find the post by ID
     const post = await Post.findByIdAndUpdate(
       postId,
       { title, content, imageUrl, company, targetedStreams },
-      { new: true } // This ensures you get the updated document in the response
+      { new: true } 
     );
 
     if (!post) {
@@ -274,18 +251,15 @@ router.put('/approveReview/:reviewId', authenticateAdmin, async (req, res) => {
   try {
     const { reviewId } = req.params;
 
-    // Find the review by ID
     const review = await Review.findById(reviewId);
 
     if (!review) {
       return res.status(404).json({ message: 'Review not found' });
     }
 
-    // Approve the review
     review.approved = true;
     review.updatedAt = Date.now();
 
-    // Save the updated review to the database
     await review.save();
 
     res.status(200).json({ message: 'Review approved successfully' });
@@ -295,25 +269,22 @@ router.put('/approveReview/:reviewId', authenticateAdmin, async (req, res) => {
   }
 });
 
-// Delete a user profile with verification in the request body
+// Delete a user profile 
 router.delete('/deleteUser/:userId', authenticateAdmin, async (req, res) => {
   try {
     const { userId } = req.params;
     const { confirmation } = req.body;
 
-    // Find the user by ID
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Verify the deletion by checking the confirmation in the request body
     if (confirmation !== 'confirm') {
       return res.status(400).json({ message: 'Deletion not confirmed' });
     }
 
-    // Delete the user from the database
     await User.deleteOne({ _id: userId });
 
     res.status(200).json({ message: 'User deleted successfully' });
@@ -324,10 +295,9 @@ router.delete('/deleteUser/:userId', authenticateAdmin, async (req, res) => {
 });
 
 
-// Check if any admin exists
+// Check existing admins
 router.get('/checkAllAdmin', authenticateAdmin, async (req, res) => {
   try {
-    // Find all admin users in the database
     const allAdmins = await Admin.find({}, 'username mobileNumber email');
 
     res.status(200).json({ admins: allAdmins });
@@ -341,20 +311,16 @@ router.post('/addComment', authenticateAdmin, async (req, res) => {
   try {
     const { postId, content } = req.body;
 
-    // Find the post by postId
     const post = await Post.findById(postId);
 
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }
 
-    // Add the comment to the post's comments array
     post.comments.push({
-      userId: req.admin._id, // Assuming admin is authenticated using the middleware
+      userId: req.admin._id,
       content,
     });
-
-    // Save the updated post
     await post.save();
 
     res.status(201).json({ message: 'Comment added successfully' });
@@ -368,18 +334,11 @@ router.post('/addComment', authenticateAdmin, async (req, res) => {
 router.delete('/deleteComment/:commentId', authenticateAdmin, async (req, res) => {
   try {
     const { commentId } = req.params;
-
-    // Check if the comment exists
     const comment = await Comment.findById(commentId);
 
     if (!comment) {
       return res.status(404).json({ message: 'Comment not found' });
     }
-
-    // Check if the admin is authorized to delete the comment (you may customize this based on your requirements)
-    // For example, you might want to check if the admin created the comment or has certain permissions
-
-    // Perform the deletion
     await comment.remove();
 
     res.status(200).json({ message: 'Comment deleted successfully' });

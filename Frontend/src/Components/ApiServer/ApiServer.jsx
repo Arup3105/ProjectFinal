@@ -1,27 +1,24 @@
 import axios from "axios";
 
 const ApiService = {
-  // Define your backend base URL
+
   baseURL: "http://localhost:5000",
 
-  // Function to perform login
+
   userLogin: async (credentials) => {
     try {
       const response = await axios.post(
         `${ApiService.baseURL}/user/login`,
         credentials,
         {
-          withCredentials: true, // Include credentials (like cookies) in the request
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-
-      // Return the response data
       return response.data;
     } catch (error) {
-      // If there's an error, throw it so it can be handled by the caller
       throw error.response.data;
     }
   },
@@ -70,9 +67,9 @@ const ApiService = {
         }
       );
   
-      return response.data; // Assuming the response contains an array of companies
+      return response.data;
     } catch (error) {
-      throw error.response.data; // Throw the error for handling in the component
+      throw error.response.data;
     }
   },
 
@@ -111,15 +108,10 @@ const ApiService = {
 
   register: async (formData) => {
     try {
-
-      // Create a new FormData object
       const formDataObj = new FormData();
-  
-      // Convert formData to object and append each key-value pair to formDataObj
       for (const [key, value] of formData.entries()) {
         formDataObj.append(key, value);
       }
-      // Send the formDataObj directly without converting it to an object
       const response = await axios.post(
         `${ApiService.baseURL}/user/register`,
         formDataObj,
@@ -127,7 +119,6 @@ const ApiService = {
           withCredentials: true,
           onUploadProgress: progressEvent => {
             console.log('Upload Progress:', (progressEvent.loaded / progressEvent.total) * 100);
-            // You can handle upload progress here if needed
           }
         }
       );
@@ -141,23 +132,19 @@ const ApiService = {
   adminregister: async (formData) => {
     try {
       const response = await axios.post(`${ApiService.baseURL}/admin/create`, formData, {
-        withCredentials: true, // Include credentials (like cookies) in the request
+        withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      // Return the response data
       return response.data;
     } catch (error) {
-      // If there's an error, throw it so it can be handled by the caller
       throw new Error(error.response.data.message);
     }
   },
 
   createPost: async (postData) => {
     try {
-
-// Stringify the postData object to calculate its length in bytes
 const postDataString = JSON.stringify(postData);
 
       const token = localStorage.getItem("jwtToken");
@@ -181,6 +168,47 @@ const postDataString = JSON.stringify(postData);
     }
   },
   
+  getUserData: async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+
+      if (!token) {
+        throw new Error("No token, authorization denied");
+      }
+
+      const response = await axios.get(`${ApiService.baseURL}/user/profile`, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      throw error.response.data;
+    }
+  },
+  updateUserData: async (updatedData) => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      const response = await axios.put(
+        `${ApiService.baseURL}/user/updateProfile`,
+        updatedData,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error updating user data:', error);
+      throw error.response.data;
+    }
+  },
   
 };
 

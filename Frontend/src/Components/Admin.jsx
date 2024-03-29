@@ -12,26 +12,18 @@ const Admin = () => {
 
   const handleLogin = async () => {
     try {
-      // Call the admin login API
       const response = await ApiService.adminLogin(employeeId, password, secretCode);
 
-      // Check if login was successful
       if (response && response.token) {
-        // Store the JWT token in localStorage
         localStorage.clear();
         localStorage.setItem('jwtToken', response.token);
         localStorage.setItem('isAdmin', response.isAdmin);
-
-        // Redirect to the feed page on successful login
         navigate('/feed');
       }
     } catch (error) {
-      // Handle login errors
       if (error.response && error.response.status === 401) {
-        // Handle invalid credentials
         setErrorMessage('Invalid credentials');
       } else {
-        // Handle other errors
         console.error('Error during login:', error);
         setErrorMessage('An unexpected error occurred');
       }

@@ -1,4 +1,4 @@
-// index.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -7,11 +7,8 @@ const {mongoURI}= require("./config/default.json")
 
 const app = express();
 const PORT = 5000;
-
-// Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests from the same host
     if (!origin || origin === 'http://localhost:5173') {
       callback(null, true);
     } else {
@@ -20,11 +17,11 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.use(bodyParser.json({ limit: '50mb' })); // Increase JSON payload limit
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // Increase URL-encoded payload limit
-app.use(bodyParser.raw({ limit: '50mb' })); // Increase raw payload limit
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.raw({ limit: '50mb' }));
 
-// MongoDB Connection
+// MongoDB 
 const mongourl = mongoURI;
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -46,7 +43,6 @@ app.use('/admin', adminRoutes);
 app.use('/posts', postRoutes);
 app.use('/reviews', reviewRoutes);
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });

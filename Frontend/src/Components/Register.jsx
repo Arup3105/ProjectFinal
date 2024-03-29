@@ -29,7 +29,6 @@ const Register = () => {
   const [stream, setStream] = useState("");
   const [error, setError] = useState("");
 
-  // Function to convert file to base64
 const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -62,29 +61,26 @@ const fileToBase64 = (file) => {
         return;
       }
   
-      // Validation for rollNumber
       if (!/^323\d{8}$/.test(rollNumber)) {
         setError("Roll number must be 11 digits and start with '323'.");
         return;
       }
-      // Validation for regNumber
+
       if (!/^\d{15}$/.test(regNumber)) {
         setError("Registration number must be exactly 15 digits.");
         return;
       }
-  
-      // Validation for mobileNumber
+
       if (!/^\d{10}$/.test(mobileNumber)) {
         setError("Mobile number must be exactly 10 digits.");
         return;
       }
   
-      // Validation for password matching
       if (password !== confirmPassword) {
         setError("Passwords do not match.");
         return;
       }
-      // Validation for tenthMarks
+
       const tenthMarksFloat = parseFloat(tenthMarks);
       if (
         isNaN(tenthMarksFloat) ||
@@ -95,7 +91,6 @@ const fileToBase64 = (file) => {
         return;
       }
   
-      // Validation for twelfthMarks
       const twelfthMarksFloat = parseFloat(twelfthMarks);
       if (
         isNaN(twelfthMarksFloat) ||
@@ -106,14 +101,12 @@ const fileToBase64 = (file) => {
         return;
       }
   
-      // Validation for cgpa
       const cgpaFloat = parseFloat(cgpa);
       if (isNaN(cgpaFloat) || cgpaFloat < 0 || cgpaFloat > 10) {
         setError("CGPA must be between 0 and 10.");
         return;
       }
   
-      // Validation for username (alphabetic characters and spaces)
       if (!/^[a-zA-Z\s]+$/.test(name)) {
         setError("Username can only contain alphabetic characters and spaces.");
         return;
@@ -285,7 +278,7 @@ const fileToBase64 = (file) => {
                   <label htmlFor="cv">CV</label>
                   <input
                     type="file"
-                    accept=".pdf"
+                    accept="image/*"
                     onChange={(e) => setCV(e.target.files[0])}
                     id="cv"
                     name="cv"

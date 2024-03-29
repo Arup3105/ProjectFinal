@@ -1,4 +1,4 @@
-// models/Admin.js
+
 const mongoose = require('mongoose');
 
 const adminSchema = new mongoose.Schema({
@@ -7,7 +7,7 @@ const adminSchema = new mongoose.Schema({
   email:{ type: String, unique: true, required: true },
   mobileNumber:{ type: String, unique: true, required: true },
   password: String,
-  secretCode: String, // Add this field for the secret code
+  secretCode: String, 
 });
 
 const Admin = mongoose.model('Admin', adminSchema);

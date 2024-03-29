@@ -9,30 +9,23 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Function to delete token from localStorage after 1 day
   const deleteTokenAfterOneDay = (key) => {
     setTimeout(() => {
       localStorage.removeItem(key);
-    }, 24 * 60 * 60 * 1000); // 1 day in milliseconds
+    }, 24 * 60 * 60 * 1000); 
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // Make a request to the server to authenticate the user
       const response = await ApiService.userLogin({ rollNumber, password });
-  
-      // Check if the response has a token
       if (response.token) {
-        // Handle successful login
         localStorage.clear();
         localStorage.setItem('jwtToken', response.token);
-        
-        // Set token deletion after 1 day
+      
         deleteTokenAfterOneDay('jwtToken');
-        
-        // Redirect the user to the home page or another page after login
-        navigate('/feed'); // Use navigate instead of history
+      
+        navigate('/feed');
       }
     } catch (error) {
 
@@ -44,14 +37,6 @@ const Login = () => {
 
   return (
     <div>
-      {/*<nav>
-         <div className="logo">
-          <div className="spinner"></div>Logo
-        </div>
-        <Link to='Admin' className="navbtn">
-          Admin
-        </Link>
-      </nav> */}
       <main className='log-main'>
         <div className="container">
           <div className="left">

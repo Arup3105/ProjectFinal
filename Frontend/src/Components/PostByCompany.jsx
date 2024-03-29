@@ -9,27 +9,22 @@ const PostsByCompany = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Function to decode base64 data
   const decodeBase64 = (base64String, type) => {
     try {
       let decodedString;
       if (type === "image") {
         decodedString = base64String;
       } else {
-        // Remove data URI prefix
         const base64Data = base64String.split(",")[1];
-        // Convert base64 string to ArrayBuffer
         const binaryString = window.atob(base64Data);
         const byteArray = new Uint8Array(binaryString.length);
         for (let i = 0; i < binaryString.length; i++) {
           byteArray[i] = binaryString.charCodeAt(i);
         }
-        // Create a Blob from ArrayBuffer
         const blob = new Blob([byteArray], { type: "application/pdf" });
-        // Return the Blob
         return blob;
       }
-      //console.log('Decoded String:', decodedString); // Print decoded result
+
       return decodedString;
     } catch (error) {
       console.error("Error decoding base64:", error);
@@ -38,7 +33,6 @@ const PostsByCompany = () => {
   };
 
   useEffect(() => {
-    // Fetch posts for the selected company based on companyName, startYear, and endYear
     ApiService.getPostsByCompany(
       companyName,
       startYear,
@@ -47,7 +41,6 @@ const PostsByCompany = () => {
     )
       .then((data) => {
         if (Array.isArray(data)) {
-          // Reverse the order of posts
           setPosts(data.reverse());
           setLoading(false);
         } else if (
@@ -55,18 +48,15 @@ const PostsByCompany = () => {
           data.message &&
           data.message.startsWith("No posts found")
         ) {
-          // Handle the case when no posts are found
-          setPosts([]); // Set an empty array for posts
+          setPosts([]);
           setLoading(false);
         } else {
-          // Handle unexpected response
           console.error("Invalid response from the server:", data);
           setError(new Error("Invalid response from the server"));
           setLoading(false);
         }
       })
       .catch((error) => {
-        // Handle errors
         console.error("Error fetching posts:", error);
         setError(error);
         setLoading(false);
@@ -127,7 +117,7 @@ const PostsByCompany = () => {
               hour: "numeric",
               minute: "numeric",
               hour12: true,
-              timeZone: "UTC", // Timezone is already in IST
+              timeZone: "UTC",
             })}
           </p>
         </div>

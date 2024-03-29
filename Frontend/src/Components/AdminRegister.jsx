@@ -53,13 +53,10 @@ const AdminRegister = () => {
         secretCode,
         authCode
       };
-
-      // Assuming ApiService.adminregister sends a request to the backend
       const response = await ApiService.adminregister(formData);
 
       if (response) {
         localStorage.clear();
-        //localStorage.setItem("jwtToken", response.token);
         navigate("/admin");
         setError("");
       } else {

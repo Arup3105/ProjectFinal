@@ -44,15 +44,15 @@
 }
 
 .post img {
-    max-width: calc(50% - 10px); /* Adjusted width with increased gap */
+    max-width: calc(50% - 10px);
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    margin-right: 20px; /* Added margin to create gap between images */
+    margin-right: 20px;
 }
 
 .post img:last-child {
-    margin-right: 0; /* Remove margin from the last image */
+    margin-right: 0;
 }
 
 .post img:hover {

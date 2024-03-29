@@ -5,12 +5,12 @@ import "./AdminPostCreation.css";
 const AdminPostCreation = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [attachments, setAttachments] = useState([]); // Update state to hold attachments
+  const [attachments, setAttachments] = useState([]);
   const [company, setCompany] = useState("");
   const [targetedStreams, setTargetedStreams] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // New loading state
+  const [loading, setLoading] = useState(false);
 
   const handleAddPost = async (e) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ const AdminPostCreation = () => {
         return;
       }
 
-      setLoading(true); // Set loading to true when the request starts
+      setLoading(true); 
       
       const postData = { title, content, attachments, company, targetedStreams };
 
@@ -29,14 +29,14 @@ const AdminPostCreation = () => {
       if (response.status === 201) {
         setMessage("Post created successfully");
         setTimeout(() => {
-          window.location.href = "/feed"; // Redirect to feed page
+          window.location.href = "/feed"; 
         }, 2000);
       }
     } catch (error) {
       setError(error.message);
       console.error("Error creating post:", error);
     } finally {
-      setLoading(false); // Set loading to false when the request finishes
+      setLoading(false);
     }
   };
 
@@ -57,7 +57,6 @@ const AdminPostCreation = () => {
       const reader = new FileReader();
 
       reader.onload = () => {
-        // Verify if reader.result looks like a valid base64 string
         console.log("Base64 string:", reader.result);
         resolve({ data: reader.result, fileName: file.name });
       };
@@ -81,7 +80,6 @@ const AdminPostCreation = () => {
           <input
             type="text"
             id="title"
-            // placeholder="Enter Title"
             value={title}
             required="required"
             onChange={(e) => setTitle(e.target.value)}
@@ -93,7 +91,6 @@ const AdminPostCreation = () => {
           <input
             type="text"
             id="content"
-            // placeholder="Enter Content"
             value={content}
             required="required"
             onChange={(e) => setContent(e.target.value)}
@@ -116,7 +113,6 @@ const AdminPostCreation = () => {
           <input
             type="text"
             id="company"
-            // placeholder="Company Name"
             value={company}
             required="required"
             onChange={(e) => setCompany(e.target.value.toUpperCase())}
@@ -128,7 +124,6 @@ const AdminPostCreation = () => {
             <input
             type="text"
             id="streams"
-            // placeholder="Enter Targeted Streams (comma-separated)"
             value={targetedStreams}
             required="required"
             onChange={(e) =>

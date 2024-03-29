@@ -6,7 +6,7 @@
 }
 
 .seeCompanyCard {
-    display: block; /* Ensure the anchor tag fills the entire card */
+    display: block;
     border: 2px solid #ccc;
     border-radius: 10px;
     padding: 30px;
@@ -26,7 +26,7 @@
 }
 
 .seeCompanyCard:hover h4 {
-    color: #333; /* Ensure the text color remains consistent on hover */
+    color: #333;
 }
 
 .seeCompanyCard h6 {
@@ -36,7 +36,7 @@
 }
 
 .seeCompanyCard:hover h6 {
-    color: #666; /* Ensure the text color remains consistent on hover */
+    color: #666;
 }
 
 @media only screen and (max-width: 768px) {

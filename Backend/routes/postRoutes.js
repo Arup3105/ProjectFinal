@@ -1,4 +1,3 @@
-// routes/postRoutes.js
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authenticate');
@@ -12,15 +11,11 @@ router.post('/create', authMiddleware, async (req, res) => {
   try {
     const { title, content, imageUrl } = req.body;
 
-    // Create a new post
     const newPost = new Post({
       title,
       content,
       imageUrl,
-      // Add other fields as needed
     });
-
-    // Save the post to the database
     await newPost.save();
 
     res.status(201).json({ message: 'Post created successfully' });
@@ -33,14 +28,12 @@ router.post('/create', authMiddleware, async (req, res) => {
 // Get all posts
 router.get('/seePosts', authMiddleware, async (req, res) => {
   try {
-    // Fetch the authenticated user's stream
     const user = await User.findById(req.user._id).select('stream');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Fetch posts that target the user's stream
     const posts = await Post.find({ targetedStreams: user.stream }).sort({ createdAt: -1 });
 
     res.status(200).json(posts);
@@ -53,10 +46,8 @@ router.get('/seePosts', authMiddleware, async (req, res) => {
 
 router.get('/shortByYear', authMiddleware, async (req, res) => {
   try {
-    // Fetch all companies from the database
     const allCompanies = await Company.find();
 
-    // Extract unique starting and ending years from the company sessions
     const uniqueYearsSet = new Set();
     const uniqueYears = allCompanies.flatMap(company =>
       company.sessions.map(session => {
@@ -67,10 +58,8 @@ router.get('/shortByYear', authMiddleware, async (req, res) => {
       })
     );
 
-    // Convert the set back to an array
     const uniqueYearsArray = Array.from(uniqueYearsSet).map(JSON.parse);
 
-    // Send the array of unique years as a JSON response
     res.json(uniqueYearsArray);
   } catch (error) {
     console.error(error);
@@ -82,20 +71,14 @@ router.get('/shortByYear', authMiddleware, async (req, res) => {
 router.get('/seeCompany/:startYear/:endYear', authMiddleware, async (req, res) => {
   try {
     const { startYear, endYear } = req.params;
-
-    // Fetch the user's stream
     const userStream = req.user.stream;
-
-    // Check if the request comes from an admin (no stream property)
     const isAdminRequest = !req.user.stream;
 
-    // Fetch companies that match the specified startYear and endYear
     const matchingCompanies = await Company.find({
       sessions: { $elemMatch: { startYear: parseInt(startYear), endYear: parseInt(endYear) } },
       ...(isAdminRequest ? {} : { targetedStreams: userStream })
     });
 
-    // Extract company details with sessions
     const companyDetails = matchingCompanies.map(company => ({
       _id: company._id,
       name: company.name,
@@ -103,10 +86,8 @@ router.get('/seeCompany/:startYear/:endYear', authMiddleware, async (req, res) =
       sessions: company.sessions.filter(session =>
         session.startYear === parseInt(startYear) && session.endYear === parseInt(endYear)
       ),
-      // Add other details as needed
     }));
 
-    // Send the array of matching company details as a JSON response
     res.json(companyDetails);
   } catch (error) {
     console.error(error);
@@ -121,10 +102,8 @@ router.get('/postsByCompany/:companyName/:startYear/:endYear/:targetedStreams', 
 
     const userStream = req.user.stream;
 
-    // Split the targetedStreams into an array
     const targetedStreamsArray = targetedStreams.split(',');
 
-    // Fetch posts that match the specified company, session, and targeted streams
     const posts = await Post.find({
       company: companyName,
       'session.startYear': parseInt(startYear),

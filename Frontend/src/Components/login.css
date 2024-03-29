@@ -47,7 +47,7 @@ nav .navbtn:hover{
 .log-main {
     position: absolute;
     width: 100%;
-    height: 110vh;
+    height: 100vh;
     background: linear-gradient(180deg, #211c7e, #12ac9f);
     overflow: hidden;
     display: flex;
