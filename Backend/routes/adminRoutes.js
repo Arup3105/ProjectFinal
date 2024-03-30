@@ -13,9 +13,9 @@ const config = require('config');
 
 const authenticateAdmin = require('../middleware/authenticate');
 
-const AUTH_CODE = config.get('adminCreatAuthCode'); // Replace with your actual secret code
+const AUTH_CODE = config.get('adminCreatAuthCode'); 
 
-// Admin login
+
 router.post('/login', async (req, res) => {
   try {
     const { employeeId, password,secretCode} = req.body;
@@ -42,7 +42,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Create a new admin (for initial setup) - Requires secret code
+
 router.post('/create', async (req, res) => {
   try {
     const { username, employeeId, password,email,mobileNumber, secretCode, authCode } = req.body;
@@ -57,10 +57,10 @@ router.post('/create', async (req, res) => {
       return res.status(400).json({ message: 'Admin already exists' });
     }
 
-    // Hash the password before saving it to the database
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new admin with hashed password
+
     const newAdmin = new Admin({
       username,
       employeeId,
@@ -70,7 +70,7 @@ router.post('/create', async (req, res) => {
       secretCode,
     });
 
-    // Save the new admin to the database
+
     await newAdmin.save();
 
     res.status(201).json({ message: 'Admin created successfully' });
