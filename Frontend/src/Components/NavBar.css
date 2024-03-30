@@ -8,7 +8,6 @@ nav {
 ul li {
     display: inline-block;
     padding: 15px;
-    /* text-decoration: none; */
     list-style: none;
 }
 
@@ -40,28 +39,59 @@ nav .menu span {
     border-radius: 0.2rem;
 }
 
-.search input{
-    border: 1px solid white;
-    border-radius: 15px;
-
+.search {
+    display: flex;
+    gap: 8px;
+    position: relative;
 }
 
-.search input::placeholder{
+.search input {
+    border: 1px solid white;
+    border-radius: 15px;
+    padding: 8px 12px;
+    color: #fff;
+    background-color: transparent; 
+}
+
+.search input::placeholder {
     color: #fff;
 }
 
-.search{
-    display: flex;
-    gap: 8px;
+.search-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 8px 0; 
+    max-height: 200px;
+    overflow-y: auto;
 }
 
-.con-btn{
+.search-results li {
+    padding: 8px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+}
+
+.search-results li:last-child {
+    border-bottom: none; 
+}
+
+.search-results li:hover {
+    background-color: #f0f0f0; 
+}
+
+.con-btn {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.createPost{
+.createPost {
     padding: 10px 50px;
 }
 
@@ -70,12 +100,12 @@ nav .menu span {
         display: flex;
     }
 
-    nav{
+    nav {
         flex-direction: column;
         align-items: start;
     }
 
-    nav ul li{
+    nav ul li {
         display: none;
         flex-direction: column;
         width: 100%;

@@ -109,13 +109,13 @@ router.post('/searchUser', authenticateAdmin, async (req, res) => {
 
     const searchCriteria = {
       $or: [
-        { name: { $regex: partialMatchPattern } },
+        { username: { $regex: partialMatchPattern } },
         { rollNumber: { $regex: new RegExp(searchQuery, 'i') } },
         { stream: { $regex: partialMatchPattern } },
       ],
     };
 
-    const users = await User.find(searchCriteria).select('name rollNumber stream ');
+    const users = await User.find(searchCriteria).select('username rollNumber stream ');
 
     res.status(200).json(users);
   } catch (error) {
@@ -124,11 +124,11 @@ router.post('/searchUser', authenticateAdmin, async (req, res) => {
   }
 });
 
-router.get('/seeAllUser', async (req, res) => {
+router.get('/user', async (req, res) => {
   try {
-    const users = await User.find().select('name rollNumber stream');
-
-    res.status(200).json(users);
+    const { rollNumber } = req.query;
+    const userData = await User.findOne({ rollNumber }).select('-_id -password -__v -notifications');
+    res.json(userData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });

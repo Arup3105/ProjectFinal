@@ -15,6 +15,7 @@ const Login = () => {
     }, 24 * 60 * 60 * 1000); 
   };
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -22,9 +23,9 @@ const Login = () => {
       if (response.token) {
         localStorage.clear();
         localStorage.setItem('jwtToken', response.token);
-      
+
         deleteTokenAfterOneDay('jwtToken');
-      
+        
         navigate('/feed');
       }
     } catch (error) {

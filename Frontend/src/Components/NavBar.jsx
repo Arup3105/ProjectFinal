@@ -1,17 +1,78 @@
-import React, { useState } from "react";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, Link, useLocation, useNavigate } from "react-router-dom"; 
 import { CiSearch } from "react-icons/ci";
 import "../Components/NavBar.css";
+import ApiService from '../Components/ApiServer/ApiServer.jsx';
 
 const NavBar = ({ isAdmin }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const location = useLocation();
+  const navigate = useNavigate(); 
 
   const isRestrictedPage =
     location.pathname === "/" ||
     location.pathname === "/register" ||
     location.pathname === "/admin" ||
     location.pathname === "/createadmin";
+
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchResultClick = async (rollNumber) => {
+    try {
+      if (typeof rollNumber !== 'undefined') {
+        // Close the search results display
+        setSearchResults([]);
+        // Redirect the user to UserProfile with the selected user's data
+        navigate(`/user/${rollNumber}`);
+      } else {
+        console.error('Invalid roll number:', rollNumber);
+      }
+    } catch (error) {
+      console.error('Error sending roll number to backend:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      try {
+        if (searchQuery.trim() !== "") {
+          const results = await ApiService.searchData(searchQuery);
+          setSearchResults(results);
+        } else {
+          setSearchResults([]);
+        }
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    };
+
+    fetchSearchResults();
+  }, [searchQuery]);
+
+  useEffect(() => {
+    // Reset searchQuery when the component unmounts
+    return () => {
+      setSearchQuery("");
+    };
+  }, []);
+
+  useEffect(() => {
+    // Reset searchQuery when the user logs in as admin
+    if (isAdmin) {
+      setSearchQuery("");
+    }
+  }, [isAdmin]);
+
+  const handleLogout = () => {
+    // Clear localStorage
+    localStorage.clear();
+    // Redirect to home page
+    navigate("/");
+  };
 
   return (
     <div>
@@ -28,8 +89,24 @@ const NavBar = ({ isAdmin }) => {
         {isAdmin && !isRestrictedPage && (
           <div className="con-btn">
             <div className="search">
-              <input type="search" placeholder="Search here" />
+              <input
+                type="search"
+                placeholder="Search here"
+                value={searchQuery}
+                onChange={handleInputChange}
+              />
               <CiSearch color="white" fontSize="2.6rem" />
+              {searchResults.length > 0 && (
+                <ul className="search-results">
+                  {searchResults.map((result, index) => (
+                    <li key={index} onClick={() => handleSearchResultClick(result.rollNumber)}>
+                      {result.username}
+                      <br/>
+                      {result.rollNumber}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
             <div className="createPost">
               <Link to="AdminPostCreation" className="navbtn">
@@ -47,7 +124,7 @@ const NavBar = ({ isAdmin }) => {
 
         <ul className={menuOpen ? "open" : ""}>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/" onClick={handleLogout}>LogOut</Link>
           </li>
           <li>
             <NavLink to="/about">About</NavLink>
@@ -62,7 +139,6 @@ const NavBar = ({ isAdmin }) => {
               </Link>
             </li>
           )}
-
         </ul>
       </nav>
     </div>

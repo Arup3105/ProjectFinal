@@ -148,7 +148,7 @@ const ApiService = {
 const postDataString = JSON.stringify(postData);
 
       const token = localStorage.getItem("jwtToken");
-      console.log(postData)
+      //console.log(postData)
       const response = await axios.post(
         `${ApiService.baseURL}/admin/createPost`,
         postData,
@@ -168,7 +168,7 @@ const postDataString = JSON.stringify(postData);
     }
   },
   
-  getUserData: async () => {
+  getProfileData: async () => {
     try {
       const token = localStorage.getItem("jwtToken");
 
@@ -189,6 +189,7 @@ const postDataString = JSON.stringify(postData);
       throw error.response.data;
     }
   },
+
   updateUserData: async (updatedData) => {
     try {
       const token = localStorage.getItem('jwtToken');
@@ -207,6 +208,50 @@ const postDataString = JSON.stringify(postData);
     } catch (error) {
       console.error('Error updating user data:', error);
       throw error.response.data;
+    }
+  },
+
+  searchData: async (searchQuery) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.post(
+        `${ApiService.baseURL}/admin/searchUser`,
+        { searchQuery },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response.data;
+    }
+  },
+
+  getUserData: async (rollNumber) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+
+      if (!token) {
+        throw new Error("No token, authorization denied");
+      }
+      
+      const response = await axios.get(
+        `${ApiService.baseURL}/admin/user?rollNumber=${rollNumber}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message || "Failed to send roll number");
     }
   },
   

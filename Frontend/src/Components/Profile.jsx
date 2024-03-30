@@ -6,24 +6,24 @@ const Profile = () => {
   const defaultUserData = {
     username: '',
     rollNumber: '',
-  regNumber: '',
-  email: '',
-  mobileNumber: '',
-  address: '',
-  photo: '',
-  tenthMarks: null,
-  tenthMarkSheet: '',
-  twelfthMarks: null,
-  twelfthMarkSheet: '',
-  cgpa: null,
-  firstSemMarkSheet: '',
-  secondSemMarkSheet: '',
-  thirdSemMarkSheet: '',
-  forthSemMarkSheet: null,
-  fifthSemMarkSheet: null,
-  sixthSemMarkSheet: null,
-  cv: '',
-  stream: '',
+    regNumber: '',
+    email: '',
+    mobileNumber: '',
+    address: '',
+    photo: '',
+    tenthMarks: null,
+    tenthMarkSheet: '',
+    twelfthMarks: null,
+    twelfthMarkSheet: '',
+    cgpa: null,
+    firstSemMarkSheet: '',
+    secondSemMarkSheet: '',
+    thirdSemMarkSheet: '',
+    forthSemMarkSheet: null,
+    fifthSemMarkSheet: null,
+    sixthSemMarkSheet: null,
+    cv: '',
+    stream: '',
   };
 
   const [userData, setUserData] = useState(defaultUserData);
@@ -41,16 +41,21 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    ApiService.getUserData()
-      .then(data => {
+    const fetchData = async () => {
+      setUserData(null); // Reset userData to null before fetching new data
+      setLoading(true); // Set loading state to true while fetching data
+      try {
+        const data = await ApiService.getProfileData();
         setUserData(data);
-        setLoading(false);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching user data:', error);
         setError(error);
-        setLoading(false);
-      });
+      } finally {
+        setLoading(false); // Set loading state to false after fetching data (whether success or error)
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleInputChange = e => {
@@ -61,66 +66,17 @@ const Profile = () => {
     }));
   };
 
-  const handleUpdate = () => {
-    const {
-      username,
-      employeeId,
-      secretCode,
-      rollNumber,
-      regNumber,
-      email,
-      mobileNumber,
-      address,
-      photo,
-      tenthMarks,
-      tenthMarkSheet,
-      twelfthMarks,
-      twelfthMarkSheet,
-      cgpa,
-      firstSemMarkSheet,
-      secondSemMarkSheet,
-      thirdSemMarkSheet,
-      forthSemMarkSheet,
-      fifthSemMarkSheet,
-      sixthSemMarkSheet,
-      cv,
-      stream,
-    } = userData;
-  
-    const updatedData = {
-      username,
-      employeeId,
-      secretCode,
-      rollNumber,
-      regNumber,
-      email,
-      mobileNumber,
-      address,
-      photo,
-      tenthMarks,
-      tenthMarkSheet,
-      twelfthMarks,
-      twelfthMarkSheet,
-      cgpa,
-      firstSemMarkSheet,
-      secondSemMarkSheet,
-      thirdSemMarkSheet,
-      forthSemMarkSheet,
-      fifthSemMarkSheet,
-      sixthSemMarkSheet,
-      cv,
-      stream,
-    };
-  
-    ApiService.updateUserData(updatedData)
-      .then(() => {
-        setEditMode(false);
-      })
-      .catch(error => {
-        console.error('Error updating user data:', error);
-        setError(error);
-      });
+  const handleUpdate = async () => {
+    try {
+      const updatedData = { ...userData };
+      await ApiService.updateUserData(updatedData);
+      setEditMode(false);
+    } catch (error) {
+      console.error('Error updating user data:', error);
+      setError(error);
+    }
   };
+  
   
 
   const handleFileUpload = async (e, fieldName) => {
