@@ -123,12 +123,11 @@ const NavBar = ({ isAdmin }) => {
         )}
 
         <ul className={menuOpen ? "open" : ""}>
+        {!isRestrictedPage && (
           <li>
-            <Link to="/" onClick={handleLogout}>LogOut</Link>
+            <NavLink to="/Feed">Home</NavLink>
           </li>
-          <li>
-            <NavLink to="/about">About</NavLink>
-          </li>
+          )}
           <li>
             <NavLink to="#">Contacts</NavLink>
           </li>
@@ -138,6 +137,11 @@ const NavBar = ({ isAdmin }) => {
                 Profile
               </Link>
             </li>
+          )}
+          {!isRestrictedPage && (
+          <li>
+            <Link to="/" onClick={handleLogout}>LogOut</Link>
+          </li>
           )}
         </ul>
       </nav>
