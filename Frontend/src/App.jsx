@@ -12,6 +12,8 @@ import AdminRegister from "./Components/AdminRegister";
 import AdminPostCreation from "./Components/AdminPostCreation";
 import Profile from "./Components/Profile";
 import UserProfile from './Components/UserProfile';
+import AdminForgot from "./Components/AdminForgot";
+import UserForgot from "./Components/UserForgot";
 
 const App = () => {
   const location = useLocation();
@@ -42,6 +44,8 @@ const App = () => {
         <Route path="AdminRegister" element={<AdminRegister />} />
         <Route path="AdminPostCreation" element={<AdminPostCreation />} />
         <Route path="/Profile" element={<Profile />} />
+        <Route path="/admin/AdminForgot" element={<AdminForgot />} />
+        <Route path="/user/UserForgot" element={<UserForgot />} />
         <Route path="/user/:rollNumber" element={<UserProfile />} />
       </Routes>
     </div>

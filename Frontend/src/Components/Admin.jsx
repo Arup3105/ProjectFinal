@@ -61,15 +61,19 @@ const Admin = () => {
               />
             </div>
             <div className="admin-btn">
-            <button onClick={handleLogin}>
-              Login
-            </button>
+              <button onClick={handleLogin}>
+                Login
+              </button>
             </div>
+            <Link to="/admin/AdminForgot" className='fpassword'>
+              Forgot Password?
+            </Link>
+            <br />
             <p>
-                  <Link to='/AdminRegister' className='signin'>
-                    Register as ADMIN
-                  </Link>
-                </p>
+              <Link to='/AdminRegister' className='signin'>
+                Register as ADMIN
+              </Link>
+            </p>
           </div>
         </div>
       </div>

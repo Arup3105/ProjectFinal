@@ -73,9 +73,9 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <a href="#" className='fpassword'>
+                <Link to="/user/UserForgot" className='fpassword'>
                   Forgot Password?
-                </a>{' '}
+                </Link>{' '}
                 <br />
                 <button type="submit">Login</button> <br />
                 {error && <p style={{ color: 'red' }}>{error}</p>}
