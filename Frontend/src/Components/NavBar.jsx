@@ -95,7 +95,7 @@ const NavBar = ({ isAdmin }) => {
                 value={searchQuery}
                 onChange={handleInputChange}
               />
-              <CiSearch color="white" fontSize="2.6rem" />
+              {/* <CiSearch color="white" fontSize="2.6rem" /> */}
               {searchResults.length > 0 && (
                 <ul className="search-results">
                   {searchResults.map((result, index) => (
