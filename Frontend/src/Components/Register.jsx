@@ -29,14 +29,27 @@ const Register = () => {
   const [stream, setStream] = useState("");
   const [error, setError] = useState("");
 
-const fileToBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-    reader.readAsDataURL(file);
-  });
-};
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileChange = (e, setter) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setError("File size exceeds 2MB limit.");
+        e.target.value = null; // Reset the file input to clear the selected file
+        return;
+      }
+      setError(""); // Clear any previous error
+      setter(file); // Set the file to state
+    }
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -60,7 +73,7 @@ const fileToBase64 = (file) => {
         setError("Please fill in all required fields.");
         return;
       }
-  
+
       if (!/^323\d{8}$/.test(rollNumber)) {
         setError("Roll number must be 11 digits and start with '323'.");
         return;
@@ -75,7 +88,7 @@ const fileToBase64 = (file) => {
         setError("Mobile number must be exactly 10 digits.");
         return;
       }
-  
+
       if (password !== confirmPassword) {
         setError("Passwords do not match.");
         return;
@@ -90,7 +103,7 @@ const fileToBase64 = (file) => {
         setError("Tenth marks must be between 0 and 100.");
         return;
       }
-  
+
       const twelfthMarksFloat = parseFloat(twelfthMarks);
       if (
         isNaN(twelfthMarksFloat) ||
@@ -100,18 +113,18 @@ const fileToBase64 = (file) => {
         setError("Twelfth marks must be between 0 and 100.");
         return;
       }
-  
+
       const cgpaFloat = parseFloat(cgpa);
       if (isNaN(cgpaFloat) || cgpaFloat < 0 || cgpaFloat > 10) {
         setError("CGPA must be between 0 and 10.");
         return;
       }
-  
+
       if (!/^[a-zA-Z\s]+$/.test(name)) {
         setError("Username can only contain alphabetic characters and spaces.");
         return;
       }
-  
+
       const formData = new FormData();
       formData.append("name", name);
       formData.append("rollNumber", rollNumber);
@@ -121,9 +134,9 @@ const fileToBase64 = (file) => {
       formData.append("mobileNumber", mobileNumber);
       formData.append("address", address);
       if (photo) {
-      const photoBase64 = await fileToBase64(photo);
-      formData.append("photo", photoBase64);
-    }
+        const photoBase64 = await fileToBase64(photo);
+        formData.append("photo", photoBase64);
+      }
       formData.append("tenthMarks", tenthMarks);
       if (tenthMarkSheet) {
         const tenthMarkSheetBase64 = await fileToBase64(tenthMarkSheet);
@@ -164,13 +177,12 @@ const fileToBase64 = (file) => {
       }
       formData.append("stream", stream.toUpperCase());
       formData.append("cgpa", cgpa);
-      
 
+      setError("Creating your account. Please wait...");
       const response = await ApiService.register(formData);
-  
+
       if (response && response.token) {
         localStorage.clear();
-        //localStorage.setItem("jwtToken", response.token);
         navigate("/");
         setError("");
       } else {

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './AdminRegister.css';
 import ApiService from '../Components/ApiServer/ApiServer.jsx';
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 const AdminRegister = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -109,6 +111,12 @@ const AdminRegister = () => {
             <div className='admin-regbtn'>
               <button type='submit'>Register</button>
             </div>
+            <p>
+                  Already have an account{" "}
+                  <Link to="/admin" className="signin">
+                    Login
+                  </Link>
+                  </p>
           </div>
         </form>
       </div>

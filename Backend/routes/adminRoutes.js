@@ -82,9 +82,9 @@ router.post('/create', async (req, res) => {
 
 router.post('/forgetPassword', async (req, res) => {
   try {
-    const { username,employeeId, secretCode, newPassword } = req.body;
-    const admin = await Admin.findOne({ username,employeeId, secretCode });
-
+    const { employeeId, email, mobileNumber, secretCode, newPassword } = req.body;
+    const admin = await Admin.findOne({ employeeId, email, mobileNumber, secretCode });
+    
     if (admin) {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
       admin.password = hashedPassword;

@@ -44,14 +44,29 @@ router.post("/register", upload.any(), async (req, res) => {
       stream,
     } = req.body;
 
-    const existingUser = await User.findOne({ rollNumber });
+    const existingUserByEmail = await User.findOne({ email });
+    const existingUserByMobile = await User.findOne({ mobileNumber });
+    const existingUserByRollNumber = await User.findOne({ rollNumber });
+    const existingUserByRegNumber = await User.findOne({ regNumber });
 
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists " });
+    if (existingUserByEmail) {
+      return res.status(400).json({ message: "Email is already registered" });
+    }
+
+    if (existingUserByMobile) {
+      return res.status(400).json({ message: "Mobile number is already registered" });
+    }
+
+    if (existingUserByRollNumber) {
+      return res.status(400).json({ message: "Roll number is already registered" });
+    }
+
+    if (existingUserByRegNumber) {
+      return res.status(400).json({ message: "Registration number is already registered" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
-      name,
+      username: name,
       rollNumber,
       regNumber,
       password: hashedPassword,
@@ -129,9 +144,9 @@ router.post("/login", async (req, res) => {
 // Forget Password
 router.post("/forgetPassword", async (req, res) => {
   try {
-    const { rollNumber, name, mobileNumber, email, newPassword } = req.body;
+    const { rollNumber, regNumber, mobileNumber, email, newPassword } = req.body;
 
-    const user = await User.findOne({ rollNumber, name, mobileNumber, email });
+    const user = await User.findOne({ rollNumber, regNumber, mobileNumber, email });
 
     if (user) {
       const hashedPassword = await bcrypt.hash(newPassword, 10);

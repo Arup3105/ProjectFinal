@@ -254,6 +254,33 @@ const postDataString = JSON.stringify(postData);
       throw new Error(error.response.data.message || "Failed to send roll number");
     }
   },
+
+  adminForgetPassword: async (employeeId, email, mobileNumber, secretCode, newPassword) => {
+    try {
+      const response = await axios.post(
+        `${ApiService.baseURL}/admin/forgetPassword`,
+        { employeeId, email, mobileNumber, secretCode, newPassword },
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  },
+
+  userForgetPassword: async (rollNumber,regNumber, email, mobileNumber, newPassword) => {
+    try {
+      const response = await axios.post(
+        `${ApiService.baseURL}/user/forgetPassword`,
+        { rollNumber,regNumber, email, mobileNumber, newPassword },
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  },
+  
   
 };
 

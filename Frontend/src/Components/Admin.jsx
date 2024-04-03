@@ -74,6 +74,12 @@ const Admin = () => {
                 Register as ADMIN
               </Link>
             </p>
+            <p>
+                  Not an Admin? {" "}
+                  <Link to="/" className="signin">
+                    Login
+                  </Link>
+                  </p>
           </div>
         </div>
       </div>

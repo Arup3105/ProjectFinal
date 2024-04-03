@@ -15,7 +15,9 @@ const NavBar = ({ isAdmin }) => {
     location.pathname === "/" ||
     location.pathname === "/register" ||
     location.pathname === "/admin" ||
-    location.pathname === "/createadmin";
+    location.pathname === "/createadmin" ||
+    location.pathname === "/admin/AdminForgot" ||
+    location.pathname === "/user/UserForgot";
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -61,16 +63,14 @@ const NavBar = ({ isAdmin }) => {
   }, []);
 
   useEffect(() => {
-    // Reset searchQuery when the user logs in as admin
+
     if (isAdmin) {
       setSearchQuery("");
     }
   }, [isAdmin]);
 
   const handleLogout = () => {
-    // Clear localStorage
     localStorage.clear();
-    // Redirect to home page
     navigate("/");
   };
 
