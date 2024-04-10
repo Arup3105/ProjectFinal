@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link, useLocation, useNavigate } from "react-router-dom"; 
-import { CiSearch } from "react-icons/ci";
+import { FaHome, FaUser, FaBell,FaPowerOff } from "react-icons/fa";
 import "../Components/NavBar.css";
+import { CiSearch } from "react-icons/ci";
 import ApiService from '../Components/ApiServer/ApiServer.jsx';
 
 const NavBar = ({ isAdmin }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [notificationListOpen, setNotificationListOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const location = useLocation();
   const navigate = useNavigate(); 
 
@@ -38,6 +42,57 @@ const NavBar = ({ isAdmin }) => {
     }
   };
 
+  const fetchNotificationCount = async () => {
+    try {
+      const response = await ApiService.getNotificationCount();
+        const Count = response.count
+      setUnreadNotifications(Count);
+
+      const notificationData = response.notification;
+      setNotifications(notificationData);
+
+    } catch (error) {
+      console.error('Error fetching notification count:', error);
+    }
+  };
+
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      await ApiService.markNotificationAsRead(notificationId);
+      // Refetch notifications after marking as read
+      fetchNotifications();
+      // Update unread notification count
+      setUnreadNotifications(unreadNotifications - 1);
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
+  const fetchNotifications = async () => {
+    try {
+      const notificationsData = await ApiService.getNotifications();
+      setNotifications(notificationsData);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  const markAllNotificationsAsRead = async () => {
+    try {
+      await ApiService.markAllNotificationsAsRead();
+      setUnreadNotifications(0);
+      //setNotifications([]);
+    } catch (error) {
+      console.error('Error marking notifications as read:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotificationCount();
+    const intervalId = setInterval(fetchNotificationCount, 30000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
@@ -56,14 +111,12 @@ const NavBar = ({ isAdmin }) => {
   }, [searchQuery]);
 
   useEffect(() => {
-    // Reset searchQuery when the component unmounts
     return () => {
       setSearchQuery("");
     };
   }, []);
 
   useEffect(() => {
-
     if (isAdmin) {
       setSearchQuery("");
     }
@@ -71,8 +124,18 @@ const NavBar = ({ isAdmin }) => {
 
   const handleLogout = () => {
     localStorage.clear();
+    setUnreadNotifications(0)
     navigate("/");
   };
+
+  const handleNotificationButtonClick = () => {
+    setNotificationListOpen(!notificationListOpen);
+    if (notificationListOpen) {
+      // Fetch notifications when opening the list
+      fetchNotifications();
+    }
+  };
+
 
   return (
     <div>
@@ -95,7 +158,7 @@ const NavBar = ({ isAdmin }) => {
                 value={searchQuery}
                 onChange={handleInputChange}
               />
-              {/* <CiSearch color="white" fontSize="2.6rem" /> */}
+              <CiSearch color="white" fontSize="2.6rem" />
               {searchResults.length > 0 && (
                 <ul className="search-results">
                   {searchResults.map((result, index) => (
@@ -115,7 +178,6 @@ const NavBar = ({ isAdmin }) => {
             </div>
           </div>
         )}
-
         {location.pathname === "/" && (
           <Link to="/admin" className="navbtn">
             Admin
@@ -123,25 +185,48 @@ const NavBar = ({ isAdmin }) => {
         )}
 
         <ul className={menuOpen ? "open" : ""}>
-        {!isRestrictedPage && (
-          <li>
-            <NavLink to="/Feed">Home</NavLink>
-          </li>
+          {!isRestrictedPage && (
+            <li>
+              <NavLink to="/Feed">
+                <FaHome /> 
+              </NavLink>
+            </li>
           )}
-          <li>
-            <NavLink to="#">Contacts</NavLink>
-          </li>
+          {!isRestrictedPage && (
+            <li>
+              <div className="nav-icon-notification" onClick={handleNotificationButtonClick}>
+                <FaBell />
+                {unreadNotifications > 0 && <span className="notification-badge">{unreadNotifications}</span>}
+              </div>
+              {notificationListOpen && (
+                <div className="notification-list">
+                  <button onClick={markAllNotificationsAsRead}>Mark All as Read</button>
+                  {notifications.map((notification, index) => (
+                    <div key={index} className="notification-item">
+                      {notification.content}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </li>
+          )}
+
+
           {!isRestrictedPage && (
             <li>
               <Link to="/profile" className="navbtn">
-                Profile
+                <FaUser />
               </Link>
             </li>
           )}
           {!isRestrictedPage && (
-          <li>
-            <Link to="/" onClick={handleLogout}>LogOut</Link>
-          </li>
+            <li>
+              <Link to="/" onClick={handleLogout}>
+                <FaPowerOff>
+                  LogOut
+                </FaPowerOff>
+              </Link>
+            </li>
           )}
         </ul>
       </nav>

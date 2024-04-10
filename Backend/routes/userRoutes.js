@@ -165,13 +165,25 @@ router.post("/forgetPassword", async (req, res) => {
   }
 });
 
-// notification 
-router.get("/notification", authMiddleware, async (req, res) => {
+router.get("/notificationCount",authMiddleware, async(req,res)=>{
   try {
     const userId = req.user._id;
-    const notifications = await Notification.find({ userId, read: false });
+    const notificationsCount = await Notification.countDocuments({ userId, read: false });
+    const notifications = await Notification.find({ userId}).select("content read");
 
-    res.status(200).json(notifications);
+    res.status(200).json({count: notificationsCount, notification: notifications});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+// notification 
+router.get("/read", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const result = await Notification.updateMany({ userId, read: false }, { $set: { read: true } });
+
+    res.status(200).json("Done");
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });

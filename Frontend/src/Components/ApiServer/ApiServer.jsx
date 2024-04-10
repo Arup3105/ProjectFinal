@@ -281,7 +281,53 @@ const postDataString = JSON.stringify(postData);
     }
   },
   
-  
+  getNotificationCount: async()=>{
+    try {
+      const token = localStorage.getItem("jwtToken");
+
+      if (!token) {
+        throw new Error("No token, authorization denied");
+      }
+      const response = await axios.get(
+        `${ApiService.baseURL}/user/notificationCount`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  },
+
+  markAllNotificationsAsRead: async()=>{
+    try {
+      const token = localStorage.getItem("jwtToken");
+
+      if (!token) {
+        throw new Error("No token, authorization denied");
+      }
+      const response = await axios.get(
+        `${ApiService.baseURL}/user/read`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
 };
 
 

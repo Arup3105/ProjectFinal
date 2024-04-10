@@ -48,16 +48,7 @@ const userSchema = new mongoose.Schema({
   sixthSemMarkSheet: {type : String , default: null},
   cv: { type: String, required: true },
   stream: { type: String, required: true }, 
-  notifications: [
-    {
-      message: String,
-      timestamp: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
-});
+  });
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
