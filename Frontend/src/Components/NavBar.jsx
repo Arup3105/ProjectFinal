@@ -19,7 +19,7 @@ const NavBar = ({ isAdmin }) => {
     location.pathname === "/" ||
     location.pathname === "/register" ||
     location.pathname === "/admin" ||
-    location.pathname === "/createadmin" ||
+    location.pathname === "/AdminRegister" ||
     location.pathname === "/admin/AdminForgot" ||
     location.pathname === "/user/UserForgot";
 
@@ -192,7 +192,8 @@ const NavBar = ({ isAdmin }) => {
               </NavLink>
             </li>
           )}
-          {!isRestrictedPage && (
+          {!isAdmin && !isRestrictedPage && (
+          // {!isRestrictedPage && (
             <li>
               <div className="nav-icon-notification" onClick={handleNotificationButtonClick}>
                 <FaBell />
