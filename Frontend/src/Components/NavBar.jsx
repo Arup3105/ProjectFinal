@@ -56,18 +56,6 @@ const NavBar = ({ isAdmin }) => {
     }
   };
 
-  const markNotificationAsRead = async (notificationId) => {
-    try {
-      await ApiService.markNotificationAsRead(notificationId);
-      // Refetch notifications after marking as read
-      fetchNotifications();
-      // Update unread notification count
-      setUnreadNotifications(unreadNotifications - 1);
-    } catch (error) {
-      console.error('Error marking notification as read:', error);
-    }
-  };
-
   const fetchNotifications = async () => {
     try {
       const notificationsData = await ApiService.getNotifications();
