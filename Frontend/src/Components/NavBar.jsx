@@ -16,8 +16,9 @@ const NavBar = ({ isAdmin }) => {
   const navigate = useNavigate(); 
 
   const isRestrictedPage =
-    location.pathname === "/" ||
-    location.pathname === "/register" ||
+  location.pathname === "/"||
+    location.pathname === "/Login" ||
+    location.pathname === "/Register" ||
     location.pathname === "/admin" ||
     location.pathname === "/AdminRegister" ||
     location.pathname === "/admin/AdminForgot" ||
@@ -30,9 +31,7 @@ const NavBar = ({ isAdmin }) => {
   const handleSearchResultClick = async (rollNumber) => {
     try {
       if (typeof rollNumber !== 'undefined') {
-        // Close the search results display
         setSearchResults([]);
-        // Redirect the user to UserProfile with the selected user's data
         navigate(`/user/${rollNumber}`);
       } else {
         console.error('Invalid roll number:', rollNumber);
@@ -69,17 +68,18 @@ const NavBar = ({ isAdmin }) => {
     try {
       await ApiService.markAllNotificationsAsRead();
       setUnreadNotifications(0);
-      //setNotifications([]);
     } catch (error) {
       console.error('Error marking notifications as read:', error);
     }
   };
 
   useEffect(() => {
-    fetchNotificationCount();
-    const intervalId = setInterval(fetchNotificationCount, 30000);
-    return () => clearInterval(intervalId);
-  }, []);
+    if (!isRestrictedPage) {
+      fetchNotificationCount();
+      const intervalId = setInterval(fetchNotificationCount, 30000);
+      return () => clearInterval(intervalId);
+    }
+  }, [isRestrictedPage]);
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -119,18 +119,24 @@ const NavBar = ({ isAdmin }) => {
   const handleNotificationButtonClick = () => {
     setNotificationListOpen(!notificationListOpen);
     if (notificationListOpen) {
-      // Fetch notifications when opening the list
       fetchNotifications();
     }
+  };
+
+  const handleLogoClick = () => {
+    localStorage.clear();
+    navigate("/");
   };
 
 
   return (
     <div>
       <nav>
-        <div className="logo">
-          <div className="spinner"></div>Logo
-        </div>
+      <Link to="/" onClick={handleLogoClick}>
+          <button className="logo">
+            <div className="spinner"></div>Logo
+          </button>
+        </Link>
         <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
           <span></span>
           <span></span>
@@ -166,10 +172,17 @@ const NavBar = ({ isAdmin }) => {
             </div>
           </div>
         )}
-        {location.pathname === "/" && (
-          <Link to="/admin" className="navbtn">
-            Admin
+
+
+          {isRestrictedPage && (
+            <Link to="/Login" className="navbtn">
+            User
           </Link>
+        )} 
+        {isRestrictedPage && (
+                <Link to="/admin" className="navbtn">
+                  Admin
+                </Link>
         )}
 
         <ul className={menuOpen ? "open" : ""}>
@@ -181,7 +194,6 @@ const NavBar = ({ isAdmin }) => {
             </li>
           )}
           {!isAdmin && !isRestrictedPage && (
-          // {!isRestrictedPage && (
             <li>
               <div className="nav-icon-notification" onClick={handleNotificationButtonClick}>
                 <FaBell />

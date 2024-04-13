@@ -14,6 +14,7 @@ import Profile from "./Components/Profile";
 import UserProfile from './Components/UserProfile';
 import AdminForgot from "./Components/AdminForgot";
 import UserForgot from "./Components/UserForgot";
+import LandingPage from "./Components/landingPage";
 
 const App = () => {
   const location = useLocation();
@@ -32,8 +33,9 @@ const App = () => {
     <div>
       <NavBar isAdmin={isAdmin} />
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route path="/" element={<LandingPage />}/>
+        <Route path="/Login" element={<Login />} />
+        <Route path="Register" element={<Register />} />
         <Route path="feed" element={<Feed />} />
         <Route path="seeCompany/:startYear/:endYear" element={<SeeCompany />} />
         <Route

@@ -81,7 +81,7 @@ const Login = () => {
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 <p>
                   Don't have an account{' '}
-                  <Link to='register' className='signin'>
+                  <Link to='/Register' className='signin'>
                     Register
                   </Link>
                 </p>
