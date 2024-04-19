@@ -2,7 +2,14 @@ import React from 'react'
 
 function landingPage() {
   return (
-    <div>landingPage</div>
+    <div className='landingpage'>
+      <div className="right">
+        <img src="#" alt="Image" />
+      </div>
+      <div className="left">
+        Welcome Students
+      </div>
+    </div>
   )
 }
 

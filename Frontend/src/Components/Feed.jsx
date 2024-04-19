@@ -23,7 +23,8 @@ const Feed = () => {
   }, [navigate]);
 
   return (
-    <div>
+    <div className='back-img'>
+        <img src="/apc.png" alt="APC" />
       <div className="feed">
         {years.map((year, index) => (
           <Link to={`/seeCompany/${year.startYear}/${year.endYear}`} key={index}>

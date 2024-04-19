@@ -5,6 +5,14 @@
     margin: 20px;
 }
 
+.back-img img{
+    position: absolute;
+    top: 25%;
+    left: 35%;
+    width: 400px;
+    z-index: -2;
+}
+
 .card {
     border: 2px solid #ccc;
     border-radius: 10px;

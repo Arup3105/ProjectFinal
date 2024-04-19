@@ -30,6 +30,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
   const fileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -76,8 +77,6 @@ const Profile = () => {
       setError(error);
     }
   };
-  
-  
 
   const handleFileUpload = async (e, fieldName) => {
     const file = e.target.files[0];
@@ -100,7 +99,14 @@ const Profile = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='load-body'>
+      <div className="load-container">
+        <div className="load-ring"></div>
+        <div className="load-ring"></div>
+        <div className="load-ring"></div>
+        <div className="loading">Loading...</div>
+      </div>
+    </div>;
   }
 
   if (error) {
@@ -110,47 +116,90 @@ const Profile = () => {
   return (
     <div className="profile-container">
       <h2>Profile</h2>
-      <div className="profile-info">
-        {userData && Object.entries(userData).map(([key, value]) => (
-          key !== 'password' && key !== 'stream' && (
-            <div key={key} className="profile-field">
-              <label>{key.toUpperCase()}</label>
-              {key.endsWith('Sheet') || key === 'cv' || key === 'photo' ? (
-                <>
-                  {editMode ? (
-                    <input type="file" accept="image/*" onChange={e => handleFileUpload(e, key)} />
-                  ) : null}
-                  {value ? (
-                    <img src={value} alt={key} />
-                  ) : (
-                    <span>No image available</span>
-                  )}
-                </>
-              ) : (
-                editMode ? (
-                  <input
-                    type="text"
-                    name={key}
-                    value={value}
-                    onChange={handleInputChange}
-                  />
+
+      {!isAdmin && (
+        <div className="profile-section">
+
+          <div className="profile-info">
+            <h3>Photo</h3>
+            {userData.photo && (
+              <div className="profile-field">
+                <label>Photo</label>
+                {editMode ? (
+                  <input className="file-input" type="file" accept="image/*" onChange={e => handleFileUpload(e, 'photo')} />
                 ) : (
-                  <span>{value}</span>
-                )
-              )}
-            </div>
-          )
-        ))}
-        <div className="profile-buttons">
-          {editMode ? (
-            <>
-              <button onClick={handleUpdate}>Save Changes</button>
-              <button onClick={() => setEditMode(false)}>Cancel</button>
-            </>
-          ) : (
-            <button onClick={() => setEditMode(true)}>Edit</button>
-          )}
+                  <img className="user-photo" src={userData.photo} alt="User Photo" />
+                )}
+              </div>
+            )}
+          </div>
         </div>
+      )}
+
+      {/* Personal Details Section */}
+      <div className="profile-section">
+        <div className="flex">
+
+          <div className="profile-info">
+            <h3>Personal Details</h3>
+            {userData && Object.entries(userData).map(([key, value]) => (
+              key !== 'password' && key !== 'stream' && !key.endsWith('Sheet') && key !== 'cv' && key !== 'photo' && (
+                <div key={key} className="profile-field">
+                  <label>{key.toUpperCase()}</label>
+                  {editMode ? (
+                    <input
+                      className="text-input"
+                      type="text"
+                      name={key}
+                      value={value}
+                      onChange={handleInputChange}
+                    />
+                  ) : (
+                    <span className="user-data">{value}</span>
+                  )}
+                </div>
+              )
+            ))}
+          </div>
+
+
+          {/* Render Documents section only if isAdmin is false */}
+          {!isAdmin && (
+            <div className="profile-section">
+
+              <div className="profile-info">
+                <h3>Documents</h3>
+                {userData && Object.entries(userData).map(([key, value]) => (
+                  (key.endsWith('Sheet') || key === 'cv') && (
+                    <div key={key} className="profile-field">
+                      <label>{key.toUpperCase()}</label>
+                      {editMode ? (
+                        <input className="file-input" type="file" accept="image/*" onChange={e => handleFileUpload(e, key)} />
+                      ) : (
+                        <span className="user-document">{value ? <img src={value} alt={key} /> : 'No document available'}</span>
+                      )}
+                    </div>
+                  )
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+      {/* Render Photo section only if isAdmin is false */}
+
+
+      {/* Edit/Save Buttons */}
+      <div className="profile-buttons">
+        {editMode ? (
+          <>
+            <button className="save-button" onClick={handleUpdate}>Save Changes</button>
+            <button className="cancel-button" onClick={() => setEditMode(false)}>Cancel</button>
+          </>
+        ) : (
+          <button className="edit-button" onClick={() => setEditMode(true)}>Edit</button>
+        )}
       </div>
     </div>
   );

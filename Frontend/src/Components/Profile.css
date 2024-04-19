@@ -1,63 +1,142 @@
-.profile-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f8f8f8;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .profile-info {
-    margin-top: 20px;
-  }
-  
-  .profile-field {
-    margin-bottom: 15px;
-  }
-  
-  .profile-field label {
-    display: block;
-    font-weight: bold;
-  }
-  
-  .profile-field input[type="text"],
-  .profile-field span {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    font-size: 14px;
-  }
-  
-  .profile-field span {
-    padding: 8px 12px;
-    background-color: #f8f8f8;
-  }
-  
-  .profile-field img {
+.profile-field img {
     max-width: 100%;
     max-height: 200px;
   }
-  
-  .profile-buttons {
-    margin-top: 20px;
+
+.flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-container {
+  display: flex;
+}
+
+.profile-section {
+  /* Styles for each section */
+}
+
+.profile-info {
+  /* Styles for the information */
+}
+
+.profile-field {
+  /* Styles for each field */
+}
+
+.flex {
+  /* Styles for the flex container */
+}
+
+.text-input {
+  /* Styles for text input */
+}
+
+.file-input {
+  /* Styles for file input */
+}
+
+.user-photo {
+  /* Styles for user photo */
+}
+
+.user-data {
+  /* Styles for user data */
+}
+
+.user-document {
+  /* Styles for user document */
+}
+
+.profile-buttons {
+  /* Styles for buttons container */
+}
+
+.save-button {
+  /* Styles for save button */
+}
+
+.cancel-button {
+  /* Styles for cancel button */
+}
+
+.edit-button {
+  /* Styles for edit button */
+}
+
+
+/* Loading Section */
+
+.load-body {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #011015;
+}
+
+.load-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.load-ring {
+  width: 200px;
+  height: 200px;
+  border: 0px solid black;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.load-ring:nth-child(1) {
+  border-bottom-width: 8px;
+  border-color: rgb(255, 0, 255);
+  animation: rotate1 2s linear infinite;
+}
+
+.load-ring:nth-child(2) {
+  border-right-width: 8px;
+  border-color: rgb(0, 247, 255);
+  animation: rotate2 2s linear infinite;
+}
+
+.load-ring:nth-child(3) {
+  border-top-width: 8px;
+  border-color: rgb(60, 255, 0);
+  animation: rotate3 2s linear infinite;
+}
+
+.loading{
+  color: white;
+}
+
+@keyframes rotate1 {
+  0% {
+      transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
   }
-  
-  .profile-buttons button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  100%{
+      transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
   }
-  
-  .profile-buttons button:hover {
-    background-color: #0056b3;
+}
+
+@keyframes rotate2{
+  0%{
+      transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
   }
-  
+  100%{
+      transform: rotateX(50deg) rotateY(-10deg) rotateZ(360deg);
+  }
+}
+
+@keyframes rotate3{
+  0%{
+      transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+  }
+  100%{
+      transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+  }
+}

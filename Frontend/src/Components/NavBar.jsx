@@ -133,9 +133,9 @@ const NavBar = ({ isAdmin }) => {
     <div>
       <nav>
       <Link to="/" onClick={handleLogoClick}>
-          <button className="logo">
+          <Link to='/home' className="logo">
             <div className="spinner"></div>Logo
-          </button>
+          </Link>
         </Link>
         <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
           <span></span>

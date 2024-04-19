@@ -30,7 +30,14 @@ const SeeCompany = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='load-body'>
+    <div className="load-container">
+      <div className="load-ring"></div>
+      <div className="load-ring"></div>
+      <div className="load-ring"></div>
+      <div className="loading">Loading...</div>
+    </div>
+  </div>;;
   }
 
   if (error) {
@@ -38,7 +45,8 @@ const SeeCompany = () => {
   }
 
   return (
-    <div className="seeCompanyFeed">
+    <div className="seeCompanyFeed back-img">
+      <img src="/apc.png" alt="APC" />
       {companyDetails.map((company, index) => (
         <a
           key={index}

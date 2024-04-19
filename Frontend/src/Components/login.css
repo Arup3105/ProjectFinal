@@ -128,15 +128,6 @@ input::placeholder {
     color: #fff;
 }
 
-button {
-    border: none;
-    padding: 10px 150px;
-    margin-top: 35px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    border-radius: 20px;
-}
-
 .fpassword {
     color: white;
     display: flex;
