@@ -62,10 +62,12 @@ const UserForgot = () => {
   };
 
   return (
-    <div className="containerForgetPassword">
+    <div className="form">
+        <div className="admin">
+          <div className="admin-formstyle">
       <h1>User Forgot Password Page</h1>
 
-      <form className="formForForgetPassword" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label>RollNumber:</label>
           <input
@@ -133,6 +135,8 @@ const UserForgot = () => {
           Login
         </Link>
       </p>
+    </div>
+    </div>
     </div>
   );
 };

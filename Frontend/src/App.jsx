@@ -35,6 +35,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />}/>
         <Route path="/Login" element={<Login />} />
+        <Route path="admin" element={<Admin />} />
         <Route path="Register" element={<Register />} />
         <Route path="feed" element={<Feed />} />
         <Route path="seeCompany/:startYear/:endYear" element={<SeeCompany />} />
@@ -42,7 +43,6 @@ const App = () => {
           path="/postsByCompany/:companyName/:startYear/:endYear/:targetedStreams"
           element={<PostsByCompany />}
         />
-        <Route path="admin" element={<Admin />} />
         <Route path="AdminRegister" element={<AdminRegister />} />
         <Route path="AdminPostCreation" element={<AdminPostCreation />} />
         <Route path="/Profile" element={<Profile />} />

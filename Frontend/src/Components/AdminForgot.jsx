@@ -50,7 +50,9 @@ const AdminForgot = () => {
   };
 
   return (
-    <div className="containerForgetPassword">
+    <div className="form">
+        <div className="admin">
+          <div className="admin-formstyle">
       <h1>Admin Forgot Password Page</h1>
       
       <form onSubmit={handleSubmit}>
@@ -121,6 +123,8 @@ const AdminForgot = () => {
                     Login
                   </Link>
                   </p>
+    </div>
+    </div>
     </div>
   );
 };
