@@ -250,7 +250,7 @@ router.put('/updatePost/:postId', async (req, res) => {
 });
 
 
-// Approve a review
+// Approve a placed student
 router.put('/approveReview/:reviewId', authenticateAdmin, async (req, res) => {
   try {
     const { reviewId } = req.params;
@@ -274,82 +274,82 @@ router.put('/approveReview/:reviewId', authenticateAdmin, async (req, res) => {
 });
 
 // Delete a user profile 
-router.delete('/deleteUser/:userId', authenticateAdmin, async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const { confirmation } = req.body;
+// router.delete('/deleteUser/:userId', authenticateAdmin, async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     const { confirmation } = req.body;
 
-    const user = await User.findById(userId);
+//     const user = await User.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
 
-    if (confirmation !== 'confirm') {
-      return res.status(400).json({ message: 'Deletion not confirmed' });
-    }
+//     if (confirmation !== 'confirm') {
+//       return res.status(400).json({ message: 'Deletion not confirmed' });
+//     }
 
-    await User.deleteOne({ _id: userId });
+//     await User.deleteOne({ _id: userId });
 
-    res.status(200).json({ message: 'User deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
+//     res.status(200).json({ message: 'User deleted successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 
 
 // Check existing admins
-router.get('/checkAllAdmin', authenticateAdmin, async (req, res) => {
-  try {
-    const allAdmins = await Admin.find({}, 'username mobileNumber email');
+// router.get('/checkAllAdmin', authenticateAdmin, async (req, res) => {
+//   try {
+//     const allAdmins = await Admin.find({}, 'username mobileNumber email');
 
-    res.status(200).json({ admins: allAdmins });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
+//     res.status(200).json({ admins: allAdmins });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 
-router.post('/addComment', authenticateAdmin, async (req, res) => {
-  try {
-    const { postId, content } = req.body;
+// router.post('/addComment', authenticateAdmin, async (req, res) => {
+//   try {
+//     const { postId, content } = req.body;
 
-    const post = await Post.findById(postId);
+//     const post = await Post.findById(postId);
 
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
+//     if (!post) {
+//       return res.status(404).json({ message: 'Post not found' });
+//     }
 
-    post.comments.push({
-      userId: req.admin._id,
-      content,
-    });
-    await post.save();
+//     post.comments.push({
+//       userId: req.admin._id,
+//       content,
+//     });
+//     await post.save();
 
-    res.status(201).json({ message: 'Comment added successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
+//     res.status(201).json({ message: 'Comment added successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 
 // Route to delete a comment
-router.delete('/deleteComment/:commentId', authenticateAdmin, async (req, res) => {
-  try {
-    const { commentId } = req.params;
-    const comment = await Comment.findById(commentId);
+// router.delete('/deleteComment/:commentId', authenticateAdmin, async (req, res) => {
+//   try {
+//     const { commentId } = req.params;
+//     const comment = await Comment.findById(commentId);
 
-    if (!comment) {
-      return res.status(404).json({ message: 'Comment not found' });
-    }
-    await comment.remove();
+//     if (!comment) {
+//       return res.status(404).json({ message: 'Comment not found' });
+//     }
+//     await comment.remove();
 
-    res.status(200).json({ message: 'Comment deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
+//     res.status(200).json({ message: 'Comment deleted successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 
 module.exports = router;

@@ -223,56 +223,58 @@ router.put("/updateProfile", authMiddleware, async (req, res) => {
   }
 });
 
-// Comment in a post 
-router.post("/addComment/:postId", authMiddleware, async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const postId = req.params.postId;
-    const { content } = req.body;
+ // to check notification
+//  router.get("/notifications", authMiddleware, async (req, res) => {
+//   try {
+//     const userId = req.user._id;
 
-    const newComment = new Comment({ userId, postId, content });
+//     const userNotifications = await Notification.find({ userId }).sort({
+//       createdAt: -1,
+//     });
 
-    await newComment.save();
+//     res.status(200).json(userNotifications);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
 
-    res.status(201).json({ message: "Comment added successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+// // Comment in a post 
+// router.post("/addComment/:postId", authMiddleware, async (req, res) => {
+//   try {
+//     const userId = req.user._id;
+//     const postId = req.params.postId;
+//     const { content } = req.body;
 
-// Add  review to a post 
-router.post("/addReview/:postId", authMiddleware, async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const postId = req.params.postId;
-    const { content } = req.body;
+//     const newComment = new Comment({ userId, postId, content });
 
-    const newReview = new Review({ userId, postId, content });
+//     await newComment.save();
 
-    await newReview.save();
+//     res.status(201).json({ message: "Comment added successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
 
-    res.status(201).json({ message: "Review added successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+// // Add  review to a post 
+// router.post("/addReview/:postId", authMiddleware, async (req, res) => {
+//   try {
+//     const userId = req.user._id;
+//     const postId = req.params.postId;
+//     const { content } = req.body;
 
-  // to check notification
-router.get("/notifications", authMiddleware, async (req, res) => {
-  try {
-    const userId = req.user._id;
+//     const newReview = new Review({ userId, postId, content });
 
-    const userNotifications = await Notification.find({ userId }).sort({
-      createdAt: -1,
-    });
+//     await newReview.save();
 
-    res.status(200).json(userNotifications);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+//     res.status(201).json({ message: "Review added successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
+
+ 
 
 module.exports = router;

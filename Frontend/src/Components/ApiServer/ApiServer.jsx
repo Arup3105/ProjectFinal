@@ -96,6 +96,49 @@ const ApiService = {
     }
   },
 
+  deletePost: async (postId) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+
+      if (!token) {
+        throw new Error("No token, authorization denied");
+      }
+
+      const response = await axios.delete(`${ApiService.baseURL}/posts/delete/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      throw error.response.data;
+    }
+  },
+
+  // Function to edit a post
+  editPost: async (postId, newData) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+
+      if (!token) {
+        throw new Error("No token, authorization denied");
+      }
+
+      const response = await axios.put(`${ApiService.baseURL}/posts/editpost/${postId}`, newData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error editing post:", error);
+      throw error.response.data;
+    }
+  },
+
   adminLogin: async (employeeId, password, secretCode) => {
     try {
       const response = await axios.post(
