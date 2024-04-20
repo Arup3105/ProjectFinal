@@ -75,55 +75,76 @@ const PostsByCompany = () => {
     return <div>No posts found for the specified company and session</div>;
   }
 
-  return (
-    <div className="posts-container">
-      <h2>Posts for {companyName}</h2>
-      {posts.map((post, index) => (
-        <div key={index} className="post">
-          <h4>{post.title}</h4>
-          <p>{post.content}</p>
-          {/* Displaying attachments */}
-          {post.attachments &&
-            post.attachments.map((attachment, index) => (
-              <div key={index}>
-                {attachment.type === "image" && (
-                  <img
-                    src={decodeBase64(attachment.data, "image")}
-                    alt={attachment.fileName}
-                  />
-                )}
-                {attachment.type === "file" && (
-                  <div className="download-box">
-                    <a
-                      href={URL.createObjectURL(
-                        new Blob([decodeBase64(attachment.data, "file")], {
-                          type: "application/pdf",
-                        })
-                      )}
-                      download={attachment.fileName}
-                    >
-                      Download File
-                    </a>
-                  </div>
-                )}
-              </div>
-            ))}
-          <p>
-            Created at:{" "}
-            {new Date(post.createdAt).toLocaleString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-              hour: "numeric",
-              minute: "numeric",
-              hour12: true,
-              timeZone: "UTC",
-            })}
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-};
+    return (
+      <div className="posts-container">
+        <h2>Posts for {companyName}</h2>
+        {posts.map((post, index) => (
+          <div key={index} className="post">
+            <h4>{post.title}</h4>
+            <p>{post.content}</p>
+            {/* Displaying creator's name */}
+            <p>Created by: {post.CreatedBy?.adminName || 'Unknown'}</p>
+            {/* Displaying attachments */}
+            {post.attachments &&
+              post.attachments.map((attachment, index) => (
+                <div key={index}>
+                  {attachment.type === "image" && (
+                    <div className="image-box">
+                      <img
+                        src={decodeBase64(attachment.data, "image")}
+                        alt={attachment.fileName}
+                      />
+                      {/* Download button for images */}
+                      <div className="download-box">
+                        <a
+                          href={decodeBase64(attachment.data, "image")}
+                          download={attachment.fileName}
+                        >
+                          Download Image
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                  {attachment.type === "file" && (
+                    <div className="download-box">
+                      <span>{attachment.fileName}</span> 
+                      <a
+                        href={URL.createObjectURL(
+                          new Blob([decodeBase64(attachment.data, "file")], {
+                            type: "application/pdf",
+                          })
+                        )}
+                        download={attachment.fileName}
+                      >
+                        {/* PDF icon */}
+                        <img
+                          src="/pdf-icorn.png" 
+                          alt="PDF icon"
+                          style={{ width: "32px", height: "32px", marginRight: "8px" }}
+                        />
+                        Download PDF
+                      </a>
+                    </div>
+                  )}
+                </div>
+              ))}
+            <p>
+              Created at:{" "}
+              {new Date(post.createdAt).toLocaleString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+                timeZone: "UTC",
+              })}
+            </p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+    
 
 export default PostsByCompany;

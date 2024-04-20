@@ -4,26 +4,27 @@ const authMiddleware = require('../middleware/authenticate');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const Company = require('../models/Company')
+const Admin = require('../models/Admin')
 
 
-// Create a new post
-router.post('/create', authMiddleware, async (req, res) => {
-  try {
-    const { title, content, imageUrl } = req.body;
+// // Create a new post
+// router.post('/create', authMiddleware, async (req, res) => {
+//   try {
+//     const { title, content, imageUrl } = req.body;
 
-    const newPost = new Post({
-      title,
-      content,
-      imageUrl,
-    });
-    await newPost.save();
+//     const newPost = new Post({
+//       title,
+//       content,
+//       imageUrl,
+//     });
+//     await newPost.save();
 
-    res.status(201).json({ message: 'Post created successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
+//     res.status(201).json({ message: 'Post created successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 
 // Get all posts
 router.get('/seePosts', authMiddleware, async (req, res) => {
@@ -35,6 +36,8 @@ router.get('/seePosts', authMiddleware, async (req, res) => {
     }
 
     const posts = await Post.find({ targetedStreams: user.stream }).sort({ createdAt: -1 });
+
+    console.log(posts)
 
     res.status(200).json(posts);
   } catch (error) {

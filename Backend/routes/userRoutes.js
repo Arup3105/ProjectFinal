@@ -7,7 +7,6 @@ const authMiddleware = require("../middleware/authenticate");
 const User = require("../models/User");
 const Admin = require("../models/Admin");
 const Post = require("../models/Post");
-const Review = require("../models/Review");
 const Notification = require("../models/Notification");
 const multer = require("multer");
 const JWT_SECRET_KEY = config.get("jwtSecret");
@@ -113,10 +112,8 @@ router.post("/login", async (req, res) => {
   try {
     const { rollNumber, password } = req.body;
     const user = await User.findOne({ rollNumber });
-
     if (user) {
       const passwordMatch = await bcrypt.compare(password, user.password);
-
       if (passwordMatch) {
         const token = jwt.sign(
           {

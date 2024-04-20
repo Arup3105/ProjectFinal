@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, Link, useLocation, useNavigate } from "react-router-dom"; 
-import { FaHome, FaUser, FaBell,FaPowerOff } from "react-icons/fa";
+import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
+import { FaHome, FaUser, FaBell, FaPowerOff } from "react-icons/fa";
 import "../Components/NavBar.css";
 import { CiSearch } from "react-icons/ci";
-import ApiService from '../Components/ApiServer/ApiServer.jsx';
+import ApiService from "../Components/ApiServer/ApiServer.jsx";
 
 const NavBar = ({ isAdmin }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,10 +13,10 @@ const NavBar = ({ isAdmin }) => {
   const [notificationListOpen, setNotificationListOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const location = useLocation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const isRestrictedPage =
-  location.pathname === "/"||
+    location.pathname === "/" ||
     location.pathname === "/Login" ||
     location.pathname === "/Register" ||
     location.pathname === "/admin" ||
@@ -30,14 +30,14 @@ const NavBar = ({ isAdmin }) => {
 
   const handleSearchResultClick = async (rollNumber) => {
     try {
-      if (typeof rollNumber !== 'undefined') {
+      if (typeof rollNumber !== "undefined") {
         setSearchResults([]);
         navigate(`/user/${rollNumber}`);
       } else {
-        console.error('Invalid roll number:', rollNumber);
+        console.error("Invalid roll number:", rollNumber);
       }
     } catch (error) {
-      console.error('Error sending roll number to backend:', error);
+      console.error("Error sending roll number to backend:", error);
     }
   };
 
@@ -55,10 +55,22 @@ const NavBar = ({ isAdmin }) => {
     }
   };
 
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      await ApiService.markNotificationAsRead(notificationId);
+      // Refetch notifications after marking as read
+      fetchNotifications();
+      // Update unread notification count
+      setUnreadNotifications(unreadNotifications - 1);
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
   const fetchNotifications = async () => {
     try {
-      const notificationsData = await ApiService.getNotifications();
-      setNotifications(notificationsData);
+      const responsedata = await ApiService.getNotificationCount();
+      setNotifications(responsedata.notification);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     }
@@ -68,18 +80,17 @@ const NavBar = ({ isAdmin }) => {
     try {
       await ApiService.markAllNotificationsAsRead();
       setUnreadNotifications(0);
+      //setNotifications([]);
     } catch (error) {
       console.error('Error marking notifications as read:', error);
     }
   };
 
   useEffect(() => {
-    if (!isRestrictedPage) {
-      fetchNotificationCount();
-      const intervalId = setInterval(fetchNotificationCount, 30000);
-      return () => clearInterval(intervalId);
-    }
-  }, [isRestrictedPage]);
+    fetchNotificationCount();
+    const intervalId = setInterval(fetchNotificationCount, 30000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -112,7 +123,7 @@ const NavBar = ({ isAdmin }) => {
 
   const handleLogout = () => {
     localStorage.clear();
-    setUnreadNotifications(0)
+    setUnreadNotifications(0);
     navigate("/");
   };
 
@@ -128,12 +139,11 @@ const NavBar = ({ isAdmin }) => {
     navigate("/");
   };
 
-
   return (
     <div>
       <nav>
-      <Link to="/" onClick={handleLogoClick}>
-          <Link to='/home' className="logo">
+        <Link to="/" onClick={handleLogoClick}>
+          <Link to="/home" className="logo">
             <div className="spinner"></div>Logo
           </Link>
         </Link>
@@ -156,9 +166,12 @@ const NavBar = ({ isAdmin }) => {
               {searchResults.length > 0 && (
                 <ul className="search-results">
                   {searchResults.map((result, index) => (
-                    <li key={index} onClick={() => handleSearchResultClick(result.rollNumber)}>
+                    <li
+                      key={index}
+                      onClick={() => handleSearchResultClick(result.rollNumber)}
+                    >
                       {result.username}
-                      <br/>
+                      <br />
                       {result.rollNumber}
                     </li>
                   ))}
@@ -173,23 +186,22 @@ const NavBar = ({ isAdmin }) => {
           </div>
         )}
 
-
-          {isRestrictedPage && (
-            <Link to="/Login" className="navbtn">
+        {isRestrictedPage && (
+          <Link to="/Login" className="navbtn">
             User
           </Link>
-        )} 
+        )}
         {isRestrictedPage && (
-                <Link to="/admin" className="navbtn">
-                  Admin
-                </Link>
+          <Link to="/admin" className="navbtn">
+            Admin
+          </Link>
         )}
 
         <ul className={menuOpen ? "open" : ""}>
           {!isRestrictedPage && (
-            <li>
+            <li className="nav-Home">
               <NavLink to="/Feed">
-                <FaHome /> 
+                <FaHome />
               </NavLink>
             </li>
           )}
@@ -212,7 +224,6 @@ const NavBar = ({ isAdmin }) => {
             </li>
           )}
 
-
           {!isRestrictedPage && (
             <li>
               <Link to="/profile" className="navbtn">
@@ -223,9 +234,7 @@ const NavBar = ({ isAdmin }) => {
           {!isRestrictedPage && (
             <li>
               <Link to="/" onClick={handleLogout}>
-                <FaPowerOff>
-                  LogOut
-                </FaPowerOff>
+                <FaPowerOff>LogOut</FaPowerOff>
               </Link>
             </li>
           )}

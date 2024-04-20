@@ -30,7 +30,7 @@ nav .logo{
     animation: spin .5s linear infinite;
 }
 
-nav .navbtn{
+/* nav .navbtn{
     border: 1px solid deeppink;
     padding: 4px 20px;
     margin-right: 5%;
@@ -42,7 +42,7 @@ nav .navbtn{
 nav .navbtn:hover{
     color: white;
     background-color: #12ac9f;
-}
+} */
 
 .log-main {
     position: absolute;

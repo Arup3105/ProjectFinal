@@ -1,48 +1,16 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: grey;
-    height: 7vh;
-
-}
-
-nav .logo {
-    font-size: 25px;
-    margin-left: 5%;
-    display: flex;
-    column-gap: 3px;
-}
-
-.spinner {
-    border: 5px solid black;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-    border-top-color: red;
-    animation: spin .5s linear infinite;
-}
-
-nav .navbtn {
+/* nav .navbtn {
     border: 1px solid deeppink;
     padding: 4px 20px;
     margin-right: 5%;
     border-radius: 15px;
     background-color: deeppink;
     color: #000;
-}
+} */
 
-nav .navbtn:hover {
+/* nav .navbtn:hover {
     color: white;
     background-color: #12ac9f;
-}
+} */
 
 main {
     /* position: relative; */

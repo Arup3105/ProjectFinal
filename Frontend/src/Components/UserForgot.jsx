@@ -131,7 +131,7 @@ const UserForgot = () => {
       </form>
       <p>
         Go Back to{" "}
-        <Link to="/" className="signin">
+        <Link to="/Login" className="signin">
           Login
         </Link>
       </p>

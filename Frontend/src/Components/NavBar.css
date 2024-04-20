@@ -1,19 +1,33 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.spinner {
+    border: 5px solid black;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border-top-color: red;
+    animation: spin .5s linear infinite;
+}
+
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #0f0f0f;
+    background-color: rgb(51, 50, 50);
+    padding: 10px 20px;
+    height: 7vh;
+    backdrop-filter: blur(10px);
 }
 
 ul li {
     display: inline-block;
-    padding: 15px;
+    padding: 10px; /* Reduced padding */
     list-style: none;
-}
-
-ul a {
-    color: beige;
-    text-decoration: none;
 }
 
 .logo {
@@ -28,16 +42,31 @@ nav .menu {
     right: 0.5rem;
     flex-direction: column;
     justify-content: space-between;
-    width: 2.25rem;
-    height: 2rem;
+    width: 1.5rem; /* Smaller width */
+    height: 1.5rem; /* Smaller height */
 }
 
 nav .menu span {
-    height: 0.4rem;
+    height: 0.2rem; /* Reduced height */
     width: 100%;
     background-color: #fff;
-    border-radius: 0.2rem;
+    border-radius: 0.1rem; /* Reduced border-radius */
 }
+
+.nav-Home{
+    color: #fff;
+    cursor: pointer;
+}
+.nav-Home:hover {
+    color: white;
+    color: rgb(75, 190, 235);
+  }
+
+nav .navbtn:hover {
+    color: white;
+    color: rgb(75, 190, 235);
+}
+
 
 .search {
     display: flex;
@@ -93,32 +122,103 @@ nav .menu span {
 }
 
 .createPost {
-    padding: 10px 50px;
+    padding: 10px 20px; /* Adjusted padding */
 }
 
-@media (max-width: 500px) {
+@media (max-width: 768px) {
     nav .menu {
         display: flex;
     }
 
-    nav {
-        flex-direction: column;
-        align-items: start;
-    }
-
-    nav ul li {
+    ul {
         display: none;
         flex-direction: column;
+        position: absolute;
+        top: 3.5rem;
+        left: 0;
         width: 100%;
-        margin-bottom: 0.25rem;
+        background-color: #0f0f0f;
+        z-index: 1;
     }
 
-    nav ul li {
-        width: 100%;
-        text-align: center;
-    }
-
-    nav ul.open li {
+    ul.open {
         display: flex;
     }
+
+    li {
+        margin: 0;
+        padding: 10px 20px; /* Adjusted padding */
+        border-bottom: 1px solid #fff;
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
 }
+
+/* Styles for notification icon */
+.nav-icon-notification {
+    color: #fff;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1); 
+  }
+  
+  .nav-icon-notification svg {
+    width: 20px;
+    height: 22px;
+  }
+  
+  .notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 6px;
+    font-size: 0.8em;
+  }
+  
+  /* Styles for notification list */
+  .notification-list {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1;
+    background-color: #f8f9fa;;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    max-height: 350px;
+    overflow-y: auto;
+  }
+  
+  .notification-item {
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+  
+  .notification-item button {
+    margin-left: 8px;
+    padding: 4px 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .notification-item button:hover {
+    background-color: #0056b3;
+  }
+  

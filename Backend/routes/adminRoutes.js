@@ -7,7 +7,6 @@ const Admin = require('../models/Admin');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const Notification= require("../models/Notification");
-const Review = require('../models/Review');
 const Company = require('../models/Company');
 const config = require('config');
 
@@ -112,6 +111,8 @@ router.post('/searchUser', authenticateAdmin, async (req, res) => {
         { username: { $regex: partialMatchPattern } },
         { rollNumber: { $regex: new RegExp(searchQuery, 'i') } },
         { stream: { $regex: partialMatchPattern } },
+        { mobileNumber: { $regex: new RegExp(searchQuery, 'i') } }, 
+        { email: { $regex: new RegExp(searchQuery, 'i') } },
       ],
     };
 
@@ -124,16 +125,16 @@ router.post('/searchUser', authenticateAdmin, async (req, res) => {
   }
 });
 
-router.get('/user', async (req, res) => {
-  try {
-    const { rollNumber } = req.query;
-    const userData = await User.findOne({ rollNumber }).select('-_id -password -__v -notifications');
-    res.json(userData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
+// router.get('/user', async (req, res) => {
+//   try {
+//     const { rollNumber } = req.query;
+//     const userData = await User.findOne({ rollNumber }).select('-_id -password -__v -notifications');
+//     res.json(userData);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 
 const getCurrentISTDate = () => {
   const istOffset = 330; 
@@ -188,7 +189,6 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
       fileName: attachment.fileName,
       type: getAttachmentType(attachment.fileName)
     }));
-
     const newPost = new Post({
       title,
       content,
@@ -199,6 +199,10 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
         endYear: sessionEndYear,
       },
       targetedStreams,
+      CreatedBy: {
+        adminId: req.user._id, 
+        adminName: req.user.username
+      }
     });
 
     await newPost.save();

@@ -1,9 +1,7 @@
 import axios from "axios";
 
 const ApiService = {
-
   baseURL: "http://localhost:5000",
-
 
   userLogin: async (credentials) => {
     try {
@@ -51,11 +49,11 @@ const ApiService = {
   seeCompany: async (startYear, endYear) => {
     try {
       const token = localStorage.getItem("jwtToken");
-  
+
       if (!token) {
         throw { message: "No token, authorization denied" };
       }
-  
+
       const response = await axios.get(
         `${ApiService.baseURL}/posts/seeCompany/${startYear}/${endYear}`,
         {
@@ -66,14 +64,19 @@ const ApiService = {
           },
         }
       );
-  
+
       return response.data;
     } catch (error) {
       throw error.response.data;
     }
   },
 
-  getPostsByCompany: async (companyName, startYear, endYear, targetedStreams) => {
+  getPostsByCompany: async (
+    companyName,
+    startYear,
+    endYear,
+    targetedStreams
+  ) => {
     try {
       const token = localStorage.getItem("jwtToken");
       const response = await axios.get(
@@ -83,11 +86,12 @@ const ApiService = {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-        }}
+          },
+        }
       );
       return response.data;
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error("Error fetching posts:", error);
       throw error;
     }
   },
@@ -101,7 +105,7 @@ const ApiService = {
       );
       return response.data;
     } catch (error) {
-      console.error('Error during admin login:', error);
+      console.error("Error during admin login:", error);
       throw error;
     }
   },
@@ -117,12 +121,15 @@ const ApiService = {
         formDataObj,
         {
           withCredentials: true,
-          onUploadProgress: progressEvent => {
-            console.log('Upload Progress:', (progressEvent.loaded / progressEvent.total) * 100);
-          }
+          onUploadProgress: (progressEvent) => {
+            console.log(
+              "Upload Progress:",
+              (progressEvent.loaded / progressEvent.total) * 100
+            );
+          },
         }
       );
-  
+
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -131,12 +138,16 @@ const ApiService = {
 
   adminregister: async (formData) => {
     try {
-      const response = await axios.post(`${ApiService.baseURL}/admin/create`, formData, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        `${ApiService.baseURL}/admin/create`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -145,7 +156,7 @@ const ApiService = {
 
   createPost: async (postData) => {
     try {
-const postDataString = JSON.stringify(postData);
+      const postDataString = JSON.stringify(postData);
 
       const token = localStorage.getItem("jwtToken");
       //console.log(postData)
@@ -160,14 +171,14 @@ const postDataString = JSON.stringify(postData);
           },
         }
       );
-      console.log(response)
+      console.log(response);
       return response;
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error("Error creating post:", error);
       throw error.response.data;
     }
   },
-  
+
   getProfileData: async () => {
     try {
       const token = localStorage.getItem("jwtToken");
@@ -185,28 +196,28 @@ const postDataString = JSON.stringify(postData);
 
       return response.data;
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error("Error fetching user data:", error);
       throw error.response.data;
     }
   },
 
   updateUserData: async (updatedData) => {
     try {
-      const token = localStorage.getItem('jwtToken');
+      const token = localStorage.getItem("jwtToken");
       const response = await axios.put(
         `${ApiService.baseURL}/user/updateProfile`,
         updatedData,
         {
           withCredentials: true,
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
       return response.data;
     } catch (error) {
-      console.error('Error updating user data:', error);
+      console.error("Error updating user data:", error);
       throw error.response.data;
     }
   },
@@ -238,7 +249,7 @@ const postDataString = JSON.stringify(postData);
       if (!token) {
         throw new Error("No token, authorization denied");
       }
-      
+
       const response = await axios.get(
         `${ApiService.baseURL}/admin/user?rollNumber=${rollNumber}`,
         {
@@ -251,11 +262,19 @@ const postDataString = JSON.stringify(postData);
       );
       return response.data;
     } catch (error) {
-      throw new Error(error.response.data.message || "Failed to send roll number");
+      throw new Error(
+        error.response.data.message || "Failed to send roll number"
+      );
     }
   },
 
-  adminForgetPassword: async (employeeId, email, mobileNumber, secretCode, newPassword) => {
+  adminForgetPassword: async (
+    employeeId,
+    email,
+    mobileNumber,
+    secretCode,
+    newPassword
+  ) => {
     try {
       const response = await axios.post(
         `${ApiService.baseURL}/admin/forgetPassword`,
@@ -268,11 +287,17 @@ const postDataString = JSON.stringify(postData);
     }
   },
 
-  userForgetPassword: async (rollNumber,regNumber, email, mobileNumber, newPassword) => {
+  userForgetPassword: async (
+    rollNumber,
+    regNumber,
+    email,
+    mobileNumber,
+    newPassword
+  ) => {
     try {
       const response = await axios.post(
         `${ApiService.baseURL}/user/forgetPassword`,
-        { rollNumber,regNumber, email, mobileNumber, newPassword },
+        { rollNumber, regNumber, email, mobileNumber, newPassword },
         { withCredentials: true }
       );
       return response.data;
@@ -280,8 +305,8 @@ const postDataString = JSON.stringify(postData);
       throw new Error(error.response.data.message);
     }
   },
-  
-  getNotificationCount: async()=>{
+
+  getNotificationCount: async () => {
     try {
       const token = localStorage.getItem("jwtToken");
 
@@ -298,37 +323,32 @@ const postDataString = JSON.stringify(postData);
           },
         }
       );
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
   },
 
-  markAllNotificationsAsRead: async()=>{
+  markAllNotificationsAsRead: async () => {
     try {
       const token = localStorage.getItem("jwtToken");
 
       if (!token) {
         throw new Error("No token, authorization denied");
       }
-      const response = await axios.get(
-        `${ApiService.baseURL}/user/read`,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response.data)
+      const response = await axios.get(`${ApiService.baseURL}/user/read`, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
-  }
+  },
 };
-
 
 export default ApiService;
