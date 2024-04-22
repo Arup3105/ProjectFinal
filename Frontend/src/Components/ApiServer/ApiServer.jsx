@@ -392,6 +392,8 @@ const ApiService = {
       throw new Error(error.response.data.message);
     }
   },
+
+  
 };
 
 export default ApiService;

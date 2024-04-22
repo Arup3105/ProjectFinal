@@ -113,7 +113,7 @@ router.get(
           message: "No posts found for the specified company and session",
         });
       }
-
+      console.log(posts)
       res.status(200).json(posts);
     } catch (error) {
       console.error(error);
@@ -176,6 +176,10 @@ router.delete("/delete/:postId", authMiddleware, async (req, res) => {
     console.error("Error deleting post:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+});
+
+router.post("/submitForm",authMiddleware, async (req, res)=>{
+
 });
 
 module.exports = router;
