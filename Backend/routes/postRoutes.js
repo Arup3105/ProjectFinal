@@ -5,7 +5,7 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 const Company = require("../models/Company");
 const Admin = require("../models/Admin");
-
+const Notification = require("../models/Notification");
 // Get all posts
 // router.get('/seePosts', authMiddleware, async (req, res) => {
 //   try {
@@ -168,7 +168,7 @@ router.delete("/delete/:postId", authMiddleware, async (req, res) => {
     //     .status(403)
     //     .json({ message: "Not authorized to delete this post" });
     // }
-
+    await Notification.deleteMany({ postId: postId });
     await Post.findByIdAndDelete(postId);
 
     res.json({ message: "Post deleted successfully" });

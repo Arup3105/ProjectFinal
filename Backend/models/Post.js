@@ -28,6 +28,8 @@ const postSchema = new mongoose.Schema(
       adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
       adminName: String,
     },
+    formData: { type: Object },
+    formId: { type: mongoose.Schema.Types.ObjectId, ref: 'Form' }
   },
   { timestamps: { currentTime: () => getCurrentISTTime() } } 
 );

@@ -145,7 +145,7 @@ const getCurrentISTDate = () => {
 
 router.post('/createPost', authenticateAdmin, async (req, res) => {
   try {
-    const { title, content, attachments, company, targetedStreams } = req.body;
+    const { title, content, attachments, company, targetedStreams, userForm } = req.body;
     const getAttachmentType = (fileName) => {
       const extension = fileName.split('.').pop().toLowerCase();
       if (extension === 'jpg' || extension === 'jpeg' || extension === 'png' || extension === 'gif') {
@@ -202,7 +202,8 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
       CreatedBy: {
         adminId: req.user._id, 
         adminName: req.user.username
-      }
+      },
+      formData: userForm
     });
 
     await newPost.save();

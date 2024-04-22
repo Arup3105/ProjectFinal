@@ -8,6 +8,8 @@ const AdminPostCreation = () => {
   const [attachments, setAttachments] = useState([]);
   const [company, setCompany] = useState("");
   const [targetedStreams, setTargetedStreams] = useState("");
+  const [formFields, setFormFields] = useState([]);
+  const [formData, setFormData] = useState({});
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,16 +22,16 @@ const AdminPostCreation = () => {
         return;
       }
 
-      setLoading(true); 
+      setLoading(true);
       
-      const postData = { title, content, attachments, company, targetedStreams };
+      const postData = { title, content, attachments, company, targetedStreams, userForm: formData };
 
       const response = await ApiService.createPost(postData);
 
       if (response.status === 201) {
         setMessage("Post created successfully");
         setTimeout(() => {
-          window.location.href = "/feed"; 
+          window.location.href = "/feed";
         }, 2000);
       }
     } catch (error) {
@@ -71,77 +73,103 @@ const AdminPostCreation = () => {
     setAttachments(updatedAttachments);
   };
 
+  const handleAddField = () => {
+    const fieldName = prompt("Enter field name:");
+    if (fieldName) {
+      setFormFields([...formFields, fieldName]);
+      setFormData({ ...formData, [fieldName]: "" });
+    }
+  };
+
+  const handleRemoveField = (fieldName) => {
+    const updatedFields = formFields.filter(field => field !== fieldName);
+    const updatedFormData = { ...formData };
+    delete updatedFormData[fieldName];
+    setFormFields(updatedFields);
+    setFormData(updatedFormData);
+  };
+
+  const handleInputChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
   return (
     <div className="custom-container">
       <div className="form">
-      <form onSubmit={handleAddPost}>
-        <div className="input-box">
-          
-          <input
-            type="text"
-            id="title"
-            value={title}
-            required="required"
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <span>Title</span>
-        </div>
-        <div className="input-box">
-          
-          <input
-            type="text"
-            id="content"
-            value={content}
-            required="required"
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <span>Content</span>
-
-        </div>
-        <div className="input-box">
-          <label htmlFor="attachment">Attachment</label>
-          <input type="file" id="attachment" onChange={handleFileChange} multiple />
-        </div>
-        {attachments.map((attachment, index) => (
-          <div key={index}>
-            <img src={attachment.data} alt={attachment.fileName} style={{ maxWidth: "100px" }} />
-            <button type="button" onClick={() => handleRemoveAttachment(index)}>Remove</button>
-          </div>
-        ))}
-        <div className="input-box">
-          
-          <input
-            type="text"
-            id="company"
-            value={company}
-            required="required"
-            onChange={(e) => setCompany(e.target.value.toUpperCase())}
-          />
-          <span>Company Name</span>
-
-        </div>
-        <div className="input-box">
+        <form onSubmit={handleAddPost}>
+          <div className="input-box">
             <input
-            type="text"
-            id="streams"
-            value={targetedStreams}
-            required="required"
-            onChange={(e) =>
-              setTargetedStreams(
-                e.target.value
-                  .split(",")
-                  .map((stream) => stream.trim().toUpperCase())
-              )
-            }
-          />
-          <span>Stream Name</span>
-        </div>
-        <button type="submit">Add Post</button>
-      </form>
-      {loading && <p style={{ color: "blue" }}>This may take a while. Please wait...</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+              type="text"
+              value={title}
+              required="required"
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Title"
+            />
+          </div>
+          <div className="input-box">
+            <input
+              type="text"
+              value={content}
+              required="required"
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Content"
+            />
+          </div>
+          <div className="input-box">
+            <label htmlFor="attachment">Attachment</label>
+            <input type="file" id="attachment" onChange={handleFileChange} multiple />
+          </div>
+          {attachments.map((attachment, index) => (
+            <div key={index}>
+              <img src={attachment.data} alt={attachment.fileName} style={{ maxWidth: "100px" }} />
+              <button type="button" onClick={() => handleRemoveAttachment(index)}>Remove</button>
+            </div>
+          ))}
+          <div className="input-box">
+            <input
+              type="text"
+              value={company}
+              required="required"
+              onChange={(e) => setCompany(e.target.value.toUpperCase())}
+              placeholder="Company Name"
+            />
+          </div>
+          <div className="input-box">
+            <input
+              type="text"
+              value={targetedStreams}
+              required="required"
+              onChange={(e) =>
+                setTargetedStreams(
+                  e.target.value
+                    .split(",")
+                    .map((stream) => stream.trim().toUpperCase())
+                )
+              }
+              placeholder="Stream Name"
+            />
+          </div>
+          <div className="willingness-form">
+            <p style={{color: "black"}}>Willingness Form</p>
+          {formFields.map((fieldName, index) => (
+            <div key={index} className="input-box">
+              <input
+                type="text"
+                value={formData[fieldName] || ""}
+                onChange={(e) => handleInputChange(fieldName, e.target.value)}
+                placeholder={fieldName}
+              />
+              <button type="button" onClick={() => handleRemoveField(fieldName)}>Remove</button>
+            </div>
+          ))}
+          <button type="button" onClick={handleAddField}>Add Field</button>
+          </div>
+          <button type="submit">Add Post</button>
+        </form>
+        {loading && <p style={{ color: "blue" }}>This may take a while. Please wait...</p>}
+        {message && <p style={{ color: "green" }}>{message}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+      </div>
     </div>
   );
 };
