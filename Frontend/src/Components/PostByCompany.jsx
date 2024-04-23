@@ -13,7 +13,7 @@ const PostsByCompany = () => {
   const [formData, setFormData] = useState({});
   const [formDataValues, setFormDataValues] = useState({});
   const [error, setError] = useState(null);
-  const [formField ,setFormField]=useState({});
+  const [formField, setFormField] = useState({});
 
   const decodeBase64 = (base64String, type) => {
     try {
@@ -45,21 +45,20 @@ const PostsByCompany = () => {
       endYear,
       targetedStreams
     )
-    .then((data) => {
-      if (Array.isArray(data)) {
-        setPosts(data.reverse());
-        setLoading(false);
-        
-        // Extracting keys from formData object and storing as an object in formField
-        const formFieldKeys = {};
-        data.forEach((post) => {
-          const formField = post.formData || {};
-          Object.keys(formField).forEach((fieldName) => {
-            formFieldKeys[fieldName] = true;
-          });
-        });
-        setFormField(formFieldKeys);
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setPosts(data.reverse());
+          setLoading(false);
 
+          // Extracting keys from formData object and storing as an object in formField
+          const formFieldKeys = {};
+          data.forEach((post) => {
+            const formField = post.formData || {};
+            Object.keys(formField).forEach((fieldName) => {
+              formFieldKeys[fieldName] = true;
+            });
+          });
+          setFormField(formFieldKeys);
         } else if (
           data &&
           data.message &&
@@ -132,7 +131,7 @@ const PostsByCompany = () => {
   const handleFormSubmitClick = async () => {
     try {
       const formDataToSend = {};
-      // Construct the formDataToSend object with field names and values
+      editPostId,
       Object.keys(formDataValues).forEach((fieldName) => {
         formDataToSend[fieldName] = formDataValues[fieldName];
       });
@@ -259,29 +258,41 @@ const PostsByCompany = () => {
                 )}
               </div>
             ))}
-          
 
-            {!localStorage.getItem("isAdmin") && (
-              <div className="form-container">
-                <h2>Form for Interested Student</h2>
-                <form>
-                  {Object.keys(formField).map((fieldName) => (
-                    <div key={fieldName}>
-                      <label htmlFor={fieldName}>{fieldName}</label>
-                      <input
-                        type="text"
-                        id={fieldName}
-                        name={fieldName}
-                        value={formDataValues[fieldName] || ""}
-                        onChange={(e) => handleFormInputChange(e, fieldName)}
-                      />
-                    </div>
-                  ))}
-                  <button onClick={handleFormSubmitClick}>Save Form</button>
-                </form>
-              </div>
-            )}
-          
+          {localStorage.getItem("isAdmin") && (
+            <div className="form-container">
+              <h2>Form Attached</h2>
+              <form>
+                {Object.keys(formField).map((fieldName) => (
+                  <div key={fieldName}>
+                    <label htmlFor={fieldName}>{fieldName}</label>
+                  </div>
+                ))}
+              </form>
+            </div>
+          )}
+
+          {!localStorage.getItem("isAdmin") && (
+            <div className="form-container">
+              <h2>Form for Interested Student</h2>
+              <form>
+                {Object.keys(formField).map((fieldName) => (
+                  <div key={fieldName}>
+                    <label htmlFor={fieldName}>{fieldName}</label>
+                    <input
+                      type="text"
+                      id={fieldName}
+                      name={fieldName}
+                      value={formDataValues[fieldName] || ""}
+                      onChange={(e) => handleFormInputChange(e, fieldName)}
+                    />
+                  </div>
+                ))}
+                <button onClick={handleFormSubmitClick}>Save Form</button>
+              </form>
+            </div>
+          )}
+
           <p>
             Created at:{" "}
             {new Date(post.createdAt).toLocaleString("en-US", {

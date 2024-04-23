@@ -6,6 +6,7 @@ const User = require("../models/User");
 const Company = require("../models/Company");
 const Admin = require("../models/Admin");
 const Notification = require("../models/Notification");
+const Form = require("../models/FormResponse");
 // Get all posts
 // router.get('/seePosts', authMiddleware, async (req, res) => {
 //   try {
@@ -179,7 +180,32 @@ router.delete("/delete/:postId", authMiddleware, async (req, res) => {
 });
 
 router.post("/submitForm",authMiddleware, async (req, res)=>{
+  try {
+    const { editPostId, formData } = req.body;
+    const userId= req.user._id;
 
+    const form = await Form.findById(editPostId,userId);
+    const userDetails = await User.findById(userId);
+
+    const {username,rollNumber,regNumber,email,mobileNumber,cgpa,tenthMarks,twelfthMarks,} = userDetails;
+
+    if (form) {
+        return res.status(404).json({ message: "Form Already Submitted" });
+    }else{
+      const newForm = new Form({
+        postId: editPostId,
+        submittedAt: Date.now(),
+        userId,
+        data: formData,
+      });
+
+      await newForm.save();
+      return res.status(201).json({ message: "Form created successfully" });
+    }
+} catch (error) {
+    console.error("Error submitting form:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+}
 });
 
 module.exports = router;

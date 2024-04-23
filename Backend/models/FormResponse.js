@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const formSchema = new mongoose.Schema(
     {
       postId: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
+      userId:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       submittedAt: { type: Date, default: Date.now },
       data: { type: Object }
     },
@@ -16,7 +17,7 @@ const formSchema = new mongoose.Schema(
     next();
   });
   
-  const Form = mongoose.model('Form', formSchema);
+  const FormResponse = mongoose.model('FormResponse', formSchema);
   
-  module.exports = Form;
+  module.exports = FormResponse;
   

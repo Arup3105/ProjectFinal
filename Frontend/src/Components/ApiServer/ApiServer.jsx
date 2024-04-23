@@ -393,6 +393,26 @@ const ApiService = {
     }
   },
 
+  formSubmit: async()=>{
+    try {
+      console.log(formDataToSend)
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.post(
+        `${ApiService.baseURL}/posts/submitForm`,
+        { formDataToSend },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response.data;
+    }
+  },
   
 };
 
