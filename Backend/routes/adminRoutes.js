@@ -14,6 +14,23 @@ const authenticateAdmin = require('../middleware/authenticate');
 
 const AUTH_CODE = config.get('adminCreatAuthCode'); 
 
+const multer = require('multer');
+
+// Multer storage 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'postAttachments');
+  },
+  filename: (req, file, cb) => {
+    const randomString = Math.random().toString(36).substring(7);
+    const newFilename = `${randomString}+${file.originalname}`;
+    cb(null, newFilename);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+
 
 router.post('/login', async (req, res) => {
   try {
@@ -145,15 +162,32 @@ const getCurrentISTDate = () => {
 
 router.post('/createPost', authenticateAdmin, async (req, res) => {
   try {
-    const { title, content, attachments, company, targetedStreams, userForm } = req.body;
-    const getAttachmentType = (fileName) => {
+
+    function getAttachmentType(fileName) {
+      console.log("File name:", fileName);
       const extension = fileName.split('.').pop().toLowerCase();
-      if (extension === 'jpg' || extension === 'jpeg' || extension === 'png' || extension === 'gif') {
-        return 'image';
-      } else {
-        return 'file';
+      switch (extension) {
+        case 'jpg':
+        case 'jpeg':
+        case 'png':
+          return 'image';
+        case 'pdf':
+          return 'pdf';
+        // Add more cases as needed for other file types
+        default:
+          return 'unknown';
       }
-    };
+    }
+
+    console.log(req.body);
+
+    const { title, content, attachments, targetedStreams, userForm, company } = req.body;
+    const attachmentsArray = req.body.attachments.map(attachment => ({
+      data: attachment.data,
+      fileName: attachment.fileName,
+      type: getAttachmentType(attachment.fileName) 
+    }));
+    
 
     const currentDate = getCurrentISTDate();
     const currentYear = currentDate.getFullYear();
@@ -184,7 +218,7 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
       await newCompany.save();
     }
 
-    const attachmentsArray = attachments.map(attachment => ({
+    const AttachmentsArray = attachments.map(attachment => ({
       data: attachment.data,
       fileName: attachment.fileName,
       type: getAttachmentType(attachment.fileName)
@@ -192,7 +226,7 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
     const newPost = new Post({
       title,
       content,
-      attachments: attachmentsArray,
+      attachments: AttachmentsArray,
       company: capitalizedCompany,
       session: {
         startYear: sessionStartYear,

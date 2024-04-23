@@ -132,9 +132,9 @@ const PostsByCompany = () => {
     try {
       const formDataToSend = {};
       editPostId,
-      Object.keys(formDataValues).forEach((fieldName) => {
-        formDataToSend[fieldName] = formDataValues[fieldName];
-      });
+        Object.keys(formDataValues).forEach((fieldName) => {
+          formDataToSend[fieldName] = formDataValues[fieldName];
+        });
       // Send a request to the API server to submit the form data
       console.log(formDataToSend);
       await ApiService.formSubmit(formDataToSend);
@@ -259,39 +259,50 @@ const PostsByCompany = () => {
               </div>
             ))}
 
-          {localStorage.getItem("isAdmin") && (
-            <div className="form-container">
-              <h2>Form Attached</h2>
-              <form>
-                {Object.keys(formField).map((fieldName) => (
-                  <div key={fieldName}>
-                    <label htmlFor={fieldName}>{fieldName}</label>
-                  </div>
-                ))}
-              </form>
-            </div>
-          )}
+          {localStorage.getItem("isAdmin") &&
+            post.formData &&
+            Object.keys(post.formData).length > 0 && (
+              <div className="form-container">
+                <h2>Form Attached</h2>
+                <form>
+                  {Object.keys(post.formData).map((fieldName) => (
+                    <div key={fieldName}>
+                      <label htmlFor={fieldName}>{fieldName}</label>
+                    </div>
+                  ))}
+                </form>
+              </div>
+            )}
 
-          {!localStorage.getItem("isAdmin") && (
-            <div className="form-container">
-              <h2>Form for Interested Student</h2>
-              <form>
-                {Object.keys(formField).map((fieldName) => (
-                  <div key={fieldName}>
-                    <label htmlFor={fieldName}>{fieldName}</label>
-                    <input
-                      type="text"
-                      id={fieldName}
-                      name={fieldName}
-                      value={formDataValues[fieldName] || ""}
-                      onChange={(e) => handleFormInputChange(e, fieldName)}
-                    />
-                  </div>
-                ))}
-                <button onClick={handleFormSubmitClick}>Save Form</button>
-              </form>
-            </div>
-          )}
+{!localStorage.getItem("isAdmin") && post.formData && (
+  <div className="form-container">
+    <h2>Form for Interested Student</h2>
+    <form>
+      {Object.keys(formField).map((fieldName) => (
+        post.formData[fieldName] !== undefined && (
+          <div key={`${post._id}-${fieldName}`}>
+            <label htmlFor={fieldName}>{fieldName}</label>
+            <input
+              type="text"
+              id={fieldName}
+              name={fieldName}
+              value={
+                (formDataValues[post._id] &&
+                  formDataValues[post._id][fieldName]) ||
+                ""
+              }
+              onChange={(e) =>
+                handleFormInputChange(e, post._id, fieldName)
+              }
+            />
+          </div>
+        )
+      ))}
+      <button onClick={handleFormSubmitClick}>Save Form</button>
+    </form>
+  </div>
+)}
+
 
           <p>
             Created at:{" "}
