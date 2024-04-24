@@ -1,14 +1,16 @@
 import React from 'react'
-
+import '../Components/landingpage.css'
 function landingPage() {
   return (
     <div className='landingpage'>
-      <div className="right">
-        <img src="#" alt="Image" />
-      </div>
-      <div className="left">
-        Welcome Students
-      </div>
+      <aside className="profile-card">
+
+
+      
+
+
+
+      </aside>
     </div>
   )
 }

@@ -1,67 +1,3 @@
-/* .form-container {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.form-container label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form-container input[type="text"],
-.form-container input[type="file"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  color: black; 
-}
-
-.form-container button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.form-container button:hover {
-  background-color: #45a049;
-}
-
-.message {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.message.success {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.message.error {
-  background-color: #f8d7da;
-  color: #721c24;
-} */
-
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-} */
-
-
 .custom-container form h2 {
   display: flex;
   justify-content: center;
@@ -160,7 +96,7 @@ a {
 .input-box input:focus ~ span
 {
   color: #00dfc4;
-  transform: translatex(10px) translateY(-26px);
+  transform: translatex(10px) translateY(-34px);
   font-size: 0.65rem;
   padding: 0 10px;
   background: #1d2b3a;
@@ -174,4 +110,3 @@ a {
 {
   border: 1px solid goldenrod;
 }
-

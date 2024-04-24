@@ -1,9 +1,3 @@
-/* * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-} */
-
 .posts-container {
     margin: 20px;
     padding: 20px;
@@ -83,4 +77,26 @@
 
 .post .download-box:hover {
     background-color: white;
+}
+
+.edit-btn{
+    width: 5rem;
+    border: 1px solid;
+    border-radius: 20px;
+    color: black;
+}
+
+.edit-btn:hover{
+    color: #007bff;
+}
+
+.post-btn-fix{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    float: right;
+}
+
+.save-btn{
+    padding: 10px 20px;
 }

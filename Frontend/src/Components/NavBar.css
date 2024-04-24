@@ -22,11 +22,14 @@ nav {
     padding: 10px 20px;
     height: 7vh;
     backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 5;
 }
 
 ul li {
     display: inline-block;
-    padding: 10px; /* Reduced padding */
+    padding: 10px;
+    /* Reduced padding */
     list-style: none;
 }
 
@@ -42,31 +45,71 @@ nav .menu {
     right: 0.5rem;
     flex-direction: column;
     justify-content: space-between;
-    width: 1.5rem; /* Smaller width */
-    height: 1.5rem; /* Smaller height */
+    width: 1.5rem;
+    /* Smaller width */
+    height: 1.5rem;
+    /* Smaller height */
 }
 
 nav .menu span {
-    height: 0.2rem; /* Reduced height */
+    height: 0.2rem;
+    /* Reduced height */
     width: 100%;
     background-color: #fff;
-    border-radius: 0.1rem; /* Reduced border-radius */
+    border-radius: 0.1rem;
+    /* Reduced border-radius */
 }
 
-.nav-Home{
-    color: #fff;
-    cursor: pointer;
+.nav-Home {
+    border: 1px solid white;
+    border-radius: 12px;
+    padding: 6px;
 }
-.nav-Home:hover {
+
+.home-hover {
     color: white;
+}
+
+.home-hover:hover {
     color: rgb(75, 190, 235);
-  }
+}
+
+.log-hover {
+    color: white;
+}
+
+.log-hover:hover {
+    color: rgb(75, 190, 235);
+}
+
+.bell-hover {
+    color: white;
+}
+
+.bell-hover:hover {
+    color: rgb(75, 190, 235);
+}
 
 nav .navbtn:hover {
     color: white;
     color: rgb(75, 190, 235);
 }
 
+.navbtn {
+    border: 1px solid white;
+    border-radius: 20px;
+    padding: 6px 15px;
+    background: transparent;
+}
+
+.navbtn:hover{
+    background: white;
+    border-color: black;
+}
+
+.bell-btn{
+    padding: 10px 12px;
+}
 
 .search {
     display: flex;
@@ -79,7 +122,7 @@ nav .navbtn:hover {
     border-radius: 15px;
     padding: 8px 12px;
     color: #fff;
-    background-color: transparent; 
+    background-color: transparent;
 }
 
 .search input::placeholder {
@@ -95,7 +138,7 @@ nav .navbtn:hover {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    padding: 8px 0; 
+    padding: 8px 0;
     max-height: 200px;
     overflow-y: auto;
 }
@@ -108,11 +151,11 @@ nav .navbtn:hover {
 }
 
 .search-results li:last-child {
-    border-bottom: none; 
+    border-bottom: none;
 }
 
 .search-results li:hover {
-    background-color: #f0f0f0; 
+    background-color: #f0f0f0;
 }
 
 .con-btn {
@@ -122,7 +165,7 @@ nav .navbtn:hover {
 }
 
 .createPost {
-    padding: 10px 20px; /* Adjusted padding */
+    padding: 10px 20px;
 }
 
 @media (max-width: 768px) {
@@ -147,7 +190,8 @@ nav .navbtn:hover {
 
     li {
         margin: 0;
-        padding: 10px 20px; /* Adjusted padding */
+        padding: 10px 20px;
+        /* Adjusted padding */
         border-bottom: 1px solid #fff;
     }
 
@@ -165,15 +209,15 @@ nav .navbtn:hover {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.1); 
-  }
-  
-  .nav-icon-notification svg {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-icon-notification svg {
     width: 20px;
     height: 22px;
-  }
-  
-  .notification-badge {
+}
+
+.notification-badge {
     position: absolute;
     top: -6px;
     right: -6px;
@@ -182,33 +226,34 @@ nav .navbtn:hover {
     border-radius: 50%;
     padding: 3px 6px;
     font-size: 0.8em;
-  }
-  
-  /* Styles for notification list */
-  .notification-list {
+}
+
+/* Styles for notification list */
+.notification-list {
     position: absolute;
     top: 100%;
     right: 0;
     z-index: 1;
-    background-color: #f8f9fa;;
+    background-color: #f8f9fa;
+    ;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 16px;
     max-height: 350px;
     overflow-y: auto;
-  }
-  
-  .notification-item {
+}
+
+.notification-item {
     padding: 8px;
     border-bottom: 1px solid #ccc;
-  }
-  
-  .notification-item:last-child {
+}
+
+.notification-item:last-child {
     border-bottom: none;
-  }
-  
-  .notification-item button {
+}
+
+.notification-item button {
     margin-left: 8px;
     padding: 4px 8px;
     background-color: #007bff;
@@ -216,9 +261,8 @@ nav .navbtn:hover {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
-  
-  .notification-item button:hover {
+}
+
+.notification-item button:hover {
     background-color: #0056b3;
-  }
-  
+}

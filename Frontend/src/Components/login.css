@@ -48,7 +48,7 @@ nav .navbtn:hover{
     position: absolute;
     width: 100%;
     height: 110vh;
-    background: linear-gradient(180deg, #211c7e, #12ac9f);
+    background: linear-gradient(180deg, #fff, #999797);
     overflow: hidden;
     display: flex;
     justify-content: center;

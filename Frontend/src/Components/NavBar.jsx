@@ -162,7 +162,7 @@ const NavBar = ({ isAdmin }) => {
                 value={searchQuery}
                 onChange={handleInputChange}
               />
-              <CiSearch color="white" fontSize="2.6rem" />
+            
               {searchResults.length > 0 && (
                 <ul className="search-results">
                   {searchResults.map((result, index) => (
@@ -201,19 +201,19 @@ const NavBar = ({ isAdmin }) => {
           {!isRestrictedPage && (
             <li className="nav-Home">
               <NavLink to="/Feed">
-                <FaHome />
+                <FaHome className="home-hover"/>
               </NavLink>
             </li>
           )}
           {!isAdmin && !isRestrictedPage && (
             <li>
               <div className="nav-icon-notification" onClick={handleNotificationButtonClick}>
-                <FaBell />
+                <FaBell className="bell-hover"/>
                 {unreadNotifications > 0 && <span className="notification-badge">{unreadNotifications}</span>}
               </div>
               {notificationListOpen && (
                 <div className="notification-list">
-                  <button onClick={markAllNotificationsAsRead}>Mark All as Read</button>
+                  <button onClick={markAllNotificationsAsRead} className="bell-btn">Mark All as Read</button>
                   {notifications.map((notification, index) => (
                     <div key={index} className="notification-item">
                       {notification.content}
@@ -234,7 +234,7 @@ const NavBar = ({ isAdmin }) => {
           {!isRestrictedPage && (
             <li>
               <Link to="/" onClick={handleLogout}>
-                <FaPowerOff>LogOut</FaPowerOff>
+                <FaPowerOff className="log-hover">LogOut</FaPowerOff>
               </Link>
             </li>
           )}

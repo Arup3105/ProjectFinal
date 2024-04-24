@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import ApiService from "../Components/ApiServer/ApiServer.jsx";
 import { useParams } from "react-router-dom";
 import "../Components/PostByCompany.css";
+import { CiEdit } from "react-icons/ci";
+import { MdDelete } from "react-icons/md";
 
 const PostsByCompany = () => {
   const { companyName, startYear, endYear, targetedStreams } = useParams();
@@ -174,7 +176,7 @@ const PostsByCompany = () => {
             <div className="admin-buttons">
               {editPostId === post._id ? (
                 <>
-                  <button onClick={handleSaveButtonClick}>Save</button>
+                  <button onClick={handleSaveButtonClick}  className="save-btn">Save</button>
                 </>
               ) : (
                 <>
