@@ -17,9 +17,9 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-app.use(bodyParser.raw({ limit: '50mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+//app.use(express.raw({ limit: '50mb' }));
 
 // MongoDB 
 const mongourl = mongoURI;

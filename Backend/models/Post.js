@@ -11,13 +11,7 @@ const postSchema = new mongoose.Schema(
   {
     title: String,
     content: String,
-    attachments: [
-      {
-        data: String, 
-        fileName: String, 
-        type: { type: String } 
-      }
-    ],
+    attachments: [ String],
     company: String,
     session: {
       startYear: Number,

@@ -89,6 +89,7 @@ const ApiService = {
           },
         }
       );
+      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -197,21 +198,19 @@ const ApiService = {
     }
   },
 
-  createPost: async (postData) => {
+  createPost: async (payload) => {
     try {
-      const postDataString = JSON.stringify(postData);
-
       const token = localStorage.getItem("jwtToken");
-      //console.log(postData)
-      const response = await axios.post(
-        `${ApiService.baseURL}/admin/createPost`,
-        postData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+      console.log(payload)
+      //const jsonStringPayload = JSON.stringify(payload);
+    const response = await axios.post(
+      `${ApiService.baseURL}/admin/createPost`,
+      payload,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         }
       );
       console.log(response);

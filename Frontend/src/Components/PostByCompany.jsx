@@ -17,29 +17,6 @@ const PostsByCompany = () => {
   const [error, setError] = useState(null);
   const [formField, setFormField] = useState({});
 
-  const decodeBase64 = (base64String, type) => {
-    try {
-      let decodedString;
-      if (type === "image") {
-        decodedString = base64String;
-      } else {
-        const base64Data = base64String.split(",")[1];
-        const binaryString = window.atob(base64Data);
-        const byteArray = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          byteArray[i] = binaryString.charCodeAt(i);
-        }
-        const blob = new Blob([byteArray], { type: "application/pdf" });
-        return blob;
-      }
-
-      return decodedString;
-    } catch (error) {
-      console.error("Error decoding base64:", error);
-      return "Error decoding base64";
-    }
-  };
-
   useEffect(() => {
     ApiService.getPostsByCompany(
       companyName,
@@ -137,7 +114,6 @@ const PostsByCompany = () => {
         Object.keys(formDataValues).forEach((fieldName) => {
           formDataToSend[fieldName] = formDataValues[fieldName];
         });
-      // Send a request to the API server to submit the form data
       console.log(formDataToSend);
       await ApiService.formSubmit(formDataToSend);
       alert("Form submitted successfully.");
@@ -176,7 +152,9 @@ const PostsByCompany = () => {
             <div className="admin-buttons">
               {editPostId === post._id ? (
                 <>
-                  <button onClick={handleSaveButtonClick}  className="save-btn">Save</button>
+                  <button onClick={handleSaveButtonClick} className="save-btn">
+                    Save
+                  </button>
                 </>
               ) : (
                 <>
@@ -216,37 +194,28 @@ const PostsByCompany = () => {
           {post.attachments &&
             post.attachments.map((attachment, index) => (
               <div key={index}>
-                {attachment.type === "image" && (
+                {typeof attachment === "string" &&
+                (attachment.toLowerCase().endsWith(".jpg")|| attachment.toLowerCase().endsWith(".jpeg")|| attachment.toLowerCase().endsWith(".png")) ? (
                   <div className="image-box">
-                    <img
-                      src={decodeBase64(attachment.data, "image")}
-                      alt={attachment.fileName}
-                    />
+                    <img src={attachment} alt={`Image ${index}`} />
                     {/* Download button for images */}
                     <div className="download-box">
-                      <a
-                        href={decodeBase64(attachment.data, "image")}
-                        download={attachment.fileName}
-                      >
+                      <a href={attachment} target="_blank" rel="noreferrer">
+                        View
+                      </a>
+                      <a href={attachment} download>
                         Download Image
                       </a>
                     </div>
                   </div>
-                )}
-                {attachment.type === "file" && (
+                ) : typeof attachment === "string" &&
+                  attachment.toLowerCase().endsWith(".pdf") ? (
                   <div className="download-box">
-                    <span>{attachment.fileName}</span>
-                    <a
-                      href={URL.createObjectURL(
-                        new Blob([decodeBase64(attachment.data, "file")], {
-                          type: "application/pdf",
-                        })
-                      )}
-                      download={attachment.fileName}
-                    >
+                    <span>{attachment}</span>
+                    <a href={attachment} download>
                       {/* PDF icon */}
                       <img
-                        src="/pdf-icorn.png"
+                        src="/pdf-icon.png"
                         alt="PDF icon"
                         style={{
                           width: "32px",
@@ -257,7 +226,7 @@ const PostsByCompany = () => {
                       Download PDF
                     </a>
                   </div>
-                )}
+                ) : null}
               </div>
             ))}
 
@@ -276,35 +245,35 @@ const PostsByCompany = () => {
               </div>
             )}
 
-{!localStorage.getItem("isAdmin") && post.formData && (
-  <div className="form-container">
-    <h2>Form for Interested Student</h2>
-    <form>
-      {Object.keys(formField).map((fieldName) => (
-        post.formData[fieldName] !== undefined && (
-          <div key={`${post._id}-${fieldName}`}>
-            <label htmlFor={fieldName}>{fieldName}</label>
-            <input
-              type="text"
-              id={fieldName}
-              name={fieldName}
-              value={
-                (formDataValues[post._id] &&
-                  formDataValues[post._id][fieldName]) ||
-                ""
-              }
-              onChange={(e) =>
-                handleFormInputChange(e, post._id, fieldName)
-              }
-            />
-          </div>
-        )
-      ))}
-      <button onClick={handleFormSubmitClick}>Save Form</button>
-    </form>
-  </div>
-)}
+          {!localStorage.getItem("isAdmin") && post.formData && (
+            <div className="form-container">
+              <h2>Form for Interested Student</h2>
 
+              <form>
+                {Object.keys(formField).map((fieldName) =>
+                  post.formData[fieldName] !== undefined ? (
+                    <div key={`${post._id}-${fieldName}`}>
+                      <label htmlFor={fieldName}>{fieldName}</label>
+
+                      <input
+                        type="text"
+                        id={fieldName}
+                        name={fieldName}
+                        value={
+                          (formDataValues[post._id] &&
+                            formDataValues[post._id][fieldName]) ||
+                          ""
+                        }
+                        onChange={(e) => handleFormInputChange(e, fieldName)}
+                      />
+                    </div>
+                  ) : null
+                )}
+
+                <button onClick={handleFormSubmitClick}>Save Form</button>
+              </form>
+            </div>
+          )}
 
           <p>
             Created at:{" "}

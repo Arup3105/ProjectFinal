@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import ApiService from "../Components/ApiServer/ApiServer.jsx";
 import "./AdminPostCreation.css";
 
@@ -21,13 +21,27 @@ const AdminPostCreation = () => {
         setError("Title, content, company, and targeted streams cannot be empty.");
         return;
       }
-
+  
       setLoading(true);
       
-      const postData = { title, content, attachments, company, targetedStreams, userForm: formData };
-
+      let postData = new FormData();
+      postData.append('title', title);
+      postData.append('content', content);
+      postData.append('company', company);
+      postData.append('targetedStreams', targetedStreams.join(','));
+  
+      attachments.forEach((file, index) => {
+        //console.log("File appended:", file); // Add this line
+        postData.append(`attachments`, file);
+      });
+      const formDataString = JSON.stringify(formData);
+      postData.append('formData',formDataString);
+      console.log("Payload:", Object.fromEntries(postData));
+      //const payload=Object.fromEntries(postData);
+      // console.log("payload",payload);
+      console.log("postdata direct",postData);
       const response = await ApiService.createPost(postData);
-
+  
       if (response.status === 201) {
         setMessage("Post created successfully");
         setTimeout(() => {
@@ -42,29 +56,16 @@ const AdminPostCreation = () => {
     }
   };
 
-  const handleFileChange = async (e) => {
-    const selectedFiles = Array.from(e.target.files);
+  useEffect(() => {
+    console.log("Attachments:", attachments);
+  }, [attachments]);
 
-    try {
-      const base64Files = await Promise.all(selectedFiles.map(fileToBase64));
-      setAttachments(base64Files);
-    } catch (error) {
-      setError("Failed to read files");
-      console.error("Error reading files:", error);
-    }
-  };
-
-  const fileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        console.log("Base64 string:", reader.result);
-        resolve({ data: reader.result, fileName: file.name });
-      };
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
-    });
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    console.log("Selected Files:", files);
+    const updatedAttachments = [...attachments, ...files];
+    console.log("Updated Attachments:", updatedAttachments);
+    setAttachments(updatedAttachments);
   };
 
   const handleRemoveAttachment = (index) => {
@@ -121,7 +122,7 @@ const AdminPostCreation = () => {
           </div>
           {attachments.map((attachment, index) => (
             <div key={index}>
-              <img src={attachment.data} alt={attachment.fileName} style={{ maxWidth: "100px" }} />
+              <span>{attachment.name}</span>
               <button type="button" onClick={() => handleRemoveAttachment(index)}>Remove</button>
             </div>
           ))}
@@ -151,18 +152,18 @@ const AdminPostCreation = () => {
           </div>
           <div className="willingness-form">
             <p style={{color: "black"}}>Willingness Form</p>
-          {formFields.map((fieldName, index) => (
-            <div key={index} className="input-box">
-              <input
-                type="text"
-                value={formData[fieldName] || ""}
-                onChange={(e) => handleInputChange(fieldName, e.target.value)}
-                placeholder={fieldName}
-              />
-              <button type="button" onClick={() => handleRemoveField(fieldName)}>Remove</button>
-            </div>
-          ))}
-          <button type="button" onClick={handleAddField}>Add Field</button>
+            {formFields.map((fieldName, index) => (
+              <div key={index} className="input-box">
+                <input
+                  type="text"
+                  value={formData[fieldName] || ""}
+                  onChange={(e) => handleInputChange(fieldName, e.target.value)}
+                  placeholder={fieldName}
+                />
+                <button type="button" onClick={() => handleRemoveField(fieldName)}>Remove</button>
+              </div>
+            ))}
+            <button type="button" onClick={handleAddField}>Add Field</button>
           </div>
           <button type="submit">Add Post</button>
         </form>

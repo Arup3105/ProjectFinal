@@ -9,26 +9,13 @@ const User = require('../models/User');
 const Notification= require("../models/Notification");
 const Company = require('../models/Company');
 const config = require('config');
+const multer = require('multer');
+const path = require('path');
 
 const authenticateAdmin = require('../middleware/authenticate');
 
 const AUTH_CODE = config.get('adminCreatAuthCode'); 
 
-const multer = require('multer');
-
-// Multer storage 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'postAttachments');
-  },
-  filename: (req, file, cb) => {
-    const randomString = Math.random().toString(36).substring(7);
-    const newFilename = `${randomString}+${file.originalname}`;
-    cb(null, newFilename);
-  }
-});
-
-const upload = multer({ storage: storage });
 
 
 
@@ -160,34 +147,35 @@ const getCurrentISTDate = () => {
   return istDate;
 };
 
-router.post('/createPost', authenticateAdmin, async (req, res) => {
+// Multer storage 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'postAttachments');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix =
+          Date.now() + "-" + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
+        cb(null, uniqueSuffix);
+  }
+});
+
+const upload = multer({ storage: storage });
+router.post('/createPost', authenticateAdmin, upload.array("attachments",15), async (req, res) => {
   try {
+  console.log(req.body);
+  //console.log(req.files);
 
-    function getAttachmentType(fileName) {
-      console.log("File name:", fileName);
-      const extension = fileName.split('.').pop().toLowerCase();
-      switch (extension) {
-        case 'jpg':
-        case 'jpeg':
-        case 'png':
-          return 'image';
-        case 'pdf':
-          return 'pdf';
-        // Add more cases as needed for other file types
-        default:
-          return 'unknown';
-      }
-    }
 
-    console.log(req.body);
+    const { title, content, targetedStreams, formData , company } = req.body;
+    const filenames =[];
+    const formDataObject = JSON.parse(formData);
+    console.log(formDataObject);
 
-    const { title, content, attachments, targetedStreams, userForm, company } = req.body;
-    const attachmentsArray = req.body.attachments.map(attachment => ({
-      data: attachment.data,
-      fileName: attachment.fileName,
-      type: getAttachmentType(attachment.fileName) 
-    }));
-    
+    const attachments = req.files;
+    attachments.forEach(attachment => {
+      filenames.push("http://localhost:5000/posts/files/"+attachment.filename);
+});
+    //console.log(filenames);
 
     const currentDate = getCurrentISTDate();
     const currentYear = currentDate.getFullYear();
@@ -218,15 +206,11 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
       await newCompany.save();
     }
 
-    const AttachmentsArray = attachments.map(attachment => ({
-      data: attachment.data,
-      fileName: attachment.fileName,
-      type: getAttachmentType(attachment.fileName)
-    }));
+    
     const newPost = new Post({
       title,
       content,
-      attachments: AttachmentsArray,
+      attachments: filenames,
       company: capitalizedCompany,
       session: {
         startYear: sessionStartYear,
@@ -237,7 +221,7 @@ router.post('/createPost', authenticateAdmin, async (req, res) => {
         adminId: req.user._id, 
         adminName: req.user.username
       },
-      formData: userForm
+      formData : formDataObject,
     });
 
     await newPost.save();
