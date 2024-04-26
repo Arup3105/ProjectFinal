@@ -29,14 +29,14 @@ const Register = () => {
   const [stream, setStream] = useState("");
   const [error, setError] = useState("");
 
-  const fileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
-    });
-  };
+  // const fileToBase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (error) => reject(error);
+  //     reader.readAsDataURL(file);
+  //   });
+  // };
 
   const handleFileChange = (e, setter) => {
     const file = e.target.files[0];
@@ -134,51 +134,42 @@ const Register = () => {
       formData.append("mobileNumber", mobileNumber);
       formData.append("address", address);
       if (photo) {
-        const photoBase64 = await fileToBase64(photo);
-        formData.append("photo", photoBase64);
+        formData.append("photo", photo);
       }
       formData.append("tenthMarks", tenthMarks);
       if (tenthMarkSheet) {
-        const tenthMarkSheetBase64 = await fileToBase64(tenthMarkSheet);
-        formData.append("tenthMarkSheet", tenthMarkSheetBase64);
+        formData.append("tenthMarkSheet", tenthMarkSheet);
       }
       formData.append("twelfthMarks", twelfthMarks);
       if (twelfthMarkSheet) {
-        const twelfthMarkSheetBase64 = await fileToBase64(twelfthMarkSheet);
-        formData.append("twelfthMarkSheet", twelfthMarkSheetBase64);
+        formData.append("twelfthMarkSheet", twelfthMarkSheet);
       }
       if (firstSemMarkSheet) {
-        const firstSemMarkSheetBase64 = await fileToBase64(firstSemMarkSheet);
-        formData.append("firstSemMarkSheet", firstSemMarkSheetBase64);
+        formData.append("firstSemMarkSheet", firstSemMarkSheet);
       }
       if (secondSemMarkSheet) {
-        const secondSemMarkSheetBase64 = await fileToBase64(secondSemMarkSheet);
-        formData.append("secondSemMarkSheet", secondSemMarkSheetBase64);
+        formData.append("secondSemMarkSheet", secondSemMarkSheet);
       }
       if (thirdSemMarkSheet) {
-        const thirdSemMarkSheetBase64 = await fileToBase64(thirdSemMarkSheet);
-        formData.append("thirdSemMarkSheet", thirdSemMarkSheetBase64);
+        formData.append("thirdSemMarkSheet", thirdSemMarkSheet);
       }
       if (fourthSemMarkSheet) {
-        const fourthSemMarkSheetBase64 = await fileToBase64(fourthSemMarkSheet);
-        formData.append("fourthSemMarkSheet", fourthSemMarkSheetBase64);
+        formData.append("fourthSemMarkSheet", fourthSemMarkSheet);
       }
       if (fifthSemMarkSheet) {
-        const fifthSemMarkSheetBase64 = await fileToBase64(fifthSemMarkSheet);
-        formData.append("fifthSemMarkSheet", fifthSemMarkSheetBase64);
+        formData.append("fifthSemMarkSheet", fifthSemMarkSheet);
       }
       if (sixthSemMarkSheet) {
-        const sixthSemMarkSheetBase64 = await fileToBase64(sixthSemMarkSheet);
-        formData.append("sixthSemMarkSheet", sixthSemMarkSheetBase64);
+        formData.append("sixthSemMarkSheet", sixthSemMarkSheet);
       }
       if (cv) {
-        const cvBase64 = await fileToBase64(cv);
-        formData.append("cv", cvBase64);
+        formData.append("cv", cv);
       }
       formData.append("stream", stream.toUpperCase());
       formData.append("cgpa", cgpa);
 
       setError("Creating your account. Please wait...");
+      console.log(Object.fromEntries(formData));
       const response = await ApiService.register(formData);
 
       if (response && response.token) {
@@ -290,7 +281,7 @@ const Register = () => {
                   <label htmlFor="cv">CV</label>
                   <input
                     type="file"
-                    accept="image/*"
+                    accept=".pdf"
                     onChange={(e) => setCV(e.target.files[0])}
                     id="cv"
                     name="cv"
