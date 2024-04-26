@@ -126,13 +126,7 @@ const Register = () => {
       }
 
       const formData = new FormData();
-      formData.append("name", name);
-      formData.append("rollNumber", rollNumber);
-      formData.append("regNumber", regNumber);
-      formData.append("password", password);
-      formData.append("email", email);
-      formData.append("mobileNumber", mobileNumber);
-      formData.append("address", address);
+      
       if (photo) {
         formData.append("photo", photo);
       }
@@ -165,6 +159,13 @@ const Register = () => {
       if (cv) {
         formData.append("cv", cv);
       }
+      formData.append("name", name);
+      formData.append("rollNumber", rollNumber);
+      formData.append("regNumber", regNumber);
+      formData.append("password", password);
+      formData.append("email", email);
+      formData.append("mobileNumber", mobileNumber);
+      formData.append("address", address);
       formData.append("stream", stream.toUpperCase());
       formData.append("cgpa", cgpa);
 

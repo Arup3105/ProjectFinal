@@ -8,6 +8,7 @@ const Admin = require("../models/Admin");
 const Notification = require("../models/Notification");
 const Form = require("../models/FormResponse");
 const path = require("path");
+
 // Get all posts
 // router.get('/seePosts', authMiddleware, async (req, res) => {
 //   try {
@@ -212,6 +213,27 @@ router.post("/submitForm",authMiddleware, async (req, res)=>{
 router.get('/files/:filename', (req, res) => {
   const filename = req.params.filename;
   const directoryPath = path.join(__dirname, '../postAttachments');
+  const filePath = path.join(directoryPath, filename);
+  const options = {
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  };
+  res.sendFile(filePath, options, function (err) {
+    if (err) {
+      console.error(err);
+      if (!res.headersSent) {
+        res.status(404).send('File not found');
+      }
+    } else {
+      console.log('Sent:', filename);
+    }
+  });
+});
+router.get('/user/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const directoryPath = path.join(__dirname, '../UserAttachments');
   const filePath = path.join(directoryPath, filename);
   const options = {
     headers: {

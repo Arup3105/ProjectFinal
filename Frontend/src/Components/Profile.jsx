@@ -32,15 +32,6 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
-  const fileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
-    });
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       setUserData(null); // Reset userData to null before fetching new data
@@ -84,17 +75,6 @@ const Profile = () => {
     if (!file || !file.type.startsWith('image/')) {
       alert('Please select a valid image file.');
       return;
-    }
-
-    try {
-      const base64Image = await fileToBase64(file);
-      setUserData(prevData => ({
-        ...prevData,
-        [fieldName]: base64Image,
-      }));
-    } catch (error) {
-      console.error('Error converting file to base64:', error);
-      setError(error);
     }
   };
 

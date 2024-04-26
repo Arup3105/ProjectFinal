@@ -11,11 +11,13 @@ const Company = require('../models/Company');
 const config = require('config');
 const multer = require('multer');
 const path = require('path');
+const uploadOnCloudinary = require('../utility/cloudinary');
+const fs =require('fs');
 
 const authenticateAdmin = require('../middleware/authenticate');
 
 const AUTH_CODE = config.get('adminCreatAuthCode'); 
-
+const MAX_RETRY_ATTEMPTS = 3;
 
 
 
@@ -160,11 +162,11 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
 router.post('/createPost', authenticateAdmin, upload.array("attachments",15), async (req, res) => {
   try {
   console.log(req.body);
   //console.log(req.files);
-
 
     const { title, content, targetedStreams, formData , company } = req.body;
     const filenames =[];
@@ -172,10 +174,21 @@ router.post('/createPost', authenticateAdmin, upload.array("attachments",15), as
     console.log(formDataObject);
 
     const attachments = req.files;
-    attachments.forEach(attachment => {
-      filenames.push("http://localhost:5000/posts/files/"+attachment.filename);
-});
-    //console.log(filenames);
+    for (let attachment of attachments) {
+      let fname = await uploadOnCloudinary(attachment.path);
+      let retryCount = 0;
+      while (fname === null && retryCount < MAX_RETRY_ATTEMPTS) {
+        console.log(`Retry attempt ${retryCount + 1}`);
+        fname = await uploadOnCloudinary(attachment.path);
+        retryCount++;
+      }
+      if (fname === null) {
+          fs.unlinkSync(attachment.path);
+      } else {
+        filenames.push(fname.url);
+        fs.unlinkSync(attachment.path)
+      }
+    }
 
     const currentDate = getCurrentISTDate();
     const currentYear = currentDate.getFullYear();

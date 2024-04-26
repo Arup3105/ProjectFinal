@@ -10,14 +10,25 @@ const Post = require("../models/Post");
 const Notification = require("../models/Notification");
 const multer = require("multer");
 const JWT_SECRET_KEY = config.get("jwtSecret");
-const upload = multer({
-  limits: {
-    fieldSize: 1024 * 1024 * 20,
+const path = require("path")
+const uploadfile = require('../utility/upload');
+const fs =require('fs');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'UserAttachments');
   },
+  filename: (req, file, cb) => {
+    const uniqueSuffix =
+          Date.now() + "-" + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
+        cb(null, uniqueSuffix);
+  }
 });
 
-// User registration Code
-router.post("/register", upload.any(), async (req, res) => {
+const upload = multer({ storage: storage });
+
+router.post("/register",upload.any(), async (req, res) => {
+
   try {
     const {
       name,
@@ -27,21 +38,13 @@ router.post("/register", upload.any(), async (req, res) => {
       email,
       mobileNumber,
       address,
-      photo,
       tenthMarks,
-      tenthMarkSheet,
       twelfthMarks,
-      twelfthMarkSheet,
       cgpa,
-      firstSemMarkSheet,
-      secondSemMarkSheet,
-      thirdSemMarkSheet,
-      forthSemMarkSheet,
-      fifthSemMarkSheet,
-      sixthSemMarkSheet,
-      cv,
       stream,
     } = req.body;
+
+    
 
     const existingUserByEmail = await User.findOne({ email });
     const existingUserByMobile = await User.findOne({ mobileNumber });
@@ -63,6 +66,38 @@ router.post("/register", upload.any(), async (req, res) => {
     if (existingUserByRegNumber) {
       return res.status(400).json({ message: "Registration number is already registered" });
     }
+
+    const files = req.files;
+    const photo = req.files.find(file => file.fieldname === 'photo')?.path;
+    const photoUrl = await uploadfile(photo);
+
+    const tenthMarkSheet = req.files.find(file => file.fieldname === 'tenthMarkSheet')?.path;
+    const tenthMarkSheetUrl = await uploadfile(tenthMarkSheet);
+
+    const twelfthMarkSheet = req.files.find(file => file.fieldname === 'twelfthMarkSheet')?.path;
+    const twelfthMarkSheetUrl = await uploadfile(twelfthMarkSheet);
+
+    const firstSemMarkSheet = req.files.find(file => file.fieldname === 'firstSemMarkSheet')?.path;
+    const firstSemMarkSheetUrl = await uploadfile(firstSemMarkSheet);
+
+    const secondSemMarkSheet = req.files.find(file => file.fieldname === 'secondSemMarkSheet')?.path;
+    const secondSemMarkSheetUrl = await uploadfile(secondSemMarkSheet);
+
+    const thirdSemMarkSheet = req.files.find(file => file.fieldname === 'thirdSemMarkSheet')?.path;
+    const thirdSemMarkSheetUrl = await uploadfile(thirdSemMarkSheet);
+
+    const forthSemMarkSheet = req.files.find(file => file.fieldname === 'forthSemMarkSheet')?.path;
+    const forthSemMarkSheetUrl = await uploadfile(forthSemMarkSheet);
+
+    const fifthSemMarkSheetl = req.files.find(file => file.fieldname === 'fifthSemMarkSheet')?.path;
+    const fifthSemMarkSheetUrl = await uploadfile(fifthSemMarkSheetl);
+
+    const sixthSemMarkSheet= req.files.find(file => file.fieldname === 'sixthSemMarkSheet')?.path;
+    const sixthSemMarkSheetUrl = await uploadfile(sixthSemMarkSheet);
+
+    const cv = req.files.find(file => file.fieldname === 'cv')?.path;
+    const cvUrl = await uploadfile(cv);
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username: name,
@@ -72,35 +107,35 @@ router.post("/register", upload.any(), async (req, res) => {
       email,
       mobileNumber,
       address,
-      photo,
+      photo:photoUrl,
       tenthMarks,
-      tenthMarkSheet,
+      tenthMarkSheet :tenthMarkSheetUrl,
       twelfthMarks,
-      twelfthMarkSheet,
+      twelfthMarkSheet:twelfthMarkSheetUrl,
       cgpa,
-      firstSemMarkSheet,
-      secondSemMarkSheet,
-      thirdSemMarkSheet,
-      forthSemMarkSheet,
-      fifthSemMarkSheet,
-      sixthSemMarkSheet,
-      cv,
+      firstSemMarkSheet:firstSemMarkSheetUrl,
+      secondSemMarkSheet:secondSemMarkSheetUrl,
+      thirdSemMarkSheet:thirdSemMarkSheetUrl,
+      forthSemMarkSheet:forthSemMarkSheetUrl,
+      fifthSemMarkSheet:fifthSemMarkSheetUrl,
+      sixthSemMarkSheet:sixthSemMarkSheetUrl,
+      cv:cvUrl,
       stream,
       notifications: [],
     });
     await newUser.save();
 
-    const token = jwt.sign(
-      {
-        userId: newUser._id,
-        username: newUser.name,
-        rollNumber: newUser.rollNumber,
-      },
-      config.get("jwtSecret"),
-      { expiresIn: "1d" }
-    );
+    // const token = jwt.sign(
+    //   {
+    //     userId: newUser._id,
+    //     username: newUser.name,
+    //     rollNumber: newUser.rollNumber,
+    //   },
+    //   config.get("jwtSecret"),
+    //   { expiresIn: "1d" }
+    // );
 
-    res.status(201).json({ message: "User registered successfully", token });
+    res.status(201).json({ message: "User registered successfully"});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -212,6 +247,9 @@ router.put("/updateProfile", authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id;
     const updatedData = req.body;
+    const updatedImage= req.files;
+    console.log("updatedData",updatedData)
+    console.log("updatedImage",updatedImage)
     const UserModel = req.user.userRole === "user" ? User : Admin;
 
     const updatedProfile = await UserModel.findByIdAndUpdate(userId, updatedData, { new: true });
