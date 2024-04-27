@@ -371,7 +371,7 @@ const ApiService = {
           },
         }
       );
-      console.log(response.data);
+      //console.log(response.data);
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -400,7 +400,7 @@ const ApiService = {
 
   formSubmit: async (formDataToSend) => {
     try {
-      console.log(formDataToSend);
+      //console.log(formDataToSend);
       const token = localStorage.getItem("jwtToken");
       const response = await axios.post(
         `${ApiService.baseURL}/user/submitResponseForm`,
@@ -421,7 +421,7 @@ const ApiService = {
 
   downloadResponse: async (postId) => {
     try {
-      console.log(postId);
+      //console.log(postId);
       const token = localStorage.getItem("jwtToken");
       const response = await axios.post(
         `${ApiService.baseURL}/posts/downloadResponse/${postId}`,
@@ -434,12 +434,86 @@ const ApiService = {
           },
         }
       );
-      console.log(response)
+      //console.log(response)
+      return response;
+    } catch (error) {
+      //console.log(error.response.data)
+      throw error.response.data;
+    }
+  },
+
+  placed: async (formData) => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      console.log(formData)
+      const response = await axios.post(`${ApiService.baseURL}/reviews/placed`, 
+      formData, 
+      {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      console.log('Response:', response);
+      return response.data;
+    } catch (error) {
+      console.log(error)
+      throw error.response.data;
+    }
+  },
+  prevSubmission: async () => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      const response = await axios.get(`${ApiService.baseURL}/reviews/prev-submission`, {
+        withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+      });
       return response;
     } catch (error) {
       throw error.response.data;
     }
   },
+
+  placedData: async () => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      const response = await axios.get(`${ApiService.baseURL}/reviews/placedStudentData`, {
+        withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+      }); 
+      //console.log(response)
+      return response;
+    } catch (error) {
+      throw new Error(`Error fetching placed data: ${error.message}`);
+    }
+  },
+
+  approveReq: async (postId) => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      const response = await axios.post(`${ApiService.baseURL}/reviews/approverdReq`,
+      { postId}, 
+      {
+        withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+      }); 
+      //console.log(response)
+      return response;
+    } catch (error) {
+      throw new Error(`Error fetching placed data: ${error.message}`);
+    }
+  },
+
 };
 
 export default ApiService;

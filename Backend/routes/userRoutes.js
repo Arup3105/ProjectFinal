@@ -13,6 +13,7 @@ const JWT_SECRET_KEY = config.get("jwtSecret");
 const path = require("path");
 const uploadfile = require("../utility/upload");
 const fs = require("fs");
+
 const FormResponse = require("../models/FormResponse");
 
 
@@ -363,57 +364,4 @@ router.post("/submitResponseForm",authMiddleware, async (req, res)=>{
     res.status(500).json({ message: "Internal Server Error" });
 }
 });
-
-// to check notification
-//  router.get("/notifications", authMiddleware, async (req, res) => {
-//   try {
-//     const userId = req.user._id;
-
-//     const userNotifications = await Notification.find({ userId }).sort({
-//       createdAt: -1,
-//     });
-
-//     res.status(200).json(userNotifications);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// });
-
-// // Comment in a post
-// router.post("/addComment/:postId", authMiddleware, async (req, res) => {
-//   try {
-//     const userId = req.user._id;
-//     const postId = req.params.postId;
-//     const { content } = req.body;
-
-//     const newComment = new Comment({ userId, postId, content });
-
-//     await newComment.save();
-
-//     res.status(201).json({ message: "Comment added successfully" });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// });
-
-// // Add  review to a post
-// router.post("/addReview/:postId", authMiddleware, async (req, res) => {
-//   try {
-//     const userId = req.user._id;
-//     const postId = req.params.postId;
-//     const { content } = req.body;
-
-//     const newReview = new Review({ userId, postId, content });
-
-//     await newReview.save();
-
-//     res.status(201).json({ message: "Review added successfully" });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// });
-
 module.exports = router;

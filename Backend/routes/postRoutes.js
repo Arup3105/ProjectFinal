@@ -8,6 +8,7 @@ const Company = require("../models/Company");
 const Admin = require("../models/Admin");
 const Notification = require("../models/Notification");
 const FormResponse = require("../models/FormResponse");
+const PlacedStudent = require('../models/PlacedStudent');
 const path = require("path");
 
 // Get all posts
@@ -100,7 +101,7 @@ router.get(
   async (req, res) => {
     try {
       const { companyName, startYear, endYear, targetedStreams } = req.params;
-      console.log(req.user._id)
+      //console.log(req.user._id)
 
       const targetedStreamsArray = targetedStreams.split(",");
 
@@ -208,10 +209,8 @@ router.delete("/delete/:postId", authMiddleware, async (req, res) => {
 
 async function retrieveExcelContent(postId) {
   try {
-    const formResponse = await FormResponse.find({ postId });
-    const { submittedAt, data } = formResponse;
-    
-    return { submittedAt, data };
+    const formResponses = await FormResponse.find({ postId });
+    return { formResponses };
   } catch (error) {
     console.error(error);
     throw error;
@@ -222,115 +221,35 @@ async function retrieveExcelContent(postId) {
 router.post('/downloadResponse/:postId', async (req, res) => {
   try {
     const { postId } = req.params;
-    console.log(postId)
-    const {submittedAt, data} = await retrieveExcelContent(postId);
-    
-    // Create a new Excel workbook
+    //console.log(postId)
+    const {formResponses} = await retrieveExcelContent(postId);
+
+    if (formResponses.length === 0) {
+      return res.status(204).json({ message: 'No response found for the given postId.' });
+    }
+
     const wb = new excel.Workbook();
     const ws = wb.addWorksheet('Sheet 1');
 
-    let column = 1;
-    for (const key in data) {
-      ws.cell(1, column).string(key);
-      column++;
-    }
+    const headers = Object.keys(formResponses[0].data);
+    headers.forEach((header, index) => {
+      ws.cell(1, index + 1).string(header);
+    });
+    formResponses.forEach((formResponse, rowIndex) => {
+      const rowData = Object.values(formResponse.data);
+      rowData.forEach((value, colIndex) => {
+        ws.cell(rowIndex + 2, colIndex + 1).string(value.toString());
+      });
+    });
 
-    let row = 2;
-    for (const key in data) {
-      ws.cell(row, 1).string(data[key].toString());
-      row++;
-    }
-
-    res.setHeader('Content-Type', 'application/vnd.ms-excel');
-    res.setHeader('Content-Disposition', `attachment; filename=${postId}.xls`);
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=${postId}.xlsx`);
     wb.write(`${postId}ExcelFile.xlsx`, res);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-// router.post("/submitResponseForm",authMiddleware, async (req, res)=>{
-//   try {
-//     const {formDataToSend}=req.body;
-//     console.log(formDataToSend);
-//     const { id,...rest } = formDataToSend;
-//     const userId= req.user._id;
-    
-//     const form = await FormResponse.findById(id,userId);
-//     const userDetails = await User.findById(userId);
-
-//     const {username,rollNumber,regNumber,email,mobileNumber,cgpa,tenthMarks,twelfthMarks,cv} = userDetails;
-
-//     if (form) {
-//         return res.status(404).json({ message: "Form Already Submitted" });
-//     }else{
-//       const newForm = new FormResponse({
-//         postId: id,
-//         submittedAt: Date.now(),
-//         username,
-//         email,
-//         mobileNumber,
-//         cgpa,
-//         tenthMarks,
-//         twelfthMarks,
-//         ...rest,
-//         cv,
-//         rollNumber,
-//         regNumber,
-//       });
-//       console.log(newForm);
-
-//       await newForm.save();
-//       return res.status(201).json({ message: "Form created successfully" });
-//     }
-// } catch (error) {
-//     console.error("Error submitting form:", error);
-//     res.status(500).json({ message: "Internal Server Error" });
-// }
-// });
-
-// router.get('/files/:filename', (req, res) => {
-//   const filename = req.params.filename;
-//   const directoryPath = path.join(__dirname, '../postAttachments');
-//   const filePath = path.join(directoryPath, filename);
-//   const options = {
-//     headers: {
-//       'x-timestamp': Date.now(),
-//       'x-sent': true
-//     }
-//   };
-//   res.sendFile(filePath, options, function (err) {
-//     if (err) {
-//       console.error(err);
-//       if (!res.headersSent) {
-//         res.status(404).send('File not found');
-//       }
-//     } else {
-//       console.log('Sent:', filename);
-//     }
-//   });
-// });
-// router.get('/user/:filename', (req, res) => {
-//   const filename = req.params.filename;
-//   const directoryPath = path.join(__dirname, '../UserAttachments');
-//   const filePath = path.join(directoryPath, filename);
-//   const options = {
-//     headers: {
-//       'x-timestamp': Date.now(),
-//       'x-sent': true
-//     }
-//   };
-//   res.sendFile(filePath, options, function (err) {
-//     if (err) {
-//       console.error(err);
-//       if (!res.headersSent) {
-//         res.status(404).send('File not found');
-//       }
-//     } else {
-//       console.log('Sent:', filename);
-//     }
-//   });
-// });
 
 
 module.exports = router;

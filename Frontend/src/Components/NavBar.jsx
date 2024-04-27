@@ -55,17 +55,17 @@ const NavBar = ({ isAdmin }) => {
     }
   };
 
-  const markNotificationAsRead = async (notificationId) => {
-    try {
-      await ApiService.markNotificationAsRead(notificationId);
-      // Refetch notifications after marking as read
-      fetchNotifications();
-      // Update unread notification count
-      setUnreadNotifications(unreadNotifications - 1);
-    } catch (error) {
-      console.error('Error marking notification as read:', error);
-    }
-  };
+  // const markNotificationAsRead = async (notificationId) => {
+  //   try {
+  //     await ApiService.markNotificationAsRead(notificationId);
+  //     // Refetch notifications after marking as read
+  //     fetchNotifications();
+  //     // Update unread notification count
+  //     setUnreadNotifications(unreadNotifications - 1);
+  //   } catch (error) {
+  //     console.error('Error marking notification as read:', error);
+  //   }
+  // };
 
   const fetchNotifications = async () => {
     try {
@@ -230,6 +230,15 @@ const NavBar = ({ isAdmin }) => {
                 <FaUser />
               </Link>
             </li>
+            
+          )}
+          {!isRestrictedPage && (
+            <li>
+              <Link to="/PlacedStudent" className="navbtn">
+                placed
+              </Link>
+            </li>
+            
           )}
           {!isRestrictedPage && (
             <li>

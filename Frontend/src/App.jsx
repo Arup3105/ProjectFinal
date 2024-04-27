@@ -15,6 +15,7 @@ import UserProfile from './Components/UserProfile';
 import AdminForgot from "./Components/AdminForgot";
 import UserForgot from "./Components/UserForgot";
 import LandingPage from "./Components/landingPage";
+import PlacedStudent from "./Components/PlacedStudent";
 
 const App = () => {
   const location = useLocation();
@@ -49,6 +50,7 @@ const App = () => {
         <Route path="/admin/AdminForgot" element={<AdminForgot />} />
         <Route path="/user/UserForgot" element={<UserForgot />} />
         <Route path="/user/:rollNumber" element={<UserProfile />} />
+        <Route path="/PlacedStudent" element={<PlacedStudent />} />
       </Routes>
     </div>
   );

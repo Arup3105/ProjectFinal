@@ -122,6 +122,9 @@ const PostsByCompany = () => {
       console.log(formDataToSend);
       await ApiService.formSubmit(formDataToSend);
       alert("Form submitted successfully.");
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("Error submitting form.");
@@ -150,6 +153,11 @@ const PostsByCompany = () => {
   const handleDownloadResponse = async (postId) => {
     try {
       const response = await ApiService.downloadResponse(postId);
+
+      if (response.statusText === 'No Content') {
+        alert('No response available.');
+        return;
+      }
       const blob = new Blob([response.data], { type: response.headers['content-type'] });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
