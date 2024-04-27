@@ -165,14 +165,14 @@ const upload = multer({ storage: storage });
 
 router.post('/createPost', authenticateAdmin, upload.array("attachments",15), async (req, res) => {
   try {
-  console.log(req.body);
+  // console.log(req.body);
   //console.log(req.files);
 
     const { title, content, targetedStreams, formData , company } = req.body;
     const filenames =[];
     const formDataObject = JSON.parse(formData);
-    console.log(formDataObject);
-
+    //console.log(formDataObject);
+    if(req.user.userRole === 'admin'){
     const attachments = req.files;
     for (let attachment of attachments) {
       let fname = await uploadOnCloudinary(attachment.path);
@@ -236,13 +236,11 @@ router.post('/createPost', authenticateAdmin, upload.array("attachments",15), as
       },
       formData : formDataObject,
     });
-
     await newPost.save();
 
-    const usersInStreams = await User.find({ stream: { $in: targetedStreams } });
-
-    const notifications = usersInStreams.map(user => ({
-      userId: user._id,
+    const usersInStreams = await User.find({ stream: { $in: targetedStreams } }).select('_id');
+    const notifications = usersInStreams.map(userId => ({
+      userId,
       postId: newPost._id,
       content: `New post: ${title}`,
     }));
@@ -250,6 +248,9 @@ router.post('/createPost', authenticateAdmin, upload.array("attachments",15), as
     await Notification.insertMany(notifications);
 
     res.status(201).json({ message: 'Post created successfully' });
+  }else{
+    res.status(500).json({message: "Authentication error"});
+  }
   } catch (error) {
     console.error('Error creating post:', error);
     res.status(500).json({ message: 'Internal Server Error' });

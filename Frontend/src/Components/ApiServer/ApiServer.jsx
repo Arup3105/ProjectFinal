@@ -89,7 +89,7 @@ const ApiService = {
           },
         }
       );
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -105,11 +105,14 @@ const ApiService = {
         throw new Error("No token, authorization denied");
       }
 
-      const response = await axios.delete(`${ApiService.baseURL}/posts/delete/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.delete(
+        `${ApiService.baseURL}/posts/delete/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       return response.data;
     } catch (error) {
@@ -127,11 +130,15 @@ const ApiService = {
         throw new Error("No token, authorization denied");
       }
 
-      const response = await axios.put(`${ApiService.baseURL}/posts/editpost/${postId}`, newData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.put(
+        `${ApiService.baseURL}/posts/editpost/${postId}`,
+        newData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       return response.data;
     } catch (error) {
@@ -201,16 +208,16 @@ const ApiService = {
   createPost: async (payload) => {
     try {
       const token = localStorage.getItem("jwtToken");
-      console.log(payload)
+      console.log(payload);
       //const jsonStringPayload = JSON.stringify(payload);
-    const response = await axios.post(
-      `${ApiService.baseURL}/admin/createPost`,
-      payload,
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await axios.post(
+        `${ApiService.baseURL}/admin/createPost`,
+        payload,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       console.log(response);
@@ -235,8 +242,6 @@ const ApiService = {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -393,12 +398,12 @@ const ApiService = {
     }
   },
 
-  formSubmit: async()=>{
+  formSubmit: async (formDataToSend) => {
     try {
-      console.log(formDataToSend)
+      console.log(formDataToSend);
       const token = localStorage.getItem("jwtToken");
       const response = await axios.post(
-        `${ApiService.baseURL}/posts/submitForm`,
+        `${ApiService.baseURL}/user/submitResponseForm`,
         { formDataToSend },
         {
           withCredentials: true,
@@ -413,7 +418,28 @@ const ApiService = {
       throw error.response.data;
     }
   },
-  
+
+  downloadResponse: async (postId) => {
+    try {
+      console.log(postId);
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.post(
+        `${ApiService.baseURL}/posts/downloadResponse/${postId}`,
+        { postId },
+        {
+          responseType: 'blob',
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response)
+      return response;
+    } catch (error) {
+      throw error.response.data;
+    }
+  },
 };
 
 export default ApiService;

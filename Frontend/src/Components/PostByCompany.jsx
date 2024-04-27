@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
 import ApiService from "../Components/ApiServer/ApiServer.jsx";
 import { useParams } from "react-router-dom";
 import "../Components/PostByCompany.css";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+
 
 const PostsByCompany = () => {
   const { companyName, startYear, endYear, targetedStreams } = useParams();
@@ -29,7 +31,6 @@ const PostsByCompany = () => {
           setPosts(data.reverse());
           setLoading(false);
 
-          // Extracting keys from formData object and storing as an object in formField
           const formFieldKeys = {};
           data.forEach((post) => {
             const formField = post.formData || {};
@@ -110,10 +111,14 @@ const PostsByCompany = () => {
   const handleFormSubmitClick = async () => {
     try {
       const formDataToSend = {};
-      editPostId,
-        Object.keys(formDataValues).forEach((fieldName) => {
-          formDataToSend[fieldName] = formDataValues[fieldName];
+      console.log(formDataValues);
+      Object.keys(formDataValues).forEach((postId) => {
+        const postData = formDataValues[postId];
+        formDataToSend["id"] = postId;
+        Object.keys(postData).forEach((fieldName) => {
+          formDataToSend[fieldName] = postData[fieldName];
         });
+      });
       console.log(formDataToSend);
       await ApiService.formSubmit(formDataToSend);
       alert("Form submitted successfully.");
@@ -123,12 +128,39 @@ const PostsByCompany = () => {
     }
   };
 
-  const handleFormInputChange = (e, fieldName) => {
-    const { value } = e.target;
-    setFormDataValues((prevValues) => ({
-      ...prevValues,
-      [fieldName]: value,
-    }));
+  const handleFormInputChange = (e, fieldName, postid) => {
+    setFormDataValues((prevValues) => {
+      const currentPostValues = prevValues[postid] || {};
+
+      const updatedPostValues = {
+        ...currentPostValues,
+        [fieldName]: e.target.value,
+      };
+
+      const updatedValues = {
+        ...prevValues,
+        [postid]: updatedPostValues,
+      };
+
+      console.log("Updated FormDataValues:", updatedValues);
+      return updatedValues;
+    });
+  };
+
+  const handleDownloadResponse = async (postId) => {
+    try {
+      const response = await ApiService.downloadResponse(postId);
+      const blob = new Blob([response.data], { type: response.headers['content-type'] });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `response_${postId}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading response:', error);
+    }
   };
 
   if (loading) {
@@ -195,7 +227,9 @@ const PostsByCompany = () => {
             post.attachments.map((attachment, index) => (
               <div key={index}>
                 {typeof attachment === "string" &&
-                (attachment.toLowerCase().endsWith(".jpg")|| attachment.toLowerCase().endsWith(".jpeg")|| attachment.toLowerCase().endsWith(".png")) ? (
+                (attachment.toLowerCase().endsWith(".jpg") ||
+                  attachment.toLowerCase().endsWith(".jpeg") ||
+                  attachment.toLowerCase().endsWith(".png")) ? (
                   <div className="image-box">
                     <img src={attachment} alt={`Image ${index}`} />
                     {/* Download button for images */}
@@ -242,38 +276,45 @@ const PostsByCompany = () => {
                     </div>
                   ))}
                 </form>
+                <button onClick={() => handleDownloadResponse(post._id)}>
+                  Download Response xlsx
+                </button>
               </div>
             )}
 
-          {!localStorage.getItem("isAdmin") && post.formData && (
-            <div className="form-container">
-              <h2>Form for Interested Student</h2>
-
-              <form>
-                {Object.keys(formField).map((fieldName) =>
-                  post.formData[fieldName] !== undefined ? (
-                    <div key={`${post._id}-${fieldName}`}>
-                      <label htmlFor={fieldName}>{fieldName}</label>
-
-                      <input
-                        type="text"
-                        id={fieldName}
-                        name={fieldName}
-                        value={
-                          (formDataValues[post._id] &&
-                            formDataValues[post._id][fieldName]) ||
-                          ""
-                        }
-                        onChange={(e) => handleFormInputChange(e, fieldName)}
-                      />
-                    </div>
-                  ) : null
+          {!localStorage.getItem("isAdmin") &&
+            (post.formData || post.submittedStatus) && (
+              <div className="form-container">
+                <h2>Form for Interested Student</h2>
+                {post.submittedStatus ? (
+                  <p>Form already submitted.</p>
+                ) : (
+                  <form>
+                    {Object.keys(formField).map((fieldName) =>
+                      post.formData[fieldName] !== undefined ? (
+                        <div key={`${post._id}-${fieldName}`}>
+                          <label htmlFor={fieldName}>{fieldName}</label>
+                          <input
+                            type="text"
+                            id={fieldName}
+                            name={fieldName}
+                            value={
+                              (formDataValues[post._id] &&
+                                formDataValues[post._id][fieldName]) ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              handleFormInputChange(e, fieldName, post._id)
+                            }
+                          />
+                        </div>
+                      ) : null
+                    )}
+                    <button onClick={handleFormSubmitClick}>Save Form</button>
+                  </form>
                 )}
-
-                <button onClick={handleFormSubmitClick}>Save Form</button>
-              </form>
-            </div>
-          )}
+              </div>
+            )}
 
           <p>
             Created at:{" "}

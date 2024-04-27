@@ -13,6 +13,8 @@ const JWT_SECRET_KEY = config.get("jwtSecret");
 const path = require("path");
 const uploadfile = require("../utility/upload");
 const fs = require("fs");
+const FormResponse = require("../models/FormResponse");
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -294,10 +296,10 @@ router.put("/updateProfile", authMiddleware, upload.any(), async (req, res) => {
 
     const updatedData = { ...req.body };
     const updateImage= {...req.files};
-    console.log(updateImage)
+    //console.log(updateImage)
     for (const key in updateImage) {
       const file = updateImage[key];
-      console.log(file.fieldname, file.path);
+      //console.log(file.fieldname, file.path);
       const fileUrl= await uploadfile(file.path)
       updatedData[file.fieldname] = fileUrl.url;
     }
@@ -313,6 +315,53 @@ router.put("/updateProfile", authMiddleware, upload.any(), async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
+});
+
+
+router.post("/submitResponseForm",authMiddleware, async (req, res)=>{
+  try {
+    const {formDataToSend}=req.body;
+    //console.log("submitResponseForm");
+    const { id,...rest } = formDataToSend;
+    const userId= req.user._id;
+    //console.log(id,userId)
+    const form = await FormResponse.findOne({ postId: id, userId: userId });
+    //console.log(form)
+    const userDetails = await User.findById(userId);
+
+    const {username,rollNumber,regNumber,email,mobileNumber,cgpa,tenthMarks,twelfthMarks,cv} = userDetails;
+
+    const data= {
+      username,
+        email,
+        mobileNumber,
+        cgpa,
+        tenthMarks,
+        twelfthMarks,
+        ...rest,
+        cv,
+        rollNumber,
+        regNumber,
+    };
+    //console.log(data);
+    if (form) {
+        return res.status(404).json({ message: "Form Already Submitted" });
+    }else{
+      const newForm = new FormResponse({
+        postId: id,
+        userId,
+        submittedAt: Date.now(),
+        data,
+      });
+      //console.log(newForm);
+
+      await newForm.save();
+      return res.status(201).json({ message: "Form created successfully" });
+    }
+} catch (error) {
+    console.error("Error submitting form:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+}
 });
 
 // to check notification

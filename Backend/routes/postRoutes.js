@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const excel = require('excel4node');
 const authMiddleware = require("../middleware/authenticate");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Company = require("../models/Company");
 const Admin = require("../models/Admin");
 const Notification = require("../models/Notification");
-const Form = require("../models/FormResponse");
+const FormResponse = require("../models/FormResponse");
 const path = require("path");
 
 // Get all posts
@@ -99,8 +100,7 @@ router.get(
   async (req, res) => {
     try {
       const { companyName, startYear, endYear, targetedStreams } = req.params;
-
-      const userStream = req.user.stream;
+      console.log(req.user._id)
 
       const targetedStreamsArray = targetedStreams.split(",");
 
@@ -116,8 +116,33 @@ router.get(
           message: "No posts found for the specified company and session",
         });
       }
-      console.log(posts)
+      if(req.user._id){
+        const userId= req.user._id;
+        //console.log(userId);
+      const postsWithResponse = await Promise.all(
+        posts.map(async (post) => {
+          const formResponse = await FormResponse.findOne({
+            postId: post._id,
+            userId: userId,
+          });
+          if (formResponse) {
+            //console.log("formResponse ",formResponse);
+            return {
+              ...post._doc,
+              formData: null,
+              submittedStatus:true,
+            };
+          }
+          //console.log("post",post)
+          return post;
+        })
+      );
+      //console.log("postsWithResponse",postsWithResponse)
+      res.status(200).json(postsWithResponse);
+    }else{
       res.status(200).json(posts);
+    }
+      
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -181,34 +206,88 @@ router.delete("/delete/:postId", authMiddleware, async (req, res) => {
   }
 });
 
-router.post("/submitForm",authMiddleware, async (req, res)=>{
+async function retrieveExcelContent(postId) {
   try {
-    const { editPostId, formData } = req.body;
-    const userId= req.user._id;
-
-    const form = await Form.findById(editPostId,userId);
-    const userDetails = await User.findById(userId);
-
-    const {username,rollNumber,regNumber,email,mobileNumber,cgpa,tenthMarks,twelfthMarks,} = userDetails;
-
-    if (form) {
-        return res.status(404).json({ message: "Form Already Submitted" });
-    }else{
-      const newForm = new Form({
-        postId: editPostId,
-        submittedAt: Date.now(),
-        userId,
-        data: formData,
-      });
-
-      await newForm.save();
-      return res.status(201).json({ message: "Form created successfully" });
-    }
-} catch (error) {
-    console.error("Error submitting form:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    const formResponse = await FormResponse.find({ postId });
+    const { submittedAt, data } = formResponse;
+    
+    return { submittedAt, data };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
+
+
+router.post('/downloadResponse/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    console.log(postId)
+    const {submittedAt, data} = await retrieveExcelContent(postId);
+    
+    // Create a new Excel workbook
+    const wb = new excel.Workbook();
+    const ws = wb.addWorksheet('Sheet 1');
+
+    let column = 1;
+    for (const key in data) {
+      ws.cell(1, column).string(key);
+      column++;
+    }
+
+    let row = 2;
+    for (const key in data) {
+      ws.cell(row, 1).string(data[key].toString());
+      row++;
+    }
+
+    res.setHeader('Content-Type', 'application/vnd.ms-excel');
+    res.setHeader('Content-Disposition', `attachment; filename=${postId}.xls`);
+    wb.write(`${postId}ExcelFile.xlsx`, res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
+// router.post("/submitResponseForm",authMiddleware, async (req, res)=>{
+//   try {
+//     const {formDataToSend}=req.body;
+//     console.log(formDataToSend);
+//     const { id,...rest } = formDataToSend;
+//     const userId= req.user._id;
+    
+//     const form = await FormResponse.findById(id,userId);
+//     const userDetails = await User.findById(userId);
+
+//     const {username,rollNumber,regNumber,email,mobileNumber,cgpa,tenthMarks,twelfthMarks,cv} = userDetails;
+
+//     if (form) {
+//         return res.status(404).json({ message: "Form Already Submitted" });
+//     }else{
+//       const newForm = new FormResponse({
+//         postId: id,
+//         submittedAt: Date.now(),
+//         username,
+//         email,
+//         mobileNumber,
+//         cgpa,
+//         tenthMarks,
+//         twelfthMarks,
+//         ...rest,
+//         cv,
+//         rollNumber,
+//         regNumber,
+//       });
+//       console.log(newForm);
+
+//       await newForm.save();
+//       return res.status(201).json({ message: "Form created successfully" });
+//     }
+// } catch (error) {
+//     console.error("Error submitting form:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+// }
+// });
 
 // router.get('/files/:filename', (req, res) => {
 //   const filename = req.params.filename;

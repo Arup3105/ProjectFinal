@@ -6,10 +6,12 @@
     "config": "^3.3.11",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "excel4node": "^1.8.2",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.0",
     "multer": "^1.4.5-lts.1",
+    "xlsx": "^0.18.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
