@@ -175,7 +175,7 @@ const Register = () => {
 
       if (response && response.token) {
         localStorage.clear();
-        navigate("/");
+        navigate("/Login");
         setError("");
       } else {
         setError("Something Went Wrong");

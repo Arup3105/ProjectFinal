@@ -236,6 +236,7 @@ const ApiService = {
         },
       });
 
+      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -252,7 +253,7 @@ const ApiService = {
         {
           withCredentials: true,
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         }

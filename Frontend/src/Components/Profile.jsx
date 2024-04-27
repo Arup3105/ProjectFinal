@@ -3,7 +3,7 @@ import ApiService from '../Components/ApiServer/ApiServer.jsx';
 import '../Components/Profile.css';
 
 const Profile = () => {
-  const defaultUserData = {
+  let defaultUserData = {
     username: '',
     rollNumber: '',
     regNumber: '',
@@ -61,6 +61,7 @@ const Profile = () => {
   const handleUpdate = async () => {
     try {
       const updatedData = { ...userData };
+
       await ApiService.updateUserData(updatedData);
       setEditMode(false);
     } catch (error) {
@@ -71,12 +72,14 @@ const Profile = () => {
 
   const handleFileUpload = async (e, fieldName) => {
     const file = e.target.files[0];
-
-    if (!file || !file.type.startsWith('image/')) {
-      alert('Please select a valid image file.');
-      return;
-    }
+  
+    const uniqueFileName = `${file.name}_${Date.now()}`;
+  
+    const updatedData = { ...userData };
+    updatedData[fieldName] = file;
+    setUserData(updatedData);
   };
+  
 
   if (loading) {
     return <div className='load-body'>
@@ -154,7 +157,7 @@ const Profile = () => {
                     <div key={key} className="profile-field">
                       <label>{key.toUpperCase()}</label>
                       {editMode ? (
-                        <input className="file-input" type="file" accept="image/*" onChange={e => handleFileUpload(e, key)} />
+                        <input className="file-input" type="file" accept="image/*,.pdf" onChange={e => handleFileUpload(e, key)} />
                       ) : (
                         <span className="user-document">{value ? <img src={value} alt={key} /> : 'No document available'}</span>
                       )}

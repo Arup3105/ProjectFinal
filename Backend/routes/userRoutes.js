@@ -10,25 +10,27 @@ const Post = require("../models/Post");
 const Notification = require("../models/Notification");
 const multer = require("multer");
 const JWT_SECRET_KEY = config.get("jwtSecret");
-const path = require("path")
-const uploadfile = require('../utility/upload');
-const fs =require('fs');
+const path = require("path");
+const uploadfile = require("../utility/upload");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'UserAttachments');
+    cb(null, "UserAttachments");
   },
   filename: (req, file, cb) => {
     const uniqueSuffix =
-          Date.now() + "-" + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
-        cb(null, uniqueSuffix);
-  }
+      Date.now() +
+      "-" +
+      Math.round(Math.random() * 1e9) +
+      path.extname(file.originalname);
+    cb(null, uniqueSuffix);
+  },
 });
 
 const upload = multer({ storage: storage });
 
-router.post("/register",upload.any(), async (req, res) => {
-
+router.post("/register", upload.any(), async (req, res) => {
   try {
     const {
       name,
@@ -44,8 +46,6 @@ router.post("/register",upload.any(), async (req, res) => {
       stream,
     } = req.body;
 
-    
-
     const existingUserByEmail = await User.findOne({ email });
     const existingUserByMobile = await User.findOne({ mobileNumber });
     const existingUserByRollNumber = await User.findOne({ rollNumber });
@@ -56,46 +56,74 @@ router.post("/register",upload.any(), async (req, res) => {
     }
 
     if (existingUserByMobile) {
-      return res.status(400).json({ message: "Mobile number is already registered" });
+      return res
+        .status(400)
+        .json({ message: "Mobile number is already registered" });
     }
 
     if (existingUserByRollNumber) {
-      return res.status(400).json({ message: "Roll number is already registered" });
+      return res
+        .status(400)
+        .json({ message: "Roll number is already registered" });
     }
 
     if (existingUserByRegNumber) {
-      return res.status(400).json({ message: "Registration number is already registered" });
+      return res
+        .status(400)
+        .json({ message: "Registration number is already registered" });
     }
 
     const files = req.files;
-    const photo = req.files.find(file => file.fieldname === 'photo')?.path;
+    const photo = req.files.find((file) => file.fieldname === "photo")?.path;
+    const tenthMarkSheet = req.files.find(
+      (file) => file.fieldname === "tenthMarkSheet"
+    )?.path;
+    const twelfthMarkSheet = req.files.find(
+      (file) => file.fieldname === "twelfthMarkSheet"
+    )?.path;
+    const firstSemMarkSheet = req.files.find(
+      (file) => file.fieldname === "firstSemMarkSheet"
+    )?.path;
+    const secondSemMarkSheet = req.files.find(
+      (file) => file.fieldname === "secondSemMarkSheet"
+    )?.path;
+    const thirdSemMarkSheet = req.files.find(
+      (file) => file.fieldname === "thirdSemMarkSheet"
+    )?.path;
+    const forthSemMarkSheet = req.files.find(
+      (file) => file.fieldname === "forthSemMarkSheet"
+    )?.path;
+    const fifthSemMarkSheet = req.files.find(
+      (file) => file.fieldname === "fifthSemMarkSheet"
+    )?.path;
+    const sixthSemMarkSheet = req.files.find(
+      (file) => file.fieldname === "sixthSemMarkSheet"
+    )?.path;
+    const cv = req.files.find((file) => file.fieldname === "cv")?.path;
+
+    console.log("Photo Path:", photo);
     const photoUrl = await uploadfile(photo);
-
-    const tenthMarkSheet = req.files.find(file => file.fieldname === 'tenthMarkSheet')?.path;
+    console.log("Tenth Mark Sheet Path:", tenthMarkSheet);
     const tenthMarkSheetUrl = await uploadfile(tenthMarkSheet);
-
-    const twelfthMarkSheet = req.files.find(file => file.fieldname === 'twelfthMarkSheet')?.path;
+    console.log("Twelfth Mark Sheet Path:", twelfthMarkSheet);
     const twelfthMarkSheetUrl = await uploadfile(twelfthMarkSheet);
-
-    const firstSemMarkSheet = req.files.find(file => file.fieldname === 'firstSemMarkSheet')?.path;
+    console.log("First Sem Mark Sheet Path:", firstSemMarkSheet);
     const firstSemMarkSheetUrl = await uploadfile(firstSemMarkSheet);
-
-    const secondSemMarkSheet = req.files.find(file => file.fieldname === 'secondSemMarkSheet')?.path;
+    console.log("Second Sem Mark Sheet Path:", secondSemMarkSheet);
     const secondSemMarkSheetUrl = await uploadfile(secondSemMarkSheet);
-
-    const thirdSemMarkSheet = req.files.find(file => file.fieldname === 'thirdSemMarkSheet')?.path;
+    console.log("Third Sem Mark Sheet Path:", thirdSemMarkSheet);
     const thirdSemMarkSheetUrl = await uploadfile(thirdSemMarkSheet);
 
-    const forthSemMarkSheet = req.files.find(file => file.fieldname === 'forthSemMarkSheet')?.path;
+    console.log("Forth Sem Mark Sheet Path:", forthSemMarkSheet);
     const forthSemMarkSheetUrl = await uploadfile(forthSemMarkSheet);
 
-    const fifthSemMarkSheetl = req.files.find(file => file.fieldname === 'fifthSemMarkSheet')?.path;
-    const fifthSemMarkSheetUrl = await uploadfile(fifthSemMarkSheetl);
+    console.log("Fifth Sem Mark Sheet Path:", fifthSemMarkSheet);
+    const fifthSemMarkSheetUrl = await uploadfile(fifthSemMarkSheet);
 
-    const sixthSemMarkSheet= req.files.find(file => file.fieldname === 'sixthSemMarkSheet')?.path;
+    console.log("Sixth Sem Mark Sheet Path:", sixthSemMarkSheet);
     const sixthSemMarkSheetUrl = await uploadfile(sixthSemMarkSheet);
 
-    const cv = req.files.find(file => file.fieldname === 'cv')?.path;
+    console.log("CV Path:", cv);
     const cvUrl = await uploadfile(cv);
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -107,35 +135,35 @@ router.post("/register",upload.any(), async (req, res) => {
       email,
       mobileNumber,
       address,
-      photo:photoUrl,
+      photo: photoUrl.url,
       tenthMarks,
-      tenthMarkSheet :tenthMarkSheetUrl,
+      tenthMarkSheet: tenthMarkSheetUrl.url,
       twelfthMarks,
-      twelfthMarkSheet:twelfthMarkSheetUrl,
+      twelfthMarkSheet: twelfthMarkSheetUrl.url,
       cgpa,
-      firstSemMarkSheet:firstSemMarkSheetUrl,
-      secondSemMarkSheet:secondSemMarkSheetUrl,
-      thirdSemMarkSheet:thirdSemMarkSheetUrl,
-      forthSemMarkSheet:forthSemMarkSheetUrl,
-      fifthSemMarkSheet:fifthSemMarkSheetUrl,
-      sixthSemMarkSheet:sixthSemMarkSheetUrl,
-      cv:cvUrl,
+      firstSemMarkSheet: firstSemMarkSheetUrl.url,
+      secondSemMarkSheet: secondSemMarkSheetUrl.url,
+      thirdSemMarkSheet: thirdSemMarkSheetUrl.url,
+      forthSemMarkSheet: forthSemMarkSheetUrl ? forthSemMarkSheetUrl.url : null,
+      fifthSemMarkSheet: fifthSemMarkSheetUrl ? fifthSemMarkSheetUrl.url : null,
+      sixthSemMarkSheet: sixthSemMarkSheetUrl ? sixthSemMarkSheetUrl.url : null,
+      cv: cvUrl.url,
       stream,
       notifications: [],
     });
     await newUser.save();
 
-    // const token = jwt.sign(
-    //   {
-    //     userId: newUser._id,
-    //     username: newUser.name,
-    //     rollNumber: newUser.rollNumber,
-    //   },
-    //   config.get("jwtSecret"),
-    //   { expiresIn: "1d" }
-    // );
+    const token = jwt.sign(
+      {
+        userId: newUser._id,
+        username: newUser.name,
+        rollNumber: newUser.rollNumber,
+      },
+      config.get("jwtSecret"),
+      { expiresIn: "1d" }
+    );
 
-    res.status(201).json({ message: "User registered successfully"});
+    res.status(201).json({ message: "User registered successfully", token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -176,9 +204,15 @@ router.post("/login", async (req, res) => {
 // Forget Password
 router.post("/forgetPassword", async (req, res) => {
   try {
-    const { rollNumber, regNumber, mobileNumber, email, newPassword } = req.body;
+    const { rollNumber, regNumber, mobileNumber, email, newPassword } =
+      req.body;
 
-    const user = await User.findOne({ rollNumber, regNumber, mobileNumber, email });
+    const user = await User.findOne({
+      rollNumber,
+      regNumber,
+      mobileNumber,
+      email,
+    });
 
     if (user) {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -197,23 +231,33 @@ router.post("/forgetPassword", async (req, res) => {
   }
 });
 
-router.get("/notificationCount",authMiddleware, async(req,res)=>{
+router.get("/notificationCount", authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id;
-    const notificationsCount = await Notification.countDocuments({ userId, read: false });
-    const notifications = await Notification.find({ userId}).select("content read");
+    const notificationsCount = await Notification.countDocuments({
+      userId,
+      read: false,
+    });
+    const notifications = await Notification.find({ userId }).select(
+      "content read"
+    );
 
-    res.status(200).json({count: notificationsCount, notification: notifications});
+    res
+      .status(200)
+      .json({ count: notificationsCount, notification: notifications });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-// notification 
+// notification
 router.get("/read", authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id;
-    const result = await Notification.updateMany({ userId, read: false }, { $set: { read: true } });
+    const result = await Notification.updateMany(
+      { userId, read: false },
+      { $set: { read: true } }
+    );
 
     res.status(200).json("Done");
   } catch (error) {
@@ -242,17 +286,27 @@ router.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// Update profile 
-router.put("/updateProfile", authMiddleware, async (req, res) => {
+// Update profile
+router.put("/updateProfile", authMiddleware, upload.any(), async (req, res) => {
   try {
     const userId = req.user._id;
-    const updatedData = req.body;
-    const updatedImage= req.files;
-    console.log("updatedData",updatedData)
-    console.log("updatedImage",updatedImage)
     const UserModel = req.user.userRole === "user" ? User : Admin;
 
-    const updatedProfile = await UserModel.findByIdAndUpdate(userId, updatedData, { new: true });
+    const updatedData = { ...req.body };
+    const updateImage= {...req.files};
+    console.log(updateImage)
+    for (const key in updateImage) {
+      const file = updateImage[key];
+      console.log(file.fieldname, file.path);
+      const fileUrl= await uploadfile(file.path)
+      updatedData[file.fieldname] = fileUrl.url;
+    }
+    
+    const updatedProfile = await UserModel.findByIdAndUpdate(
+      userId,
+      updatedData,
+      { new: true }
+    );
 
     res.status(200).json(updatedProfile);
   } catch (error) {
@@ -261,7 +315,7 @@ router.put("/updateProfile", authMiddleware, async (req, res) => {
   }
 });
 
- // to check notification
+// to check notification
 //  router.get("/notifications", authMiddleware, async (req, res) => {
 //   try {
 //     const userId = req.user._id;
@@ -277,7 +331,7 @@ router.put("/updateProfile", authMiddleware, async (req, res) => {
 //   }
 // });
 
-// // Comment in a post 
+// // Comment in a post
 // router.post("/addComment/:postId", authMiddleware, async (req, res) => {
 //   try {
 //     const userId = req.user._id;
@@ -295,7 +349,7 @@ router.put("/updateProfile", authMiddleware, async (req, res) => {
 //   }
 // });
 
-// // Add  review to a post 
+// // Add  review to a post
 // router.post("/addReview/:postId", authMiddleware, async (req, res) => {
 //   try {
 //     const userId = req.user._id;
@@ -312,7 +366,5 @@ router.put("/updateProfile", authMiddleware, async (req, res) => {
 //     res.status(500).json({ message: "Internal Server Error" });
 //   }
 // });
-
- 
 
 module.exports = router;

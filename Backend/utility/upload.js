@@ -2,7 +2,10 @@ const fs = require('fs');
 const uploadOnCloudinary = require('../utility/cloudinary');
 const MAX_RETRY_ATTEMPTS = 3;
 
-const upload = async (file)=>{
+const upload = async (filepath)=>{
+    if(typeof filepath == 'undefined' ){
+      return null;
+    }else{
     let fname = await uploadOnCloudinary(filepath);
     let retryCount = 0;
 
@@ -18,5 +21,6 @@ const upload = async (file)=>{
         fs.unlinkSync(filepath);
         return fname;
       }
+    }
 }
 module.exports=upload;
