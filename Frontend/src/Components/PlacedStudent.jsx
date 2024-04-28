@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ApiService from '../Components/ApiServer/ApiServer';
+import * as XLSX from 'xlsx';
 
 function PlacedStudent() {
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
@@ -85,6 +86,33 @@ function PlacedStudent() {
     } catch (error) {
       console.error('Error approving request:', error);
       alert('Error approving request.');
+    }
+  };
+
+  const handleDownloadExcel = () => {
+    if (filteredData.length > 0) {
+      const approvedData = filteredData.filter(item => item.approved === true);
+      const excludedFields = ['_id', 'userId','approved','approvedBy','__v','createdAt'];
+
+      const modifiedData = approvedData.map(item => {
+        const newItem = { ...item };
+        excludedFields.forEach(field => delete newItem[field]);
+        return newItem;
+      });
+
+      const fieldsOrder = ['username', 'stream', 'companyName', 'salary', 'year'];
+    const rearrangedData = modifiedData.map(item => {
+      const rearrangedItem = {};
+      fieldsOrder.forEach(field => {
+        rearrangedItem[field] = item[field];
+      });
+      return rearrangedItem;
+    });
+
+      const ws = XLSX.utils.json_to_sheet(rearrangedData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'PlacedStudentData.xlsx');
     }
   };
 
@@ -187,6 +215,7 @@ function PlacedStudent() {
                     <option value="high">High to Low</option>
                     <option value="low">Low to Hight</option>
                   </select>
+                  <button onClick={handleDownloadExcel}>Download Excel</button>
                 </div>
                 <ul>
                   {filteredData.map(
