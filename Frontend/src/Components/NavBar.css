@@ -79,7 +79,7 @@ nav .menu span {
 }
 
 .log-hover:hover {
-    color: rgb(75, 190, 235);
+    color: red;
 }
 
 .bell-hover {

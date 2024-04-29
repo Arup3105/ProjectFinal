@@ -173,13 +173,13 @@ const PostsByCompany = () => {
 
   if (loading) {
     return <div className='load-body'>
-    <div className="load-container">
-      <div className="load-ring"></div>
-      <div className="load-ring"></div>
-      <div className="load-ring"></div>
-      <div className="loading">Loading...</div>
-    </div>
-  </div>;
+      <div className="load-container">
+        <div className="load-ring"></div>
+        <div className="load-ring"></div>
+        <div className="load-ring"></div>
+        <div className="loading">Loading...</div>
+      </div>
+    </div>;
   }
 
   if (error) {
@@ -204,18 +204,12 @@ const PostsByCompany = () => {
                   </button>
                 </>
               ) : (
-                <>
-                  <button
-                    onClick={() =>
-                      handleEditButtonClick(post._id, post.title, post.content)
-                    }
-                  >
-                    Edit
-                  </button>
-                  <button onClick={() => handleDeletePost(post._id)}>
-                    Delete
-                  </button>
-                </>
+              
+                  < div className="post-btn-fix">
+                    <CiEdit onClick={() => handleEditButtonClick(post._id, post.title, post.content)} className="edit-btn" size={40} />
+                    <MdDelete onClick={() => handleDeletePost(post._id)} className="delete-btn" size={40} />
+                  </div>
+              
               )}
             </div>
           )}
@@ -242,9 +236,9 @@ const PostsByCompany = () => {
             post.attachments.map((attachment, index) => (
               <div key={index}>
                 {typeof attachment === "string" &&
-                (attachment.toLowerCase().endsWith(".jpg") ||
-                  attachment.toLowerCase().endsWith(".jpeg") ||
-                  attachment.toLowerCase().endsWith(".png")) ? (
+                  (attachment.toLowerCase().endsWith(".jpg") ||
+                    attachment.toLowerCase().endsWith(".jpeg") ||
+                    attachment.toLowerCase().endsWith(".png")) ? (
                   <div className="image-box">
                     <img src={attachment} alt={`Image ${index}`} />
                     {/* Download button for images */}

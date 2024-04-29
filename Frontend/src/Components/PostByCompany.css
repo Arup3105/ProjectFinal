@@ -97,6 +97,17 @@
     float: right;
 }
 
+.delete-btn{
+    width: 5rem;
+    border: 1px solid;
+    border-radius: 20px;
+    color: black;
+}
+
+.delete-btn:hover{
+    color: red;
+}
+
 .save-btn{
     padding: 10px 20px;
 }
