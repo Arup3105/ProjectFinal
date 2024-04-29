@@ -172,7 +172,14 @@ const PostsByCompany = () => {
   };
 
   if (loading) {
-    return <div>Loading posts...</div>;
+    return <div className='load-body'>
+    <div className="load-container">
+      <div className="load-ring"></div>
+      <div className="load-ring"></div>
+      <div className="load-ring"></div>
+      <div className="loading">Loading...</div>
+    </div>
+  </div>;
   }
 
   if (error) {
@@ -253,7 +260,7 @@ const PostsByCompany = () => {
                 ) : typeof attachment === "string" &&
                   attachment.toLowerCase().endsWith(".pdf") ? (
                   <div className="download-box">
-                    <span>{attachment}</span>
+                    {/* <span>{attachment}</span> */}
                     <a href={attachment} download>
                       {/* PDF icon */}
                       <img
