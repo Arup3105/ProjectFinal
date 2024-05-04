@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../Components/login.css';
 import ApiService from '../Components/ApiServer/ApiServer.jsx';
+import Footer from './Footer.jsx';
 
 const Login = () => {
   const [rollNumber, setRollNumber] = useState('');
@@ -90,6 +91,7 @@ const Login = () => {
           </div>
         </div>
       </main>
+      {/* <Footer/> */}
     </div>
   );
 };

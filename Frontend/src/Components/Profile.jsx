@@ -72,14 +72,14 @@ const Profile = () => {
 
   const handleFileUpload = async (e, fieldName) => {
     const file = e.target.files[0];
-  
+
     const uniqueFileName = `${file.name}_${Date.now()}`;
-  
+
     const updatedData = { ...userData };
     updatedData[fieldName] = file;
     setUserData(updatedData);
   };
-  
+
 
   if (loading) {
     return <div className='load-body'>
@@ -98,16 +98,15 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <h2>Profile</h2>
-
+      <div className="bg-image">
+        <img src="/apchome.jpg" alt="" />
+      </div>
       {!isAdmin && (
-        <div className="profile-section">
+        <div className="profile-photo-section">
 
-          <div className="profile-info">
-            <h3>Photo</h3>
+          <div className="profile-photo">
             {userData.photo && (
               <div className="profile-field">
-                <label>Photo</label>
                 {editMode ? (
                   <input className="file-input" type="file" accept="image/*" onChange={e => handleFileUpload(e, 'photo')} />
                 ) : (
@@ -115,43 +114,52 @@ const Profile = () => {
                 )}
               </div>
             )}
+            {!isAdmin && (
+              <div className="username">
+                <p>{userData.username}</p>
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* Personal Details Section */}
-      <div className="profile-section">
-        <div className="flex">
 
-          <div className="profile-info">
-            <h3>Personal Details</h3>
-            {userData && Object.entries(userData).map(([key, value]) => (
-              key !== 'password' && key !== 'stream' && !key.endsWith('Sheet') && key !== 'cv' && key !== 'photo' && (
-                <div key={key} className="profile-field">
-                  <label>{key.toUpperCase()}</label>
-                  {editMode ? (
-                    <input
-                      className="text-input"
-                      type="text"
-                      name={key}
-                      value={value}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span className="user-data">{value}</span>
-                  )}
-                </div>
-              )
-            ))}
+
+      <div className="profile-details">
+        {/* Personal Details Section */}
+        <div className="flex">
+          <div className="profile-info-section">
+
+            <div className="profile-info">
+              <h3>Personal Details</h3>
+              {userData && Object.entries(userData).map(([key, value]) => (
+                key !== 'password' && key !== 'stream' && !key.endsWith('Sheet') && key !== 'cv' && key !== 'photo' && (
+                  <div key={key} className="profile-field">
+                    <label>{key.toUpperCase()}</label>
+                    {editMode ? (
+                      <input
+                        className="text-input"
+                        type="text"
+                        name={key}
+                        value={value}
+                        onChange={handleInputChange}
+                      />
+                    ) : (
+                      <span className="user-data">{value}</span>
+                    )}
+                  </div>
+                )
+              ))}
+            </div>
           </div>
 
 
           {/* Render Documents section only if isAdmin is false */}
           {!isAdmin && (
-            <div className="profile-section">
+            <div className="profile-docs-section">
 
-              <div className="profile-info">
-                <h3>Documents</h3>
+              <h3>Documents</h3>
+              <div className="profile-docs">
                 {userData && Object.entries(userData).map(([key, value]) => (
                   (key.endsWith('Sheet') || key === 'cv') && (
                     <div key={key} className="profile-field">
@@ -169,9 +177,8 @@ const Profile = () => {
           )}
 
         </div>
+        {/* Render Photo section only if isAdmin is false */}
       </div>
-      {/* Render Photo section only if isAdmin is false */}
-
 
       {/* Edit/Save Buttons */}
       <div className="profile-buttons">

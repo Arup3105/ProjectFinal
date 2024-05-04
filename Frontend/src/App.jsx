@@ -52,6 +52,7 @@ const App = () => {
         <Route path="/user/:rollNumber" element={<UserProfile />} />
         <Route path="/PlacedStudent" element={<PlacedStudent />} />
       </Routes>
+    
     </div>
   );
 };
