@@ -297,9 +297,8 @@ const ApiService = {
       if (!token) {
         throw new Error("No token, authorization denied");
       }
-
       const response = await axios.get(
-        `${ApiService.baseURL}/admin/user?rollNumber=${rollNumber}`,
+        `${ApiService.baseURL}/admin/user/${rollNumber}`,
         {
           withCredentials: true,
           headers: {
@@ -308,6 +307,7 @@ const ApiService = {
           },
         }
       );
+      console.log(response.data)
       return response.data;
     } catch (error) {
       throw new Error(

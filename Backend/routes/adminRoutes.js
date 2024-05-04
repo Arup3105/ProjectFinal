@@ -306,6 +306,23 @@ router.put('/approveReview/:reviewId', authenticateAdmin, async (req, res) => {
   }
 });
 
+router.get('/user/:rollNumber', authenticateAdmin, async (req, res) => {
+  try {
+    const rollNumber = req.params.rollNumber;
+    
+    const user = await User.findOne({ rollNumber },{ _id: 0, __v: 0, password: 0 }).lean();
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    return res.json(user);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 // Delete a user profile 
 // router.delete('/deleteUser/:userId', authenticateAdmin, async (req, res) => {
 //   try {
