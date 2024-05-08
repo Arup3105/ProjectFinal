@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import "../Components/PostByCompany.css";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+import { SiGooglesheets } from "react-icons/si";
+
 
 
 const PostsByCompany = () => {
@@ -285,8 +287,8 @@ const PostsByCompany = () => {
                     </div>
                   ))}
                 </form>
-                <button onClick={() => handleDownloadResponse(post._id)}>
-                  Download Response xlsx
+                <button onClick={() => handleDownloadResponse(post._id)} className="exel-btn">
+                <SiGooglesheets className='exel'/> Download Response
                 </button>
               </div>
             )}

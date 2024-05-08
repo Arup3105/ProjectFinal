@@ -7,6 +7,10 @@
     transition: transform 0.3s ease;
 }
 
+.posts-container img{
+    width: 300px;
+}
+
 .posts-container:hover {
     transform: translateY(-5px);
 }

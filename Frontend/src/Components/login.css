@@ -82,6 +82,10 @@ nav .navbtn:hover{
     padding: 60% 5%;
 }
 
+.form h2{
+    color: black;
+}
+
 
 
 @keyframes spin {

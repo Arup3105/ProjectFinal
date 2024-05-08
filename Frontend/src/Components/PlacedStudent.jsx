@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ApiService from '../Components/ApiServer/ApiServer';
 import * as XLSX from 'xlsx';
+import '../Components/PlacedStudent.css'
+import { SiGooglesheets } from "react-icons/si";
 
 function PlacedStudent() {
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
@@ -92,7 +94,7 @@ function PlacedStudent() {
   const handleDownloadExcel = () => {
     if (filteredData.length > 0) {
       const approvedData = filteredData.filter(item => item.approved === true);
-      const excludedFields = ['_id', 'userId','approved','approvedBy','__v','createdAt'];
+      const excludedFields = ['_id', 'userId', 'approved', 'approvedBy', '__v', 'createdAt'];
 
       const modifiedData = approvedData.map(item => {
         const newItem = { ...item };
@@ -101,13 +103,13 @@ function PlacedStudent() {
       });
 
       const fieldsOrder = ['username', 'stream', 'companyName', 'salary', 'year'];
-    const rearrangedData = modifiedData.map(item => {
-      const rearrangedItem = {};
-      fieldsOrder.forEach(field => {
-        rearrangedItem[field] = item[field];
+      const rearrangedData = modifiedData.map(item => {
+        const rearrangedItem = {};
+        fieldsOrder.forEach(field => {
+          rearrangedItem[field] = item[field];
+        });
+        return rearrangedItem;
       });
-      return rearrangedItem;
-    });
 
       const ws = XLSX.utils.json_to_sheet(rearrangedData);
       const wb = XLSX.utils.book_new();
@@ -131,8 +133,8 @@ function PlacedStudent() {
   let filteredData =
     selectedValue && inputValue
       ? placedData.filter(data =>
-          data[selectedValue]?.toLowerCase().includes(inputValue?.toLowerCase())
-        )
+        data[selectedValue]?.toLowerCase().includes(inputValue?.toLowerCase())
+      )
       : placedData;
 
   // Apply sorting based on selected sort order
@@ -147,8 +149,8 @@ function PlacedStudent() {
   return (
     <>
       {isAdmin ? (
-        <div>
-          <div>You are an admin.</div>
+        <div className='placed-students'>
+          {/* <div>You are an admin.</div> */}
           {placedData.length > 0 && (
             <div className="data">
               <div className="pendingReq">
@@ -164,11 +166,14 @@ function PlacedStudent() {
                             Year: {data.year}, Stream: {data.stream}, Package:{' '}
                             {data.salary}, Status:{' '}
                             {data.approved ? 'Approved' : 'Pending'}
+                            <div className="apv-btn-wrap">
                             <button
                               onClick={() => handleApproveRequest(data._id)}
+                              className='apv-btn'
                             >
                               Approve Request
                             </button>
+                            </div>
                           </li>
                         </p>
                       )
@@ -177,14 +182,7 @@ function PlacedStudent() {
               </div>
 
               <div className="ApprovedReq">
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: '1rem',
-                    alignItems: 'center',
-                    // border: '1px solid red',
-                  }}
-                >
+                <div>
                   <h3>Approved Request</h3>
                   <select
                     name="filter"
@@ -215,7 +213,9 @@ function PlacedStudent() {
                     <option value="high">High to Low</option>
                     <option value="low">Low to Hight</option>
                   </select>
-                  <button onClick={handleDownloadExcel}>Download Excel</button>
+                  <div className="exel-btn-wrap">
+                  <button onClick={handleDownloadExcel} className='exel-btn'><SiGooglesheets className='exel'/> Download Excel</button>
+                  </div>
                 </div>
                 <ul>
                   {filteredData.map(

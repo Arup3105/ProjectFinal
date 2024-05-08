@@ -188,7 +188,7 @@ const Profile = () => {
             <button className="cancel-button" onClick={() => setEditMode(false)}>Cancel</button>
           </>
         ) : (
-          <button className="edit-button" onClick={() => setEditMode(true)}>Edit</button>
+          <button className="edit-button" onClick={() => setEditMode(true)}>Edit Profile</button>
         )}
       </div>
     </div>
