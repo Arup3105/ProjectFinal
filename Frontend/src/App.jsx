@@ -31,7 +31,7 @@ const App = () => {
   }, [location]);
 
   return (
-    <div>
+    <div className="app">
       <NavBar isAdmin={isAdmin} />
       <Routes>
         <Route path="/" element={<LandingPage />}/>

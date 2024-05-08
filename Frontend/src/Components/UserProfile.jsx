@@ -58,7 +58,7 @@ const UserProfile = () => {
                   <h3>Personal Details</h3>
                   {userData && Object.entries(userData).map(([key, value]) => (
                     key !== 'password' && key !== 'stream' && !key.endsWith('Sheet') && key !== 'cv' && key !== 'photo' && (
-                      <div key={key} className="profile-field">
+                      <div key={key} className="profile-field" style={{ marginBottom:"10px"}}>
                         <label>{key.toUpperCase()}</label>
                         <span className="user-data">{value}</span>
                       </div>
@@ -80,7 +80,7 @@ const UserProfile = () => {
                               <span className="user-document">
                                 {key === 'cv' ? (
                                   <a href={value} target="_blank" rel="noopener noreferrer">
-                                    <img src={value} alt={key} />
+                                    <img src="/pdf-icon.png" alt={key} style={{ width:"50px"}} />
                                   </a>
                                 ) : (
                                   <img src={value} alt={key} />

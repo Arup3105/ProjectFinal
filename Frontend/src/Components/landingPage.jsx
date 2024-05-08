@@ -6,7 +6,7 @@ function landingPage() {
     <div className='landingpage'>
       <aside className="profile-card">
 
-
+      <p> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas minus eos enim impedit corrupti sapiente nostrum, ipsa, saepe, tempore excepturi obcaecati inventore distinctio dicta accusantium provident qui. Dolores, accusantium quidem.</p>
       <Footer/>
 
 

@@ -130,12 +130,12 @@ const Profile = () => {
         <div className="flex">
           <div className="profile-info-section">
 
-            <div className="profile-info">
+            <div className="profile-info" >
               <h3>Personal Details</h3>
               {userData && Object.entries(userData).map(([key, value]) => (
                 key !== 'password' && key !== 'stream' && !key.endsWith('Sheet') && key !== 'cv' && key !== 'photo' && (
-                  <div key={key} className="profile-field">
-                    <label>{key.toUpperCase()}</label>
+                  <div key={key} className="profile-field" style={{ marginBottom:"10px"}}>
+                    <label >{key.toUpperCase()}:  </label>
                     {editMode ? (
                       <input
                         className="text-input"
@@ -145,7 +145,7 @@ const Profile = () => {
                         onChange={handleInputChange}
                       />
                     ) : (
-                      <span className="user-data">{value}</span>
+                      <span className="user-data" style={{ fontSize: "1.5em"}}>{value}</span>
                     )}
                   </div>
                 )
