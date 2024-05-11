@@ -5,9 +5,17 @@
 	padding: 0px;
 	margin: 0px;
 	width: 100%;
-	height: 100%;
+	height: 100vh;
 	font: normal 14px/1.618em "Hind", sans-serif;
 	-webkit-font-smoothing: antialiased;
+}
+
+.landing-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    height: 44vh;
 }
 .landingpage:before {
     content: "";

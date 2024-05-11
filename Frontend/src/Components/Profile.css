@@ -29,6 +29,21 @@
   padding: 0px 10px;
 }
 
+.admin-flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-info-section{
+  margin-top: 50px;
+ margin-left: 510px;
+}
+
+.admin-info{
+  /* margin: 0px 300px; */
+}
+
 .profile-photo-section {
   display: flex;
   justify-content: center;

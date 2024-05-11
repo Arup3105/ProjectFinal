@@ -123,7 +123,7 @@ const AdminPostCreation = () => {
           {attachments.map((attachment, index) => (
             <div key={index}>
               <span>{attachment.name}</span>
-              <button type="button" onClick={() => handleRemoveAttachment(index)}>Remove</button>
+              <button type="button" onClick={() => handleRemoveAttachment(index)} className="remove-btn">Remove</button>
             </div>
           ))}
           <div className="input-box">
@@ -160,7 +160,7 @@ const AdminPostCreation = () => {
                   onChange={(e) => handleInputChange(fieldName, e.target.value)}
                   placeholder={fieldName}
                 />
-                <button type="button" onClick={() => handleRemoveField(fieldName)}>Remove</button>
+                <button type="button" onClick={() => handleRemoveField(fieldName)} className="remove-btn">Remove</button>
               </div>
             ))}
             <button type="button" onClick={handleAddField}>Add Field</button>
