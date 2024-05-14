@@ -7,12 +7,11 @@ const Admin = () => {
   const navigate = useNavigate();
   const [employeeId, setEmployeeId] = useState('');
   const [password, setPassword] = useState('');
-  const [secretCode, setSecretCode] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState('');
 
   const handleLogin = async () => {
     try {
-      const response = await ApiService.adminLogin(employeeId, password, secretCode);
+      const response = await ApiService.adminLogin(employeeId, password);
 
       if (response && response.token) {
         localStorage.clear();
@@ -22,10 +21,10 @@ const Admin = () => {
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        setErrorMessage('Invalid credentials');
+        setError('Invalid credentials');
       } else {
         console.error('Error during login:', error);
-        setErrorMessage('An unexpected error occurred');
+        setError('An unexpected error occurred');
       }
     }
   };
@@ -35,7 +34,6 @@ const Admin = () => {
       <div className="form">
         <div className="admin">
           <div className="admin-formstyle">
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
             <div className="Employee ID">
               <input
                 type="text"
@@ -52,14 +50,7 @@ const Admin = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="Re-password">
-              <input
-                type="text"
-                placeholder='Secret Code'
-                value={secretCode}
-                onChange={(e) => setSecretCode(e.target.value)}
-              />
-            </div>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className="admin-btn">
               <button onClick={handleLogin}>
                 Login

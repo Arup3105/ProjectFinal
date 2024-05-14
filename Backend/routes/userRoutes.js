@@ -47,6 +47,7 @@ router.post("/register", upload.any(), async (req, res) => {
       twelfthMarks,
       cgpa,
       stream,
+      secretCode,
     } = req.body;
 
     const existingUserByEmail = await User.findOne({ email });
@@ -146,12 +147,13 @@ router.post("/register", upload.any(), async (req, res) => {
       cgpa,
       firstSemMarkSheet: firstSemMarkSheetUrl.url,
       secondSemMarkSheet: secondSemMarkSheetUrl.url,
-      thirdSemMarkSheet: thirdSemMarkSheetUrl.url,
+      thirdSemMarkSheet: thirdSemMarkSheetUrl?thirdSemMarkSheetUrl.url : null,
       forthSemMarkSheet: forthSemMarkSheetUrl ? forthSemMarkSheetUrl.url : null,
       fifthSemMarkSheet: fifthSemMarkSheetUrl ? fifthSemMarkSheetUrl.url : null,
       sixthSemMarkSheet: sixthSemMarkSheetUrl ? sixthSemMarkSheetUrl.url : null,
       cv: cvUrl.url,
       stream,
+      secretCode,
       notifications: [],
     });
     await newUser.save();
@@ -207,14 +209,13 @@ router.post("/login", async (req, res) => {
 // Forget Password
 router.post("/forgetPassword", async (req, res) => {
   try {
-    const { rollNumber, regNumber, mobileNumber, email, newPassword } =
+    const { rollNumber, regNumber, secretCode, newPassword } =
       req.body;
 
     const user = await User.findOne({
       rollNumber,
       regNumber,
-      mobileNumber,
-      email,
+      secretCode,
     });
 
     if (user) {
@@ -275,7 +276,7 @@ router.get("/profile", authMiddleware, async (req, res) => {
     let profile;
     if (req.user.userRole === "user") {
       profile = await User.findById(req.user._id).select(
-        "-_id -password -notifications -__v"
+        "-_id -password -notifications -__v -secretCode"
       );
     } else {
       profile = await Admin.findById(req.user._id).select(

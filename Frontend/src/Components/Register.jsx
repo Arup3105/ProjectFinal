@@ -27,6 +27,7 @@ const Register = () => {
   const [sixthSemMarkSheet, setSixthSemMarkSheet] = useState(null);
   const [cv, setCV] = useState(null);
   const [stream, setStream] = useState("");
+  const [secretCode, setSecretCode] = useState("");
   const [error, setError] = useState("");
 
   // const fileToBase64 = (file) => {
@@ -66,8 +67,8 @@ const Register = () => {
         !twelfthMarkSheet ||
         !firstSemMarkSheet ||
         !secondSemMarkSheet ||
-        !thirdSemMarkSheet ||
         !cv ||
+        !secretCode ||
         !stream
       ) {
         setError("Please fill in all required fields.");
@@ -89,7 +90,14 @@ const Register = () => {
         return;
       }
       if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/.test(password)) {
-        setError("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.");
+        setError(
+          "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number."
+        );
+        return;
+      }
+
+      if (!/.{6}/.test(secretCode)) {
+        setError("SecretCode must be exactly 6 characters long.");
         return;
       }
 
@@ -130,7 +138,7 @@ const Register = () => {
       }
 
       const formData = new FormData();
-      
+
       if (photo) {
         formData.append("photo", photo);
       }
@@ -170,8 +178,9 @@ const Register = () => {
       formData.append("email", email);
       formData.append("mobileNumber", mobileNumber);
       formData.append("address", address);
-      formData.append("stream", stream.toUpperCase());
+      formData.append("stream", stream);
       formData.append("cgpa", cgpa);
+      formData.append("secretCode", secretCode);
 
       setError("Creating your account. Please wait...");
       console.log(Object.fromEntries(formData));
@@ -293,15 +302,23 @@ const Register = () => {
                   />
                 </div>
                 <div className="stream">
-                  <label htmlFor="stream">Stream</label>
-                  <input
-                    type="text"
-                    placeholder="Stream E.g. BCA, BBA, BHM ..."
+                  <label htmlFor="stream">Select Stream   </label>
+                  <select
                     value={stream}
                     onChange={(e) => setStream(e.target.value)}
                     id="stream"
                     name="stream"
-                  />
+                  >
+                    <option value="">Select Stream</option>
+                    <option value="BCA">BCA</option>
+                    <option value="BBA">BBA</option>
+                    <option value="BBA(H.M)">BBA (H.M)</option>
+                    <option value="BBA(Supply Chain)">
+                      BBA (Supply Chain)
+                    </option>
+                    <option value="Optometry">Optometry</option>
+                    <option value="Lab Technology">Lab Technology</option>
+                  </select>
                 </div>
                 <div className="address">
                   <label htmlFor="address">Address</label>
@@ -455,6 +472,17 @@ const Register = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     id="confirmPassword"
                     name="confirmPassword"
+                  />
+                </div>
+                <div className="Secret-Code">
+                  <label htmlFor="secretCode">Secret Code</label>
+                  <input
+                    type="password"
+                    placeholder="Secret Code"
+                    value={secretCode}
+                    onChange={(e) => setSecretCode(e.target.value)}
+                    id="secretCode"
+                    name="secretCode"
                   />
                 </div>
                 {error && <p style={{ color: "red" }}>{error}</p>}

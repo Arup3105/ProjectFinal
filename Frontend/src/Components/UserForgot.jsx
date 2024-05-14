@@ -7,8 +7,7 @@ const UserForgot = () => {
   const [formData, setFormData] = useState({
     rollNumber: "",
     regNumber: "",
-    email: "",
-    mobileNumber: "",
+    secretCode: "",
     newPassword: "",
     confirmNewPassword: "",
   });
@@ -30,8 +29,7 @@ const UserForgot = () => {
     const {
       rollNumber,
       regNumber,
-      email,
-      mobileNumber,
+      secretCode,
       newPassword,
       confirmNewPassword,
     } = formData;
@@ -47,14 +45,13 @@ const UserForgot = () => {
       const response = await ApiService.userForgetPassword(
         rollNumber,
         regNumber,
-        email,
-        mobileNumber,
+        secretCode,
         newPassword
       );
       setSuccessMessage(response.message);
       setError("");
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/Login";
       }, 5000);
     } catch (error) {
       setError(error.message);
@@ -78,24 +75,7 @@ const UserForgot = () => {
             autoComplete="username"
           />
         </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Mobile Number:</label>
-          <input
-            type="text"
-            name="mobileNumber"
-            value={formData.mobileNumber}
-            onChange={handleChange}
-          />
-        </div>
+        
         <div>
           <label>Registration Number:</label>
           <input
@@ -104,6 +84,15 @@ const UserForgot = () => {
             value={formData.regNumber}
             onChange={handleChange}
           />
+        </div>
+        <div>
+        <label>Secret Code:</label>
+        <input
+            type="password"
+            name="secretCode"
+            value={formData.secretCode}
+            onChange={handleChange}
+          /> 
         </div>
         <div>
           <label>New Password:</label>
@@ -124,7 +113,7 @@ const UserForgot = () => {
             onChange={handleChange}
             autoComplete="new-password"
           />
-          {error && <div>{error}</div>}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
           {successMessage && <div>{successMessage}</div>}
         </div>
         <button type="submit">Submit</button>

@@ -42,12 +42,13 @@ const userSchema = new mongoose.Schema({
   } },
   firstSemMarkSheet: { type: String, required: true },
   secondSemMarkSheet: { type: String, required: true },
-  thirdSemMarkSheet: { type: String, required: true },
+  thirdSemMarkSheet: { type: String, default: null },
   forthSemMarkSheet: {type : String , default: null},
   fifthSemMarkSheet: {type : String , default: null},
   sixthSemMarkSheet: {type : String , default: null},
   cv: { type: String, required: true },
   stream: { type: String, required: true }, 
+  secretCode: String, 
   });
 
 const User = mongoose.model('User', userSchema);

@@ -147,11 +147,11 @@ const ApiService = {
     }
   },
 
-  adminLogin: async (employeeId, password, secretCode) => {
+  adminLogin: async (employeeId, password) => {
     try {
       const response = await axios.post(
         `${ApiService.baseURL}/admin/login`,
-        { employeeId, password, secretCode },
+        { employeeId, password},
         { withCredentials: true }
       );
       return response.data;
@@ -318,8 +318,6 @@ const ApiService = {
 
   adminForgetPassword: async (
     employeeId,
-    email,
-    mobileNumber,
     secretCode,
     newPassword
   ) => {
@@ -338,14 +336,13 @@ const ApiService = {
   userForgetPassword: async (
     rollNumber,
     regNumber,
-    email,
-    mobileNumber,
+    secretCode,
     newPassword
   ) => {
     try {
       const response = await axios.post(
         `${ApiService.baseURL}/user/forgetPassword`,
-        { rollNumber, regNumber, email, mobileNumber, newPassword },
+        { rollNumber, regNumber, secretCode, newPassword },
         { withCredentials: true }
       );
       return response.data;

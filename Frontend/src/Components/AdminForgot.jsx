@@ -7,8 +7,6 @@ import { Link } from "react-router-dom";
 const AdminForgot = () => {
   const [formData, setFormData] = useState({
     employeeId: '',
-    email: '',
-    mobileNumber: '',
     secretCode: '',
     newPassword: '',
     confirmNewPassword: '',
@@ -28,7 +26,7 @@ const AdminForgot = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { employeeId, email, mobileNumber, newPassword, confirmNewPassword } = formData;
+    const { employeeId, secretCode, newPassword, confirmNewPassword } = formData;
 
     if (newPassword !== confirmNewPassword) {
       setError('New password and confirm password do not match.');
@@ -38,7 +36,7 @@ const AdminForgot = () => {
     try {
       setError("");
       setSuccessMessage("");
-      const response = await ApiService.adminForgetPassword(employeeId, email, mobileNumber, formData.secretCode, newPassword);
+      const response = await ApiService.adminForgetPassword(employeeId, secretCode, newPassword);
       setSuccessMessage(response.message);
       setError("");
       setTimeout(() => {
@@ -66,24 +64,8 @@ const AdminForgot = () => {
             autoComplete="username"
           />
         </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Mobile Number:</label>
-          <input
-            type="text"
-            name="mobileNumber"
-            value={formData.mobileNumber}
-            onChange={handleChange}
-          />
-        </div>
+        
+        
         <div>
           <label>Secret Code:</label>
           <input
@@ -112,8 +94,8 @@ const AdminForgot = () => {
             onChange={handleChange}
             autoComplete="new-password"
           />
-          {error && <div>{error}</div>}
-          {successMessage && <div>{successMessage}</div>}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
         </div>
         <button type="submit">Submit</button>
       </form>

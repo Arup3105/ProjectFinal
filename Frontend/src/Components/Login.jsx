@@ -78,8 +78,8 @@ const Login = () => {
                   Forgot Password?
                 </Link>{' '}
                 <br />
-                <button type="submit">Login</button> <br />
                 {error && <p style={{ color: 'red' }}>{error}</p>}
+                <button type="submit">Login</button> <br />
                 <p>
                   Don't have an account{' '}
                   <Link to='/Register' className='signin'>

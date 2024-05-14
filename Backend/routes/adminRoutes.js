@@ -23,15 +23,12 @@ const MAX_RETRY_ATTEMPTS = 3;
 
 router.post('/login', async (req, res) => {
   try {
-    const { employeeId, password,secretCode} = req.body;
-
+    const { employeeId, password} = req.body;
     const admin = await Admin.findOne({ employeeId });
 
     if (admin) {
       const passwordMatch = await bcrypt.compare(password, admin.password);
-      const secretCodeMatch = secretCode === admin.secretCode;
-
-      if (passwordMatch && secretCodeMatch) {
+      if (passwordMatch ) {
         const isAdmin = true;
         const token = jwt.sign({ adminId: admin._id }, config.get('jwtSecret'), { expiresIn: '1d' });
         res.status(200).json({ message: 'Admin login successful', token ,isAdmin, redirect: '/admin/dashboard' });
@@ -87,8 +84,8 @@ router.post('/create', async (req, res) => {
 
 router.post('/forgetPassword', async (req, res) => {
   try {
-    const { employeeId, email, mobileNumber, secretCode, newPassword } = req.body;
-    const admin = await Admin.findOne({ employeeId, email, mobileNumber, secretCode });
+    const { employeeId, secretCode, newPassword } = req.body;
+    const admin = await Admin.findOne({ employeeId, secretCode });
     
     if (admin) {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -310,7 +307,7 @@ router.get('/user/:rollNumber', authenticateAdmin, async (req, res) => {
   try {
     const rollNumber = req.params.rollNumber;
     
-    const user = await User.findOne({ rollNumber },{ _id: 0, __v: 0, password: 0 }).lean();
+    const user = await User.findOne({ rollNumber },{ _id: 0, __v: 0, password: 0,secretCode: 0}).lean();
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
