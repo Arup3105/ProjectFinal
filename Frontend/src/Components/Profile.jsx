@@ -30,7 +30,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  // const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  let isAdmin = localStorage.getItem('isAdmin') === 'true'; 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,6 +97,8 @@ const Profile = () => {
     return <div>Error: {error.message}</div>;
   }
 
+ 
+
   return (
     <div className="profile-container">
       <div className="bg-image">
@@ -127,10 +130,10 @@ const Profile = () => {
 
       <div className="profile-details">
         {/* Personal Details Section */}
-        <div className="flex">
-          <div className="profile-info-section">
+        <div className={`flex ${isAdmin ? 'admin-flex' : 'flex'}`}>
+          <div className={`profile-info-section ${isAdmin ? 'admin-info-section' : 'profile-info-section'}`}>
 
-            <div className="profile-info" >
+          <div className={`profile-info ${isAdmin ? 'admin-info' : 'profile-info'}`} >
               <h3>Personal Details</h3>
               {userData && Object.entries(userData).map(([key, value]) => (
                 key !== 'password' && key !== 'stream' && !key.endsWith('Sheet') && key !== 'cv' && key !== 'photo' && (

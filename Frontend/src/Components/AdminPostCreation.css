@@ -110,3 +110,7 @@ a {
 {
   border: 1px solid goldenrod;
 }
+
+.remove-btn{
+  padding: 10px 20px;
+}
