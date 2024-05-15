@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ApiService from '../Components/ApiServer/ApiServer';
 import * as XLSX from 'xlsx';
-import '../Components/PlacedStudent.css'
-import { SiGooglesheets } from "react-icons/si";
+import '../Components/PlacedStudent.css';
+import { SiGooglesheets } from 'react-icons/si';
 
 function PlacedStudent() {
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
@@ -17,18 +17,23 @@ function PlacedStudent() {
   const [selectedValue, setSelectedValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [filterYear, setFilterYear] = useState('all');
+  const [streamOptions, setStreamOptions] = useState([]);
+  const [companyOptions, setCompanyOptions] = useState([]);
+  const [yearOptions, setYearOptions] = useState([]);
+  const [multipleOffers, setMultipleOffers] = useState(false);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     const transformedValue =
       name === 'companyName' ? value.toUpperCase() : value; // Convert companyName to uppercase
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       [name]: transformedValue,
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await ApiService.placed(formData);
@@ -65,6 +70,15 @@ function PlacedStudent() {
       const response = await ApiService.placedData();
       if (response && Array.isArray(response.data)) {
         setPlacedData(response.data);
+
+        // Extract stream, company, and year options from the data
+        const streams = new Set(response.data.map((item) => item.stream));
+        const companies = new Set(response.data.map((item) => item.companyName));
+        const years = new Set(response.data.map((item) => item.year));
+        
+        setStreamOptions(Array.from(streams));
+        setCompanyOptions(Array.from(companies));
+        setYearOptions(Array.from(years));
       } else {
         setPlacedData([]);
       }
@@ -73,11 +87,11 @@ function PlacedStudent() {
     }
   };
 
-  const handleApproveRequest = async postId => {
+  const handleApproveRequest = async (postId) => {
     try {
       await ApiService.approveReq(postId);
-      setPlacedData(prevData =>
-        prevData.map(data => {
+      setPlacedData((prevData) =>
+        prevData.map((data) => {
           if (data._id === postId) {
             return { ...data, approved: true };
           }
@@ -93,19 +107,19 @@ function PlacedStudent() {
 
   const handleDownloadExcel = () => {
     if (filteredData.length > 0) {
-      const approvedData = filteredData.filter(item => item.approved === true);
+      const approvedData = filteredData.filter((item) => item.approved === true);
       const excludedFields = ['_id', 'userId', 'approved', 'approvedBy', '__v', 'createdAt'];
 
-      const modifiedData = approvedData.map(item => {
+      const modifiedData = approvedData.map((item) => {
         const newItem = { ...item };
-        excludedFields.forEach(field => delete newItem[field]);
+        excludedFields.forEach((field) => delete newItem[field]);
         return newItem;
       });
 
       const fieldsOrder = ['username', 'stream', 'companyName', 'salary', 'year'];
-      const rearrangedData = modifiedData.map(item => {
+      const rearrangedData = modifiedData.map((item) => {
         const rearrangedItem = {};
-        fieldsOrder.forEach(field => {
+        fieldsOrder.forEach((field) => {
           rearrangedItem[field] = item[field];
         });
         return rearrangedItem;
@@ -132,10 +146,15 @@ function PlacedStudent() {
 
   let filteredData =
     selectedValue && inputValue
-      ? placedData.filter(data =>
-        data[selectedValue]?.toLowerCase().includes(inputValue?.toLowerCase())
-      )
+      ? placedData.filter((data) =>
+          data[selectedValue]?.toLowerCase().includes(inputValue?.toLowerCase())
+        )
       : placedData;
+
+  // Filter by year
+  if (filterYear !== 'all') {
+    filteredData = filteredData.filter((data) => data.year === filterYear);
+  }
 
   // Apply sorting based on selected sort order
   if (sortBy === 'high') {
@@ -144,13 +163,25 @@ function PlacedStudent() {
     filteredData = filteredData.slice().sort((a, b) => a.salary - b.salary);
   }
 
-  console.log({ selectedValue });
+  // Count multiple offers for each user
+  const countMultipleOffers = () => {
+    const offersCount = {};
+    placedData.forEach((item) => {
+      if (offersCount[item.userId]) {
+        offersCount[item.userId]++;
+      } else {
+        offersCount[item.userId] = 1;
+      }
+    });
+    return offersCount;
+  };
+
+  const offersCount = countMultipleOffers();
 
   return (
     <>
       {isAdmin ? (
-        <div className='placed-students'>
-          {/* <div>You are an admin.</div> */}
+        <div className="placed-students">
           {placedData.length > 0 && (
             <div className="data">
               <div className="pendingReq">
@@ -167,12 +198,12 @@ function PlacedStudent() {
                             {data.salary}/LPA, Status:{' '}
                             {data.approved ? 'Approved' : 'Pending'}
                             <div className="apv-btn-wrap">
-                            <button
-                              onClick={() => handleApproveRequest(data._id)}
-                              className='apv-btn'
-                            >
-                              Approve Request
-                            </button>
+                              <button
+                                onClick={() => handleApproveRequest(data._id)}
+                                className="apv-btn"
+                              >
+                                Approve Request
+                              </button>
                             </div>
                           </li>
                         </p>
@@ -185,49 +216,94 @@ function PlacedStudent() {
                 <div>
                   <h3>Approved Request</h3>
                   <select
-                    name="filter"
-                    id="filter"
-                    value={selectedValue}
-                    onChange={e => {
-                      setSelectedValue(e.target.value);
-                    }}
+                    name="filterYear"
+                    value={filterYear}
+                    onChange={(e) => setFilterYear(e.target.value)}
                   >
-                    <option value="username">Username</option>
-                    <option value="companyName">Company Name</option>
-                    <option value="stream">Stream</option>
-                    <option value="year">Year</option>
+                    <option value="all">All Years</option>
+                    {yearOptions.map((year, index) => (
+                      <option key={index} value={year}>
+                        {year}
+                      </option>
+                    ))}
                   </select>
-                  <input
-                    onChange={e => setInputValue(e.target.value)}
-                    style={{ width: '20vw' }}
-                  />
+                  <select
+                    name="selectedValue"
+                    value={selectedValue}
+                    onChange={(e) => setSelectedValue(e.target.value)}
+                  >
+                    <option value="all">All</option>
+                    <option value="username">Username</option>
+                    <option value="stream">Stream</option>
+                    <option value="companyName">Company Name</option>
+                    <option value="multipleOffers">Multiple Offers</option>
+                  </select>
+                  {selectedValue === 'username' && (
+                    <input className='Search-value'
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      placeholder="Search by Username"
+                    />
+                  )}
+                  {selectedValue === 'stream' && (
+                    <select
+                      name="stream"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                    >
+                      <option value="">Select Stream</option>
+                      {streamOptions.map((stream, index) => (
+                        <option key={index} value={stream}>
+                          {stream}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  {selectedValue === 'companyName' && (
+                    <select
+                      name="companyName"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                    >
+                      <option value="">Select Company</option>
+                      {companyOptions.map((company, index) => (
+                        <option key={index} value={company}>
+                          {company}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  {selectedValue === 'multipleOffers' && (
+                    <p>Total Users with Multiple Offers: {Object.keys(offersCount).filter(key => offersCount[key] > 1).length}</p>
+                  )}
                   <select
                     name="sort"
-                    id="sorter"
                     value={sortBy}
-                    onChange={e => {
+                    onChange={(e) => {
                       setSortBy(e.target.value);
                     }}
                   >
                     <option>Sort Packages by</option>
                     <option value="high">High to Low</option>
-                    <option value="low">Low to Hight</option>
+                    <option value="low">Low to High</option>
                   </select>
-                  <div className="exel-btn-wrap">
-                  <button onClick={handleDownloadExcel} className='exel-btn'><SiGooglesheets className='exel'/> Download Excel</button>
+                  <div className="excel-btn-wrap">
+                    <button onClick={handleDownloadExcel} className="excel-btn">
+                      <SiGooglesheets className="excel" /> Download Excel
+                    </button>
                   </div>
                 </div>
                 <ul>
-                  {filteredData.map(
-                    (data, index) =>
-                      data.approved && (
-                        <li key={data._id}>
-                          Name: {data.username}, Roll Number: {data.rollNumber},
-                          Company Name: {data.companyName}, Year: {data.year},
-                          Stream: {data.stream}, Package: {data.salary}/LPA, Status:{' '}
-                          {data.approved ? 'Approved' : 'Pending'}
-                        </li>
-                      )
+                  {filteredData.map((data) =>
+                    data.approved ? (
+                      <li key={data._id}>
+                        Name: {data.username}, Roll Number: {data.rollNumber},
+                        Company Name: {data.companyName}, Year: {data.year},
+                        Stream: {data.stream}, Package: {data.salary}/LPA, Status:{' '}
+                        {data.approved ? 'Approved' : 'Pending'}
+                      </li>
+                    ) : null
                   )}
                 </ul>
               </div>
@@ -273,14 +349,12 @@ function PlacedStudent() {
               <div>
                 <h3>Previous Submits</h3>
                 <ul>
-                  {previousSubmits.map((submit, index) => (
-                    <p key={submit._id}>
-                      <li>
-                        Company Name: {submit.companyName}, Year: {submit.year},
-                        Stream: {submit.stream}, Package: {submit.salary},
-                        Status: {submit.approved ? 'Approved' : 'Pending'}
-                      </li>
-                    </p>
+                  {previousSubmits.map((submit) => (
+                    <li key={submit._id}>
+                      Company Name: {submit.companyName}, Year: {submit.year},
+                      Stream: {submit.stream}, Package: {submit.salary}, Status:{' '}
+                      {submit.approved ? 'Approved' : 'Pending'}
+                    </li>
                   ))}
                 </ul>
               </div>

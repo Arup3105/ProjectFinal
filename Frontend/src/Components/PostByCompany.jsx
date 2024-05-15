@@ -287,6 +287,7 @@ const PostsByCompany = () => {
             post.formData &&
             Object.keys(post.formData).length > 0 && (
               <div className="form-container">
+                <h3>__________________________</h3>
                 <h2>Form Attached</h2>
                 <form>
                 {Object.keys(post.formData).map((fieldName) => (
@@ -297,7 +298,8 @@ const PostsByCompany = () => {
         
         {post.existingFields && post.existingFields.length > 0 && (
           <div>
-            <h3>Choose fields for download:</h3>
+            <h3>__________________________</h3>
+            <h3>Choose fields for download:- </h3>
             {post.existingFields.map((fieldName) => (
               <div key={fieldName}>
                 <input
