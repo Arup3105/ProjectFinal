@@ -160,8 +160,8 @@ const AdminPostCreation = () => {
             <label>
               <input
                 type="checkbox"
-                checked={targetedStreams.includes("BCA")} // Assuming targetedStreams is an array of selected streams
-                onChange={(e) => handleCheckboxChange("BCA", e.target.checked)} // Handle checkbox change for BCA stream
+                checked={targetedStreams.includes("BCA")}
+                onChange={(e) => handleCheckboxChange("BCA", e.target.checked)}
               />
               BCA
             </label>
