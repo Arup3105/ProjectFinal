@@ -302,7 +302,7 @@ const Register = () => {
                   />
                 </div>
                 <div className="stream">
-                  <label htmlFor="stream">Select Stream   </label>
+                  <label htmlFor="stream">Select Stream </label>
                   <select
                     value={stream}
                     onChange={(e) => setStream(e.target.value)}

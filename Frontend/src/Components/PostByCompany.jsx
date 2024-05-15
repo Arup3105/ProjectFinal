@@ -154,8 +154,15 @@ const PostsByCompany = () => {
 
   const handleDownloadResponse = async (postId) => {
     try {
-      const response = await ApiService.downloadResponse(postId);
+      const checkedFields = [];
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      checkboxes.forEach((checkbox) => {
+        checkedFields.push(checkbox.value);
+      });
 
+      console.log(checkedFields)
+      const response = await ApiService.downloadResponse(postId, checkedFields);
+  
       if (response.statusText === 'No Content') {
         alert('No response available.');
         return;
@@ -172,6 +179,7 @@ const PostsByCompany = () => {
       console.error('Error downloading response:', error);
     }
   };
+  
 
   if (loading) {
     return <div className='load-body'>
@@ -281,11 +289,28 @@ const PostsByCompany = () => {
               <div className="form-container">
                 <h2>Form Attached</h2>
                 <form>
-                  {Object.keys(post.formData).map((fieldName) => (
-                    <div key={fieldName}>
-                      <label htmlFor={fieldName}>{fieldName}</label>
-                    </div>
-                  ))}
+                {Object.keys(post.formData).map((fieldName) => (
+          <div key={fieldName}>
+            <label htmlFor={fieldName}>{fieldName}</label>
+          </div>
+        ))}
+        
+        {post.existingFields && post.existingFields.length > 0 && (
+          <div>
+            <h3>Choose fields for download:</h3>
+            {post.existingFields.map((fieldName) => (
+              <div key={fieldName}>
+                <input
+                  type="checkbox"
+                  id={fieldName}
+                  name={fieldName}
+                  value={fieldName}
+                />
+                <label htmlFor={fieldName}>{fieldName}</label>
+              </div>
+            ))}
+          </div>
+        )}
                 </form>
                 <button onClick={() => handleDownloadResponse(post._id)} className="exel-btn">
                 <SiGooglesheets className='exel'/> Download Response

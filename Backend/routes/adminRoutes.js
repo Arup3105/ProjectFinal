@@ -167,6 +167,8 @@ router.post('/createPost', authenticateAdmin, upload.array("attachments",15), as
 
     const { title, content, targetedStreams, formData , company } = req.body;
     const filenames =[];
+
+    const targetedStreamsArray = targetedStreams.split(",");
     const formDataObject = JSON.parse(formData);
     //console.log(formDataObject);
     if(req.user.userRole === 'admin'){
@@ -203,7 +205,7 @@ router.post('/createPost', authenticateAdmin, upload.array("attachments",15), as
 
     const existingCompany = await Company.findOne({
       name: capitalizedCompany,
-      targetedStreams,
+      targetedStreams:targetedStreamsArray,
       sessions: { $elemMatch: { startYear: sessionStartYear, endYear: sessionEndYear } }
     });
 
@@ -211,7 +213,7 @@ router.post('/createPost', authenticateAdmin, upload.array("attachments",15), as
       const newCompany = new Company({
         name: capitalizedCompany,
         sessions: [{ startYear: sessionStartYear, endYear: sessionEndYear }],
-        targetedStreams,
+        targetedStreams:targetedStreamsArray,
       });
       await newCompany.save();
     }
@@ -226,7 +228,7 @@ router.post('/createPost', authenticateAdmin, upload.array("attachments",15), as
         startYear: sessionStartYear,
         endYear: sessionEndYear,
       },
-      targetedStreams,
+      targetedStreams:targetedStreamsArray,
       CreatedBy: {
         adminId: req.user._id, 
         adminName: req.user.username

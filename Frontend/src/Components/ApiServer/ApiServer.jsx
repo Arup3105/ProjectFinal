@@ -89,6 +89,7 @@ const ApiService = {
           },
         }
       );
+      console.log(response)
       console.log(response.data);
       return response.data;
     } catch (error) {
@@ -416,13 +417,14 @@ const ApiService = {
     }
   },
 
-  downloadResponse: async (postId) => {
+  downloadResponse: async (postId,checkedFields) => {
     try {
       //console.log(postId);
       const token = localStorage.getItem("jwtToken");
+      console.log(postId ,checkedFields);
       const response = await axios.post(
         `${ApiService.baseURL}/posts/downloadResponse/${postId}`,
-        { postId },
+        { postId ,checkedFields},
         {
           responseType: 'blob',
           withCredentials: true,

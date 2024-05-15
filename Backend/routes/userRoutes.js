@@ -329,21 +329,13 @@ router.post("/submitResponseForm",authMiddleware, async (req, res)=>{
     //console.log(id,userId)
     const form = await FormResponse.findOne({ postId: id, userId: userId });
     //console.log(form)
-    const userDetails = await User.findById(userId);
+    const userDetails = await User.findById(userId).select("-_id -__v -password -secretCode");
 
-    const {username,rollNumber,regNumber,email,mobileNumber,cgpa,tenthMarks,twelfthMarks,cv} = userDetails;
+    //const {username,rollNumber,regNumber,email,mobileNumber,cgpa,tenthMarks,twelfthMarks,cv} = userDetails;
 
     const data= {
-      username,
-        email,
-        mobileNumber,
-        cgpa,
-        tenthMarks,
-        twelfthMarks,
-        ...rest,
-        cv,
-        rollNumber,
-        regNumber,
+      ...userDetails,
+      ...rest,
     };
     //console.log(data);
     if (form) {

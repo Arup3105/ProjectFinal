@@ -71,7 +71,7 @@ router.post("/approverdReq",authMiddleware,async(req, res)=>{
   }
     );
 
-    router.get('/placedStudentData',authMiddleware, async (req, res) => {
+router.get('/placedStudentData',authMiddleware, async (req, res) => {
       try {
         const placedData = await PlacedStudent.find();
         res.status(200).json(placedData);

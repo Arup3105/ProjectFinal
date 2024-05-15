@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const excel = require('excel4node');
+const excel = require("excel4node");
 const authMiddleware = require("../middleware/authenticate");
 const Post = require("../models/Post");
 const User = require("../models/User");
@@ -8,7 +8,7 @@ const Company = require("../models/Company");
 const Admin = require("../models/Admin");
 const Notification = require("../models/Notification");
 const FormResponse = require("../models/FormResponse");
-const PlacedStudent = require('../models/PlacedStudent');
+const PlacedStudent = require("../models/PlacedStudent");
 const path = require("path");
 
 // Get all posts
@@ -101,8 +101,6 @@ router.get(
   async (req, res) => {
     try {
       const { companyName, startYear, endYear, targetedStreams } = req.params;
-      //console.log(req.user._id)
-
       const targetedStreamsArray = targetedStreams.split(",");
 
       const posts = await Post.find({
@@ -117,33 +115,59 @@ router.get(
           message: "No posts found for the specified company and session",
         });
       }
-      if(req.user._id){
-        const userId= req.user._id;
-        //console.log(userId);
-      const postsWithResponse = await Promise.all(
-        posts.map(async (post) => {
-          const formResponse = await FormResponse.findOne({
+      //console.log(req.user);
+      if (req.user.userRole === "admin") {
+        await Promise.all(posts.map(async (post) => {
+          const formResponse = await FormResponse.find({
             postId: post._id,
-            userId: userId,
           });
-          if (formResponse) {
-            //console.log("formResponse ",formResponse);
+          if (formResponse.length === 0) {
+            return;
+          } else {
+            const formDetails = await Post.findById(post._id);
+            if (formDetails.formData) {
+              const formdatafields = Object.keys(formDetails.formData);
+              const userDetails = Object.keys(User.schema.paths);
+              const excludedFields = ['_id', '__v', 'secretCode','password'];
+              const existingFields= formdatafields.concat(userDetails).filter(field => !excludedFields.includes(field));
+              post.existingFields = existingFields;
+              return;
+            }
+          }
+          //console.log("formResponse", formResponse);
+        }));
+      }
+      if (req.user._id) {
+        const userId = req.user._id;
+        //console.log(userId);
+        const postsWithResponse = await Promise.all(
+          posts.map(async (post) => {
+            const formResponse = await FormResponse.findOne({
+              postId: post._id,
+              userId: userId,
+            });
+            if (formResponse) {
+              //console.log("formResponse ",formResponse);
+              return {
+                ...post._doc,
+                formData: null,
+                submittedStatus: true,
+              };
+            }
+            //console.log("post",post)
+
             return {
               ...post._doc,
-              formData: null,
-              submittedStatus:true,
+              existingFields: post.existingFields,
             };
-          }
-          //console.log("post",post)
-          return post;
-        })
-      );
-      //console.log("postsWithResponse",postsWithResponse)
-      res.status(200).json(postsWithResponse);
-    }else{
-      res.status(200).json(posts);
-    }
-      
+          })
+        );
+        //console.log("postsWithResponse",postsWithResponse)
+        //console.log("final postsWithResponse",postsWithResponse);
+        res.status(200).json(postsWithResponse);
+      } else {
+        res.status(200).json(posts);
+      }
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -196,7 +220,7 @@ router.delete("/delete/:postId", authMiddleware, async (req, res) => {
       _id: { $ne: postId },
       company,
       session,
-      targetedStreams: { $all: targetedStreams }
+      targetedStreams: { $all: targetedStreams },
     });
 
     if (countMatchingPosts > 0) {
@@ -219,11 +243,29 @@ router.delete("/delete/:postId", authMiddleware, async (req, res) => {
   }
 });
 
-
-async function retrieveExcelContent(postId) {
+async function retrieveExcelContent(postId, checkedFields) {
   try {
-    const formResponses = await FormResponse.find({ postId });
-    return { formResponses };
+    const selectFields = checkedFields.reduce((acc, field) => {
+      acc[`data.${field}`] = 1; // Include the field in the projection
+      return acc;
+    }, {});
+    selectFields.postId = 1; // Include the postId field in the projection
+    const formResponses = await FormResponse.find({ postId }).select(selectFields);
+
+    const selectedFieldsResponses = formResponses.map(response => {
+      const selectedFieldsData = {};
+      checkedFields.forEach(field => {
+        selectedFieldsData[field] = response.data[field];
+      });
+      return {
+        _id: response._id,
+        postId: response.postId,
+        data: selectedFieldsData
+      };
+    });
+
+    //console.log(selectedFieldsResponses)
+    return { formResponses: selectedFieldsResponses };
   } catch (error) {
     console.error(error);
     throw error;
@@ -231,18 +273,23 @@ async function retrieveExcelContent(postId) {
 }
 
 
-router.post('/downloadResponse/:postId', async (req, res) => {
+
+router.post("/downloadResponse/:postId", async (req, res) => {
   try {
     const { postId } = req.params;
     //console.log(postId)
-    const {formResponses} = await retrieveExcelContent(postId);
-
+    const {checkedFields} = req.body;
+    //console.log(checkedFields);
+    const { formResponses } = await retrieveExcelContent(postId,checkedFields);
+    //console.log("formResponses",formResponses);
     if (formResponses.length === 0) {
-      return res.status(204).json({ message: 'No response found for the given postId.' });
+      return res
+        .status(204)
+        .json({ message: "No response found for the given postId." });
     }
 
     const wb = new excel.Workbook();
-    const ws = wb.addWorksheet('Sheet 1');
+    const ws = wb.addWorksheet("Sheet 1");
 
     const headers = Object.keys(formResponses[0].data);
     headers.forEach((header, index) => {
@@ -255,14 +302,16 @@ router.post('/downloadResponse/:postId', async (req, res) => {
       });
     });
 
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', `attachment; filename=${postId}.xlsx`);
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader("Content-Disposition", `attachment; filename=${postId}.xlsx`);
     wb.write(`${postId}ExcelFile.xlsx`, res);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
 
 module.exports = router;
