@@ -191,21 +191,34 @@ router.delete("/delete/:postId", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    // Check if the user is authorized to delete the post (You can customize this logic based on your requirements)
-    // if (post.CreatedBy.adminId !== req.user._id) {
-    //   return res
-    //     .status(403)
-    //     .json({ message: "Not authorized to delete this post" });
-    // }
-    await Notification.deleteMany({ postId: postId });
-    await Post.findByIdAndDelete(postId);
+    const { company, session, targetedStreams } = post;
+    const countMatchingPosts = await Post.countDocuments({
+      _id: { $ne: postId },
+      company,
+      session,
+      targetedStreams: { $all: targetedStreams }
+    });
 
-    res.json({ message: "Post deleted successfully" });
+    if (countMatchingPosts > 0) {
+      await Notification.deleteMany({ postId });
+      await Post.findByIdAndDelete(postId);
+      res.json({ message: "Post deleted successfully" });
+    } else if (countMatchingPosts === 0) {
+      await Notification.deleteMany({ postId });
+      await Post.findByIdAndDelete(postId);
+      await Company.deleteOne({ name: company });
+      res.json({ message: "Post and associated company deleted successfully" });
+    } else {
+      await Notification.deleteMany({ postId });
+      await Post.findByIdAndDelete(postId);
+      res.json({ message: "Post deleted successfully" });
+    }
   } catch (error) {
     console.error("Error deleting post:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 async function retrieveExcelContent(postId) {
   try {

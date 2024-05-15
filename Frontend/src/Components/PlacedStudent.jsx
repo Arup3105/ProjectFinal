@@ -164,7 +164,7 @@ function PlacedStudent() {
                             Name: {data.username}, Roll Number:{' '}
                             {data.rollNumber}, Company Name: {data.companyName},
                             Year: {data.year}, Stream: {data.stream}, Package:{' '}
-                            {data.salary}, Status:{' '}
+                            {data.salary}/LPA, Status:{' '}
                             {data.approved ? 'Approved' : 'Pending'}
                             <div className="apv-btn-wrap">
                             <button
@@ -224,7 +224,7 @@ function PlacedStudent() {
                         <li key={data._id}>
                           Name: {data.username}, Roll Number: {data.rollNumber},
                           Company Name: {data.companyName}, Year: {data.year},
-                          Stream: {data.stream}, Package: {data.salary}, Status:{' '}
+                          Stream: {data.stream}, Package: {data.salary}/LPA, Status:{' '}
                           {data.approved ? 'Approved' : 'Pending'}
                         </li>
                       )

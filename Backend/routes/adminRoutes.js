@@ -257,27 +257,27 @@ router.post('/createPost', authenticateAdmin, upload.array("attachments",15), as
 
 
 
-router.put('/updatePost/:postId', async (req, res) => {
-  const postId = req.params.postId;
-  const { title, content, imageUrl, company, targetedStreams } = req.body;
+// router.put('/updatePost/:postId', async (req, res) => {
+//   const postId = req.params.postId;
+//   const { title, content, imageUrl, company, targetedStreams } = req.body;
 
-  try {
-    const post = await Post.findByIdAndUpdate(
-      postId,
-      { title, content, imageUrl, company, targetedStreams },
-      { new: true } 
-    );
+//   try {
+//     const post = await Post.findByIdAndUpdate(
+//       postId,
+//       { title, content, imageUrl, company, targetedStreams },
+//       { new: true } 
+//     );
 
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
+//     if (!post) {
+//       return res.status(404).json({ message: 'Post not found' });
+//     }
 
-    res.status(200).json({ message: 'Post updated successfully', post });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
+//     res.status(200).json({ message: 'Post updated successfully', post });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
 
 
 // Approve a placed student

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ApiService from "../Components/ApiServer/ApiServer.jsx";
 import "./AdminPostCreation.css";
 
@@ -18,30 +18,32 @@ const AdminPostCreation = () => {
     e.preventDefault();
     try {
       if (!title || !content || !company || !targetedStreams) {
-        setError("Title, content, company, and targeted streams cannot be empty.");
+        setError(
+          "Title, content, company, and targeted streams cannot be empty."
+        );
         return;
       }
-  
+
       setLoading(true);
-      
+
       let postData = new FormData();
-      postData.append('title', title);
-      postData.append('content', content);
-      postData.append('company', company);
-      postData.append('targetedStreams', targetedStreams.join(','));
-  
+      postData.append("title", title);
+      postData.append("content", content);
+      postData.append("company", company);
+      postData.append("targetedStreams", targetedStreams.join(","));
+
       attachments.forEach((file, index) => {
         //console.log("File appended:", file); // Add this line
         postData.append(`attachments`, file);
       });
       const formDataString = JSON.stringify(formData);
-      postData.append('formData',formDataString);
+      postData.append("formData", formDataString);
       console.log("Payload:", Object.fromEntries(postData));
       //const payload=Object.fromEntries(postData);
       // console.log("payload",payload);
-      console.log("postdata direct",postData);
+      console.log("postdata direct", postData);
       const response = await ApiService.createPost(postData);
-  
+
       if (response.status === 201) {
         setMessage("Post created successfully");
         setTimeout(() => {
@@ -83,7 +85,7 @@ const AdminPostCreation = () => {
   };
 
   const handleRemoveField = (fieldName) => {
-    const updatedFields = formFields.filter(field => field !== fieldName);
+    const updatedFields = formFields.filter((field) => field !== fieldName);
     const updatedFormData = { ...formData };
     delete updatedFormData[fieldName];
     setFormFields(updatedFields);
@@ -92,6 +94,14 @@ const AdminPostCreation = () => {
 
   const handleInputChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleCheckboxChange = (stream, checked) => {
+    if (checked) {
+      setTargetedStreams([...targetedStreams, stream]);
+    } else {
+      setTargetedStreams(targetedStreams.filter((item) => item !== stream));
+    }
   };
 
   return (
@@ -118,12 +128,23 @@ const AdminPostCreation = () => {
           </div>
           <div className="input-box">
             <label htmlFor="attachment">Attachment</label>
-            <input type="file" id="attachment" onChange={handleFileChange} multiple />
+            <input
+              type="file"
+              id="attachment"
+              onChange={handleFileChange}
+              multiple
+            />
           </div>
           {attachments.map((attachment, index) => (
             <div key={index}>
               <span>{attachment.name}</span>
-              <button type="button" onClick={() => handleRemoveAttachment(index)} className="remove-btn">Remove</button>
+              <button
+                type="button"
+                onClick={() => handleRemoveAttachment(index)}
+                className="remove-btn"
+              >
+                Remove
+              </button>
             </div>
           ))}
           <div className="input-box">
@@ -135,23 +156,67 @@ const AdminPostCreation = () => {
               placeholder="Company Name"
             />
           </div>
-          <div className="input-box">
-            <input
-              type="text"
-              value={targetedStreams}
-              required="required"
-              onChange={(e) =>
-                setTargetedStreams(
-                  e.target.value
-                    .split(",")
-                    .map((stream) => stream.trim().toUpperCase())
-                )
-              }
-              placeholder="Stream Name"
-            />
+          <div className="input-check-box">
+            <label>
+              <input
+                type="checkbox"
+                checked={targetedStreams.includes("BCA")} // Assuming targetedStreams is an array of selected streams
+                onChange={(e) => handleCheckboxChange("BCA", e.target.checked)} // Handle checkbox change for BCA stream
+              />
+              BCA
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={targetedStreams.includes("BBA")}
+                onChange={(e) => handleCheckboxChange("BBA", e.target.checked)}
+              />
+              BBA
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={targetedStreams.includes("BBA(H.M)")}
+                onChange={(e) =>
+                  handleCheckboxChange("BBA(H.M)", e.target.checked)
+                }
+              />
+              BBA (H.M)
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={targetedStreams.includes("BBA(Supply Chain)")}
+                onChange={(e) =>
+                  handleCheckboxChange("BBA(Supply Chain)", e.target.checked)
+                }
+              />
+              BBA (Supply Chain)
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={targetedStreams.includes("Optometry")}
+                onChange={(e) =>
+                  handleCheckboxChange("Optometry", e.target.checked)
+                }
+              />
+              Optometry
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={targetedStreams.includes("Lab Technology")}
+                onChange={(e) =>
+                  handleCheckboxChange("Lab Technology", e.target.checked)
+                }
+              />
+              Lab Technology
+            </label>
           </div>
+
           <div className="willingness-form">
-            <p style={{color: "black"}}>Willingness Form</p>
+            <p style={{ color: "black" }}>Willingness Form</p>
             {formFields.map((fieldName, index) => (
               <div key={index} className="input-box">
                 <input
@@ -160,14 +225,24 @@ const AdminPostCreation = () => {
                   onChange={(e) => handleInputChange(fieldName, e.target.value)}
                   placeholder={fieldName}
                 />
-                <button type="button" onClick={() => handleRemoveField(fieldName)} className="remove-btn">Remove</button>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveField(fieldName)}
+                  className="remove-btn"
+                >
+                  Remove
+                </button>
               </div>
             ))}
-            <button type="button" onClick={handleAddField}>Add Field</button>
+            <button type="button" onClick={handleAddField}>
+              Add Field
+            </button>
           </div>
           <button type="submit">Add Post</button>
         </form>
-        {loading && <p style={{ color: "blue" }}>This may take a while. Please wait...</p>}
+        {loading && (
+          <p style={{ color: "blue" }}>This may take a while. Please wait...</p>
+        )}
         {message && <p style={{ color: "green" }}>{message}</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
