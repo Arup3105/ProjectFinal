@@ -15,7 +15,38 @@
     justify-content: space-between;
     align-items: center;
     gap: 30px;
-    height: 44vh;
+    /* height: 44vh; */
+    margin: 50px 80px;
+}
+
+.landing-container .right h1{
+    line-height: 3rem;
+}
+
+.landing-container .right h1 span{
+    color: blue;
+}
+
+.landing-container .right h1:nth-child(1){
+    font-size: 3.5rem;
+}
+
+.landing-container .right h1:nth-child(2){
+    font-size: 3rem;
+}
+
+.landing-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.get-started{
+    padding: 10px 20px;
+}
+
+.landing-container img{
+    width: 100%;
 }
 .landingpage:before {
     content: "";

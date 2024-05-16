@@ -25,7 +25,7 @@ const AdminRegister = () => {
 
   const validatePassword = (password) => {
     return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[ -~]{8,}$/.test(password);
-};
+  };
 
 
   const handleRegister = async (e) => {
@@ -112,11 +112,10 @@ const AdminRegister = () => {
               <button type='submit'>Register</button>
             </div>
             <p>
-                  Already have an account{" "}
-                  <Link to="/admin" className="signin">
-                    Login
-                  </Link>
-                  </p>
+              <Link to="/admin" className="signin">
+              Already have an account{" "} <span>Login</span>
+              </Link>
+            </p>
           </div>
         </form>
       </div>

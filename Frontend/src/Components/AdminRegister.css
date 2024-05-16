@@ -2,7 +2,7 @@
     position: relative;
     width: 100%;
     height: 100vh;
-    background: linear-gradient(180deg, #211c7e, #12ac9f);
+    background: linear-gradient(180deg, #fff, #999797);
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -12,4 +12,13 @@
 .admin-regbtn{
     display: flex;
     justify-content: center;
+}
+
+.admin-reg p a{
+    color: rgb(66, 63, 63);
+}
+
+.admin-reg p a span{
+    color: black;
+    padding: 0 5px ;
 }

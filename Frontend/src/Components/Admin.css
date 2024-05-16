@@ -1,5 +1,5 @@
 .admin{
-    background: linear-gradient(180deg, #211c7e, #12ac9f);
+    background: linear-gradient(180deg, #fff, #999797);
     height: 100vh;
     width: 100%;
     position: absolute;
@@ -68,4 +68,13 @@ button:hover::before{
 .admin-btn{
     display: flex;
     justify-content: center;
+}
+
+.admin-formstyle p{
+    color: rgb(66, 63, 63);
+}
+
+.admin-formstyle p span{
+    color: black;
+    padding: 0 5px ;
 }

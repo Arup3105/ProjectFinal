@@ -62,7 +62,7 @@ const Admin = () => {
             <br />
             <p>
               <Link to='/AdminRegister' className='signin'>
-                Register as ADMIN
+                Register as <span>ADMIN</span>
               </Link>
             </p>
             {/* <p>
