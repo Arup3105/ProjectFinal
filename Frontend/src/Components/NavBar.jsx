@@ -15,8 +15,9 @@ const NavBar = ({ isAdmin }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const landingpage= location.pathname==="/";
   const isRestrictedPage =
-    location.pathname === "/" ||
+    // location.pathname === "/" ||
     location.pathname === "/Login" ||
     location.pathname === "/Register" ||
     location.pathname === "/admin" ||
@@ -141,6 +142,7 @@ const NavBar = ({ isAdmin }) => {
 
   return (
     <div>
+      { !landingpage &&(
       <nav>
         <Link to="/" onClick={handleLogoClick}>
           <Link to="/home" className="logo">
@@ -249,6 +251,7 @@ const NavBar = ({ isAdmin }) => {
           )}
         </ul>
       </nav>
+      )}
     </div>
   );
 };

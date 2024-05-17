@@ -15,7 +15,7 @@ const Footer = () => {
                     <li>About</li>
                 </ul>
             </div>
-            <div className="section">
+            {/* <div className="section">
                 <h1>Quick Links</h1>
                 <ul>
                     <li>About</li>
@@ -47,7 +47,7 @@ const Footer = () => {
                     <li>About</li>
                     <li>About</li>
                 </ul>
-            </div>
+            </div> */}
         </div>
     )
 }
