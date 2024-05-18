@@ -139,3 +139,38 @@
     width: 300px;
     border-radius: 15px;
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown span{
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: black;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-menu li {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-menu li:hover {
+    background-color: lightblue;
+  }
+  
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }

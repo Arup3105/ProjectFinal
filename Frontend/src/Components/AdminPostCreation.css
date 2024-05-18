@@ -114,3 +114,16 @@ a {
 .remove-btn{
   padding: 10px 20px;
 }
+
+.input-check-box{
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.input-check-box label{
+  border: 0.1px solid black;
+  padding: 5px;
+}

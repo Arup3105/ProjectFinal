@@ -311,8 +311,8 @@ function PlacedStudent() {
           )}
         </div>
       ) : (
-        <>
-          <form onSubmit={handleSubmit}>
+        <div className='stu-form-main'>
+          <form onSubmit={handleSubmit} className='stu-form'>
             <label htmlFor="companyName">Company Name:</label>
             <input
               type="text"
@@ -340,9 +340,9 @@ function PlacedStudent() {
               onChange={handleInputChange}
               required
             />
-            <button type="submit">Submit</button>
+            <button type="submit" className='stu-btn'>Submit</button>
           </form>
-          <div>
+          <div className="previous-submits">
             {fetchError ? (
               <div>Error fetching previous submits: {fetchError}</div>
             ) : previousSubmits.length > 0 ? (
@@ -359,10 +359,10 @@ function PlacedStudent() {
                 </ul>
               </div>
             ) : (
-              <div>No previous submits.</div>
+              <div className='stu-pre'>No previous submits.</div>
             )}
           </div>
-        </>
+        </div>
       )}
     </>
   );

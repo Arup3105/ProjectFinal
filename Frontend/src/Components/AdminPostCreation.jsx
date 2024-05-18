@@ -109,6 +109,7 @@ const AdminPostCreation = () => {
       <div className="form">
         <form onSubmit={handleAddPost}>
           <div className="input-box">
+            <label>Title</label>
             <input
               type="text"
               value={title}
@@ -118,6 +119,7 @@ const AdminPostCreation = () => {
             />
           </div>
           <div className="input-box">
+          <label>Content</label>
             <input
               type="text"
               value={content}
@@ -148,6 +150,7 @@ const AdminPostCreation = () => {
             </div>
           ))}
           <div className="input-box">
+          <label>Company Name</label>
             <input
               type="text"
               value={company}
@@ -158,22 +161,23 @@ const AdminPostCreation = () => {
           </div>
           <div className="input-check-box">
             <label>
+              BCA
               <input
                 type="checkbox"
                 checked={targetedStreams.includes("BCA")}
                 onChange={(e) => handleCheckboxChange("BCA", e.target.checked)}
               />
-              BCA
             </label>
             <label>
+              BBA
               <input
                 type="checkbox"
                 checked={targetedStreams.includes("BBA")}
                 onChange={(e) => handleCheckboxChange("BBA", e.target.checked)}
               />
-              BBA
             </label>
             <label>
+              BBA (H.M)
               <input
                 type="checkbox"
                 checked={targetedStreams.includes("BBA(H.M)")}
@@ -181,9 +185,9 @@ const AdminPostCreation = () => {
                   handleCheckboxChange("BBA(H.M)", e.target.checked)
                 }
               />
-              BBA (H.M)
             </label>
             <label>
+              BBA (Supply Chain)
               <input
                 type="checkbox"
                 checked={targetedStreams.includes("BBA(Supply Chain)")}
@@ -191,9 +195,9 @@ const AdminPostCreation = () => {
                   handleCheckboxChange("BBA(Supply Chain)", e.target.checked)
                 }
               />
-              BBA (Supply Chain)
             </label>
             <label>
+              Optometry
               <input
                 type="checkbox"
                 checked={targetedStreams.includes("Optometry")}
@@ -201,9 +205,9 @@ const AdminPostCreation = () => {
                   handleCheckboxChange("Optometry", e.target.checked)
                 }
               />
-              Optometry
             </label>
             <label>
+              Lab Technology
               <input
                 type="checkbox"
                 checked={targetedStreams.includes("Lab Technology")}
@@ -211,7 +215,6 @@ const AdminPostCreation = () => {
                   handleCheckboxChange("Lab Technology", e.target.checked)
                 }
               />
-              Lab Technology
             </label>
           </div>
 

@@ -301,14 +301,14 @@ const PostsByCompany = () => {
             <h3>__________________________</h3>
             <h3>Choose fields for download:- </h3>
             {post.existingFields.map((fieldName) => (
-              <div key={fieldName}>
+              <div key={fieldName} className="attach-form">
+                <label htmlFor={fieldName}>{fieldName}</label>
                 <input
                   type="checkbox"
                   id={fieldName}
                   name={fieldName}
                   value={fieldName}
                 />
-                <label htmlFor={fieldName}>{fieldName}</label>
               </div>
             ))}
           </div>
@@ -322,7 +322,7 @@ const PostsByCompany = () => {
 
           {!localStorage.getItem("isAdmin") &&
             (post.formData || post.submittedStatus) && (
-              <div className="form-container">
+              <div className="form-container attach-form">
                 <h2>Form for Interested Student</h2>
                 {post.submittedStatus ? (
                   <p>Form already submitted.</p>
@@ -348,7 +348,7 @@ const PostsByCompany = () => {
                         </div>
                       ) : null
                     )}
-                    <button onClick={handleFormSubmitClick}>Save Form</button>
+                    <button onClick={handleFormSubmitClick} className="save-btn">Save Form</button>
                   </form>
                 )}
               </div>

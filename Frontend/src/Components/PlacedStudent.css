@@ -1,35 +1,110 @@
-.data{
+.data {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 20px;
     margin: 15px 10px;
 }
 
-.pendingReq{
+.pendingReq {
     border: 2px solid;
     padding: 20px;
 }
 
-.ApprovedReq{
+.ApprovedReq {
     border: 2px solid;
     padding: 20px;
 }
 
-.exel{
+.exel {
     width: 3rem;
 }
 
-.exel-btn, .apv-btn{
+.exel-btn,
+.apv-btn {
     padding: 10px 20px;
 }
 
-.exel-btn-wrap, .apv-btn-wrap{
+.exel-btn-wrap,
+.apv-btn-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.ApprovedReq select{
+.ApprovedReq select {
     padding: 10px;
     margin: 10px;
+}
+
+.Search-value {
+    width: 30%;
+    height: 40px;
+}
+
+.stu-form-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.stu-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+
+.stu-form label {
+    margin-top: 10px;
+}
+
+.stu-form input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.stu-btn {
+    padding: 10px 137px;
+    z-index: 3;
+}
+
+.previous-submits {
+    margin-top: 20px;
+    width: 100%;
+  
+    max-width: 600px;
+    
+}
+
+.previous-submits ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.previous-submits li {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.stu-pre{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
 }

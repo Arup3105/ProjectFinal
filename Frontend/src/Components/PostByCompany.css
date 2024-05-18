@@ -113,7 +113,7 @@
 }
 
 .save-btn{
-    padding: 10px 20px;
+    padding: 10px 10px;
 }
 
 .flex{
@@ -137,3 +137,8 @@
 .download-box a:hover{
     background-color: white;
 }
+
+.attach-form{
+    width: 25%;
+}
+
