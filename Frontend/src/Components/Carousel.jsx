@@ -9,11 +9,15 @@ const Carousel = () => {
 
   // Array of locally stored image URLs
   const images = [
-    '/more.png',
     '/tcs.webp',
     '/Del.png',
     '/fed.png',
-    '/wipro.png'
+    '/wipro.png',
+    '/Accenture.jpg',
+    '/Capgemini.jpeg',
+    'cognizant.jpg',
+    '/HUL.jpg',
+    '/more.png'
   ];
 
   // Function to go to the next slide
