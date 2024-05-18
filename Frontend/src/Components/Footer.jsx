@@ -5,49 +5,37 @@ const Footer = () => {
     return (
         <div className='footer'>
             <div className="section">
-                <h1>Quick Links</h1>
-                <ul>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                </ul>
+                <h1>Placement Portal</h1>
+                <p>The Placement Cell secures job opportunities for students <br /> by connecting with reputable firms. Operating year-round, <br /> it continuously increases the number of students placed <br /> through campus interviews.</p>
             </div>
-            {/* <div className="section">
-                <h1>Quick Links</h1>
+            <div className="section">
+                <h1>Menu</h1>
                 <ul>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
+                    <li>Home</li>
+                    <li>Login</li>
+                    <li>Register</li>
+                    <li>Contact</li>
                     <li>About</li>
                 </ul>
             </div>
             <div className="section">
-                <h1>Quick Links</h1>
+                <h1>Support</h1>
                 <ul>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
+                    <li>Terms & Conditions</li>
+                    <li>Privacy Policy</li>
+                    <li>Contact Us</li>
+                    <li>FAQ/Help</li>
+
                 </ul>
             </div>
             <div className="section">
-                <h1>Quick Links</h1>
+                <h1>Conatct</h1>
                 <ul>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
-                    <li>About</li>
+                    <li>akashdutta.business96@gmail.com</li>
+                    <li>Nijer gulo likhe nio</li>
+                    <li>Nijer gulo likhe nio</li>
                 </ul>
-            </div> */}
+            </div>
         </div>
     )
 }
