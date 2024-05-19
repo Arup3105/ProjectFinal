@@ -47,7 +47,7 @@ nav .navbtn:hover{
 .log-main {
     position: absolute;
     width: 100%;
-    height: 110vh;
+    height: 100vh;
     background: linear-gradient(180deg, #fff, #999797);
     overflow: hidden;
     display: flex;
@@ -67,7 +67,7 @@ nav .navbtn:hover{
     border: .2px solid #fff;
 }
 
-.login-imagecontainer {
+/* .login-imagecontainer {
     position: relative;
     width: 100%;
     height: 100%;
@@ -80,7 +80,7 @@ nav .navbtn:hover{
 
 .overlay {
     padding: 60% 5%;
-}
+} */
 
 .form h2{
     color: black;

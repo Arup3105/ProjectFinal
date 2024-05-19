@@ -31,9 +31,9 @@ const Footer = () => {
             <div className="section">
                 <h1>Conatct</h1>
                 <ul>
+                    <li>devrup31051@gmail.com</li>
                     <li>akashdutta.business96@gmail.com</li>
-                    <li>Nijer gulo likhe nio</li>
-                    <li>Nijer gulo likhe nio</li>
+                    <li>Shalulaha2004@gmail.com</li>
                 </ul>
             </div>
         </div>
