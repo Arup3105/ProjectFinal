@@ -35,6 +35,7 @@ const Admin = () => {
         <div className="admin">
           <div className="admin-formstyle">
             <div className="Employee ID">
+              <label>Employee ID</label>
               <input
                 type="text"
                 placeholder='Employee ID'
@@ -43,6 +44,7 @@ const Admin = () => {
               />
             </div>
             <div className="password">
+            <label>Password</label>
               <input
                 type="password"
                 placeholder='Password'

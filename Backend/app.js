@@ -3,13 +3,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const {mongoURI}= require("./config/default.json")
+const {mongoURI, environment}= require("./config/default.json")
+const path = require("path")
+
 
 const app = express();
 const PORT = 5000;
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || origin === 'http://localhost:5173') {
+    if (!origin || origin === '*') {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));

@@ -97,7 +97,7 @@ const AdminRegister = () => {
             </div>
             <div className='password'>
               <label htmlFor='password'>Password</label>
-              <input type='password' placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)} />
+              <input type='password' placeholder='At least 8 characters, with 1 uppercase, 1 lowercase, and 1 number' value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
             <div className='SecretCode'>
               <label htmlFor='SecretCode'>Secret Code</label>

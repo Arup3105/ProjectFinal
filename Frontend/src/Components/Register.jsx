@@ -456,7 +456,7 @@ const Register = () => {
                   <label htmlFor="password">Password</label>
                   <input
                     type="password"
-                    placeholder="Enter Password"
+                    placeholder="At least 8 characters, with 1 uppercase, 1 lowercase, and 1 number"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     id="password"
