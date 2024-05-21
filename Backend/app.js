@@ -8,7 +8,8 @@ const path = require("path")
 
 
 const allowedOrigins = [
-  'https://bcrecplacementportal-3n4xtk6mo-arupduttas-projects.vercel.app'
+  //'https://bcrecplacementportal-3n4xtk6mo-arupduttas-projects.vercel.app'
+  'https://bcrapclacementportal.vercel.app'
 ];
 
 const app = express();
