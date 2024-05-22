@@ -8,11 +8,15 @@
 .pendingReq {
     border: 2px solid;
     padding: 20px;
+    overflow-y: scroll;
+    max-height: 90vh;
 }
 
 .ApprovedReq {
     border: 2px solid;
     padding: 20px;
+    overflow-y: scroll;
+    max-height: 90vh;
 }
 
 .exel {

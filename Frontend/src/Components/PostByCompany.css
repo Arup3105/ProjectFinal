@@ -138,7 +138,23 @@
     background-color: white;
 }
 
-.attach-form{
-    width: 25%;
+.attach-form-main{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
+.attach-form{
+    width: 25%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.attach-form label{
+    text-transform: uppercase;
+}
+
+.attach-form input{
+    width: 1rem;
+    padding: 10px;
+}

@@ -300,6 +300,7 @@ const PostsByCompany = () => {
           <div>
             <h3>__________________________</h3>
             <h3>Choose fields for download:- </h3>
+            <div className="attach-form-main">
             {post.existingFields.map((fieldName) => (
               <div key={fieldName} className="attach-form">
                 <label htmlFor={fieldName}>{fieldName}</label>
@@ -311,8 +312,10 @@ const PostsByCompany = () => {
                 />
               </div>
             ))}
+            </div>
           </div>
         )}
+        
                 </form>
                 <button onClick={() => handleDownloadResponse(post._id)} className="exel-btn">
                 <SiGooglesheets className='exel'/> Download Response
