@@ -86,7 +86,7 @@ const Carousel = () => {
       <div className="carousel" ref={carouselRef}>
         <div className="slides" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
           {images.map((image, index) => (
-            <img key={index} src={image} alt={`Slide ${index + 1}`} className="slide" style={{ width: '10%', height: '330px', objectFit: 'cover' }} />
+            <img key={index} src={image} alt={`Slide ${index + 1}`} className="slide" />
           ))}
         </div>
       </div>

@@ -6,6 +6,27 @@
     padding: 10px 20px;
 }
 
-.section ul li {
+.footer .section .items {
     display: block;
+    text-align: center;
+}
+
+@media screen and (max-width:500px) {
+    .footer{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 40px;
+    }
+
+    .section:nth-child(1){
+        display: none;
+    }
+
+    .section:nth-child(2){
+        display: none;
+    }
+
+    .footer .section .items{
+        display: block;
+    }
 }

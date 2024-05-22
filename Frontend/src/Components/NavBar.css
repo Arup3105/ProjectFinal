@@ -266,3 +266,13 @@ nav .navbtn:hover {
 .notification-item button:hover {
     background-color: #0056b3;
 }
+
+@media screen and (max-width:500px){
+    .navbtn {
+        border: 1px solid white;
+        border-radius: 20px;
+        padding: 6px 10px;
+        font-size: 1rem;
+        background: transparent;
+    }
+}

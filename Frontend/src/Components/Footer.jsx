@@ -10,31 +10,30 @@ const Footer = () => {
             </div>
             <div className="section">
                 <h1>Menu</h1>
-                <ul>
-                    <li>Home</li>
-                    <li>Login</li>
-                    <li>Register</li>
-                    <li>Contact</li>
-                    <li>About</li>
-                </ul>
+                <div className="items">
+                    <p>Home</p>
+                    <p>Login</p>
+                    <p>Register</p>
+                    <p>Contact</p>
+                    <p>About</p>
+                </div>
             </div>
             <div className="section">
                 <h1>Support</h1>
-                <ul>
-                    <li>Terms & Conditions</li>
-                    <li>Privacy Policy</li>
-                    <li>Contact Us</li>
-                    <li>FAQ/Help</li>
-
-                </ul>
+                <div className="items">
+                    <p>Terms & Conditions</p>
+                    <p>Privacy Policy</p>
+                    <p>Contact Us</p>
+                    <p>FAQ/Help</p>
+                </div>
             </div>
             <div className="section">
                 <h1>Conatct</h1>
-                <ul>
-                    <li>devrup31051@gmail.com</li>
-                    <li>akashdutta.business96@gmail.com</li>
-                    <li>Shalulaha2004@gmail.com</li>
-                </ul>
+                <div className="items">
+                    <p>devrup31051@gmail.com</p>
+                    <p>akashdutta.business96@gmail.com</p>
+                    <p>Shalulaha2004@gmail.com</p>
+                </div>
             </div>
         </div>
     )

@@ -1,4 +1,4 @@
-.landing-container{
+.landing-container {
     gap: 30px;
     margin: 50px 80px;
 }
@@ -45,21 +45,139 @@
     border-radius: 0.2rem;
 }
 
-.landingpage .navbtn{
+.landingpage .navbtn {
     color: white;
 }
 
+
+
+.landing-container .left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-container .right h1 {
+    line-height: 3rem;
+}
+
+.landing-container .right h1 span {
+    color: blue;
+}
+
+.landing-container .right h1:nth-child(1) {
+    font-size: 3.5rem;
+}
+
+.landing-container .right h1:nth-child(2) {
+    font-size: 3rem;
+}
+
+.landing-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.get-started {
+    padding: 10px 20px;
+}
+
+.landing-container img {
+    width: 20%;
+}
+
+.landing-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    margin: 20px 60px;
+    background: rgba(206, 178, 178, 0.575);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 20px;
+    padding: 60px 30px;
+}
+
+.landing-card h1 {
+    font-size: 3.5rem;
+}
+
+.landing-card h1 span {
+    color: blue;
+}
+
+.landing-card img {
+    width: 300px;
+    border-radius: 15px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown span {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: black;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-menu li a {
+    color: white;
+}
+
+.dropdown-menu li a:hover {
+    color: #0f0f0f;
+}
+
+.dropdown-menu li {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-menu li:hover {
+    background-color: lightblue;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
 @media (max-width: 500px) {
+    .landing-container {
+        gap: 30px;
+        margin: 20px 40px;
+    }
+
+    .landingpage .navbtn{
+        display: none;
+    }
+
     .landingpage nav .menu {
         display: flex;
     }
 
-    .landingpage nav{
+    .landingpage nav {
         flex-direction: column;
         align-items: start;
     }
 
-    .landingpage nav ul li{
+    .landingpage nav ul li {
         display: none;
         flex-direction: column;
         width: 100%;
@@ -74,111 +192,41 @@
     .landingpage nav ul.open li {
         display: flex;
     }
+
+    .landing-container img {
+        width: 60%;
+    }
+
+    .landing-container .right h1 {
+        line-height: 2.5rem;
+    }
+
+    .landing-container .right h1:nth-child(1) {
+        font-size: 2.5rem;
+    }
+
+    .landing-container .right h1:nth-child(2) {
+        font-size: 2.5rem;
+    }
+
+    .get-started {
+        padding: 5px 10px;
+    }
+
+    .landing-card {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .landing-card h1 {
+        font-size: 2.5rem;
+    }
+
+    .landing-card h1 span {
+        color: blue;
+    }
+
+    .landing-card img {
+        width: 200px;
+    }
 }
-
-
-.landing-container .left{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.landing-container .right h1{
-    line-height: 3rem;
-}
-
-.landing-container .right h1 span{
-    color: blue;
-}
-
-.landing-container .right h1:nth-child(1){
-    font-size: 3.5rem;
-}
-
-.landing-container .right h1:nth-child(2){
-    font-size: 3rem;
-}
-
-.landing-btn{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.get-started{
-    padding: 10px 20px;
-}
-
-.landing-container img{
-    width: 20%;
-}
-
-.landing-card{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid black;
-    margin: 20px 60px;
-    background: rgba(206, 178, 178, 0.575);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-radius: 20px;
-    padding: 60px 30px;
-}
-
-.landing-card h1{
-    font-size: 3.5rem;
-}
-
-.landing-card h1 span{
-    color: blue;
-}
-
-.landing-card img{
-    width: 300px;
-    border-radius: 15px;
-}
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropdown span{
-    color: #fff;
-    font-size: 1.3rem;
-    font-weight: bold;
-  }
-
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    background-color: black;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-  }
-
-  .dropdown-menu li a{
-    color: white;
-  }
-
-  .dropdown-menu li a:hover{
-    color: #0f0f0f;
-  }
-  
-  .dropdown-menu li {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
-  
-  .dropdown-menu li:hover {
-    background-color: lightblue;
-  }
-  
-  .dropdown:hover .dropdown-menu {
-    display: block;
-  }
