@@ -162,7 +162,7 @@ const PostsByCompany = () => {
 
       console.log(checkedFields)
       const response = await ApiService.downloadResponse(postId, checkedFields);
-  
+
       if (response.statusText === 'No Content') {
         alert('No response available.');
         return;
@@ -179,7 +179,7 @@ const PostsByCompany = () => {
       console.error('Error downloading response:', error);
     }
   };
-  
+
 
   if (loading) {
     return <div className='load-body'>
@@ -214,12 +214,12 @@ const PostsByCompany = () => {
                   </button>
                 </>
               ) : (
-              
-                  < div className="post-btn-fix">
-                    <CiEdit onClick={() => handleEditButtonClick(post._id, post.title, post.content)} className="edit-btn" size={40} />
-                    <MdDelete onClick={() => handleDeletePost(post._id)} className="delete-btn" size={40} />
-                  </div>
-              
+
+                < div className="post-btn-fix">
+                  <CiEdit onClick={() => handleEditButtonClick(post._id, post.title, post.content)} className="edit-btn" size={40} />
+                  <MdDelete onClick={() => handleDeletePost(post._id)} className="delete-btn" size={40} />
+                </div>
+
               )}
             </div>
           )}
@@ -242,46 +242,48 @@ const PostsByCompany = () => {
             </>
           )}
           <p>Created by: {post.CreatedBy?.adminName || "Unknown"}</p>
-          {post.attachments &&
-            post.attachments.map((attachment, index) => (
-              <div key={index}>
-                {typeof attachment === "string" &&
-                  (attachment.toLowerCase().endsWith(".jpg") ||
-                    attachment.toLowerCase().endsWith(".jpeg") ||
-                    attachment.toLowerCase().endsWith(".png")) ? (
-                  <div className="image-box">
-                    <img src={attachment} alt={`Image ${index}`} />
-                    {/* Download button for images */}
+          <div className="flex1">
+            {post.attachments &&
+              post.attachments.map((attachment, index) => (
+                <div key={index}>
+                  {typeof attachment === "string" &&
+                    (attachment.toLowerCase().endsWith(".jpg") ||
+                      attachment.toLowerCase().endsWith(".jpeg") ||
+                      attachment.toLowerCase().endsWith(".png")) ? (
+                    <div className="image-box">
+                      <img src={attachment} alt={`Image ${index}`} />
+                      {/* Download button for images */}
+                      <div className="download-box">
+                        <a href={attachment} target="_blank" rel="noreferrer">
+                          View
+                        </a>
+                        <a href={attachment} download>
+                          Download Image
+                        </a>
+                      </div>
+                    </div>
+                  ) : typeof attachment === "string" &&
+                    attachment.toLowerCase().endsWith(".pdf") ? (
                     <div className="download-box">
-                      <a href={attachment} target="_blank" rel="noreferrer">
-                        View
-                      </a>
+                      {/* <span>{attachment}</span> */}
                       <a href={attachment} download>
-                        Download Image
+                        {/* PDF icon */}
+                        <img
+                          src="/pdf-icon.png"
+                          alt="PDF icon"
+                          style={{
+                            width: "32px",
+                            height: "32px",
+                            marginRight: "8px",
+                          }}
+                        />
+                        Download PDF
                       </a>
                     </div>
-                  </div>
-                ) : typeof attachment === "string" &&
-                  attachment.toLowerCase().endsWith(".pdf") ? (
-                  <div className="download-box">
-                    {/* <span>{attachment}</span> */}
-                    <a href={attachment} download>
-                      {/* PDF icon */}
-                      <img
-                        src="/pdf-icon.png"
-                        alt="PDF icon"
-                        style={{
-                          width: "32px",
-                          height: "32px",
-                          marginRight: "8px",
-                        }}
-                      />
-                      Download PDF
-                    </a>
-                  </div>
-                ) : null}
-              </div>
-            ))}
+                  ) : null}
+                </div>
+              ))}
+          </div>
 
           {localStorage.getItem("isAdmin") &&
             post.formData &&
@@ -290,35 +292,35 @@ const PostsByCompany = () => {
                 <h3>__________________________</h3>
                 <h2>Form Attached</h2>
                 <form>
-                {Object.keys(post.formData).map((fieldName) => (
-          <div key={fieldName}>
-            <label htmlFor={fieldName}>{fieldName}</label>
-          </div>
-        ))}
-        
-        {post.existingFields && post.existingFields.length > 0 && (
-          <div>
-            <h3>__________________________</h3>
-            <h3>Choose fields for download:- </h3>
-            <div className="attach-form-main">
-            {post.existingFields.map((fieldName) => (
-              <div key={fieldName} className="attach-form">
-                <label htmlFor={fieldName}>{fieldName}</label>
-                <input
-                  type="checkbox"
-                  id={fieldName}
-                  name={fieldName}
-                  value={fieldName}
-                />
-              </div>
-            ))}
-            </div>
-          </div>
-        )}
-        
+                  {Object.keys(post.formData).map((fieldName) => (
+                    <div key={fieldName}>
+                      <label htmlFor={fieldName}>{fieldName}</label>
+                    </div>
+                  ))}
+
+                  {post.existingFields && post.existingFields.length > 0 && (
+                    <div>
+                      <h3>__________________________</h3>
+                      <h3>Choose fields for download:- </h3>
+                      <div className="attach-form-main">
+                        {post.existingFields.map((fieldName) => (
+                          <div key={fieldName} className="attach-form">
+                            <label htmlFor={fieldName}>{fieldName}</label>
+                            <input
+                              type="checkbox"
+                              id={fieldName}
+                              name={fieldName}
+                              value={fieldName}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                 </form>
                 <button onClick={() => handleDownloadResponse(post._id)} className="exel-btn">
-                <SiGooglesheets className='exel'/> Download Response
+                  <SiGooglesheets className='exel' /> Download Response
                 </button>
               </div>
             )}

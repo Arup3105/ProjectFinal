@@ -15,7 +15,7 @@ const NavBar = ({ isAdmin }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const landingpage= location.pathname==="/";
+  const landingpage = location.pathname === "/";
   const isRestrictedPage =
     // location.pathname === "/" ||
     location.pathname === "/Login" ||
@@ -45,7 +45,7 @@ const NavBar = ({ isAdmin }) => {
   const fetchNotificationCount = async () => {
     try {
       const response = await ApiService.getNotificationCount();
-        const Count = response.count
+      const Count = response.count
       setUnreadNotifications(Count);
 
       const notificationData = response.notification;
@@ -142,115 +142,117 @@ const NavBar = ({ isAdmin }) => {
 
   return (
     <div>
-      { !landingpage &&(
-      <nav>
-        <Link to="/" onClick={handleLogoClick}>
-          <Link to="/home" className="logo">
-            <div className="spinner"></div>Logo
+      {!landingpage && (
+        <nav>
+          <Link to="/" onClick={handleLogoClick}>
+            <Link to="/home" className="logo">
+              <div className="spinner"></div>Logo
+            </Link>
           </Link>
-        </Link>
-        <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-
-        {isAdmin && !isRestrictedPage && (
-          <div className="con-btn">
-            <div className="search">
-              <input
-                type="search"
-                placeholder="Search here"
-                value={searchQuery}
-                onChange={handleInputChange}
-              />
-            
-              {searchResults.length > 0 && (
-                <ul className="search-results">
-                  {searchResults.map((result, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleSearchResultClick(result.rollNumber)}
-                    >
-                      {result.username}
-                      <br />
-                      {result.rollNumber}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div className="createPost">
-              <Link to="AdminPostCreation" className="navbtn">
-                Create
-              </Link>
-            </div>
-          </div>
-        )}
-
-        {isRestrictedPage && (
-          <Link to="/Login" className="navbtn">
-            User
-          </Link>
-        )}
-        {isRestrictedPage && (
-          <Link to="/admin" className="navbtn">
-            Admin
-          </Link>
-        )}
-
-        <ul className={menuOpen ? "open" : ""}>
           {!isRestrictedPage && (
-            <li className="nav-Home">
-              <NavLink to="/Feed">
-                <FaHome className="home-hover"/>
-              </NavLink>
-            </li>
+            <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           )}
-          {!isAdmin && !isRestrictedPage && (
-            <li>
-              <div className="nav-icon-notification" onClick={handleNotificationButtonClick}>
-                <FaBell className="bell-hover"/>
-                {unreadNotifications > 0 && <span className="notification-badge">{unreadNotifications}</span>}
+
+          {isAdmin && !isRestrictedPage && (
+            <div className="con-btn">
+              <div className="search">
+                <input
+                  type="search"
+                  placeholder="Search here"
+                  value={searchQuery}
+                  onChange={handleInputChange}
+                />
+
+                {searchResults.length > 0 && (
+                  <ul className="search-results">
+                    {searchResults.map((result, index) => (
+                      <li
+                        key={index}
+                        onClick={() => handleSearchResultClick(result.rollNumber)}
+                      >
+                        {result.username}
+                        <br />
+                        {result.rollNumber}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-              {notificationListOpen && (
-                <div className="notification-list">
-                  <button onClick={markAllNotificationsAsRead} className="bell-btn">Mark All as Read</button>
-                  {notifications.map((notification, index) => (
-                    <div key={index} className="notification-item">
-                      {notification.content}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </li>
+              <div className="createPost">
+                <Link to="AdminPostCreation" className="navbtn">
+                  Create
+                </Link>
+              </div>
+            </div>
           )}
 
-          {!isRestrictedPage && (
-            <li>
-              <Link to="/profile" className="navbtn">
-                <FaUser />
-              </Link>
-            </li>
-            
+          {isRestrictedPage && (
+            <Link to="/Login" className="navbtn">
+              User
+            </Link>
           )}
-          {!isRestrictedPage && (
-            <li>
-              <Link to="/PlacedStudent" className="navbtn">
-                placed
-              </Link>
-            </li>
-            
+          {isRestrictedPage && (
+            <Link to="/admin" className="navbtn">
+              Admin
+            </Link>
           )}
-          {!isRestrictedPage && (
-            <li>
-              <Link to="/" onClick={handleLogout}>
-                <FaPowerOff className="log-hover">LogOut</FaPowerOff>
-              </Link>
-            </li>
-          )}
-        </ul>
-      </nav>
+
+          <ul className={menuOpen ? "open" : ""}>
+            {!isRestrictedPage && (
+              <li className="nav-Home">
+                <NavLink to="/Feed">
+                  <FaHome className="home-hover" />
+                </NavLink>
+              </li>
+            )}
+            {!isAdmin && !isRestrictedPage && (
+              <li>
+                <div className="nav-icon-notification" onClick={handleNotificationButtonClick}>
+                  <FaBell className="bell-hover" />
+                  {unreadNotifications > 0 && <span className="notification-badge">{unreadNotifications}</span>}
+                </div>
+                {notificationListOpen && (
+                  <div className="notification-list">
+                    <button onClick={markAllNotificationsAsRead} className="bell-btn">Mark All as Read</button>
+                    {notifications.map((notification, index) => (
+                      <div key={index} className="notification-item">
+                        {notification.content}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </li>
+            )}
+
+            {!isRestrictedPage && (
+              <li>
+                <Link to="/profile" className="navbtn">
+                  <FaUser />
+                </Link>
+              </li>
+
+            )}
+            {!isRestrictedPage && (
+              <li>
+                <Link to="/PlacedStudent" className="navbtn">
+                  placed
+                </Link>
+              </li>
+
+            )}
+            {!isRestrictedPage && (
+              <li>
+                <Link to="/" onClick={handleLogout}>
+                  <FaPowerOff className="log-hover">LogOut</FaPowerOff>
+                </Link>
+              </li>
+            )}
+          </ul>
+        </nav>
       )}
     </div>
   );
