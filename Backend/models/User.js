@@ -51,5 +51,5 @@ const userSchema = new mongoose.Schema({
   secretCode: String, 
   });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('Userinfo', userSchema);
 module.exports = User;

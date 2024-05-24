@@ -12,12 +12,59 @@
     max-height: 90vh;
 }
 
+.pending-table{
+    font-size: 14px;
+}
+
+.apv-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .apv-btn:hover {
+    background-color: #45a049;
+  }
+
 .ApprovedReq {
     border: 2px solid;
     padding: 20px;
     overflow-y: scroll;
     max-height: 90vh;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+  }
+  
+  th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+  }
+  
+  thead tr {
+    background-color: #f2f2f2;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  
+  tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
 
 .exel {
     width: 3rem;

@@ -75,7 +75,7 @@ function PlacedStudent() {
         const streams = new Set(response.data.map((item) => item.stream));
         const companies = new Set(response.data.map((item) => item.companyName));
         const years = new Set(response.data.map((item) => item.year));
-        
+
         setStreamOptions(Array.from(streams));
         setCompanyOptions(Array.from(companies));
         setYearOptions(Array.from(years));
@@ -147,8 +147,8 @@ function PlacedStudent() {
   let filteredData =
     selectedValue && inputValue
       ? placedData.filter((data) =>
-          data[selectedValue]?.toLowerCase().includes(inputValue?.toLowerCase())
-        )
+        data[selectedValue]?.toLowerCase().includes(inputValue?.toLowerCase())
+      )
       : placedData;
 
   // Filter by year
@@ -186,30 +186,40 @@ function PlacedStudent() {
             <div className="data">
               <div className="pendingReq">
                 <h3>Pending Request</h3>
-                <ul>
-                  {placedData.map(
-                    (data, index) =>
-                      !data.approved && (
-                        <p key={data._id}>
-                          <li>
-                            Name: {data.username}, Roll Number:{' '}
-                            {data.rollNumber}, Company Name: {data.companyName},
-                            Year: {data.year}, Stream: {data.stream}, Package:{' '}
-                            {data.salary}/LPA, Status:{' '}
-                            {data.approved ? 'Approved' : 'Pending'}
-                            <div className="apv-btn-wrap">
-                              <button
-                                onClick={() => handleApproveRequest(data._id)}
-                                className="apv-btn"
-                              >
-                                Approve Request
-                              </button>
-                            </div>
-                          </li>
-                        </p>
-                      )
-                  )}
-                </ul>
+                <table className='pending-table'>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Roll Number</th>
+                      <th>Company Name</th>
+                      <th>Year</th>
+                      <th>Stream</th>
+                      <th>Package (LPA)</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {placedData.map((data) =>
+                      !data.approved ? (
+                        <tr key={data._id}>
+                          <td>{data.username}</td>
+                          <td>{data.rollNumber}</td>
+                          <td>{data.companyName}</td>
+                          <td>{data.year}</td>
+                          <td>{data.stream}</td>
+                          <td>{data.salary}</td>
+                          <td>{data.approved ? 'Approved' : 'Pending'}</td>
+                          <td>
+                            <button onClick={() => handleApproveRequest(data._id)} className="apv-btn">
+                              Approve Request
+                            </button>
+                          </td>
+                        </tr>
+                      ) : null
+                    )}
+                  </tbody>
+                </table>
               </div>
 
               <div className="ApprovedReq">
@@ -294,18 +304,35 @@ function PlacedStudent() {
                     </button>
                   </div>
                 </div>
-                <ul>
-                  {filteredData.map((data) =>
-                    data.approved ? (
-                      <li key={data._id}>
-                        Name: {data.username}, Roll Number: {data.rollNumber},
-                        Company Name: {data.companyName}, Year: {data.year},
-                        Stream: {data.stream}, Package: {data.salary}/LPA, Status:{' '}
-                        {data.approved ? 'Approved' : 'Pending'}
-                      </li>
-                    ) : null
-                  )}
-                </ul>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Roll Number</th>
+                      <th>Company Name</th>
+                      <th>Year</th>
+                      <th>Stream</th>
+                      <th>Package (LPA)</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredData.map((data) =>
+                      data.approved ? (
+                        <tr key={data._id}>
+                          <td>{data.username}</td>
+                          <td>{data.rollNumber}</td>
+                          <td>{data.companyName}</td>
+                          <td>{data.year}</td>
+                          <td>{data.stream}</td>
+                          <td>{data.salary}</td>
+                          <td>{data.approved ? 'Approved' : 'Pending'}</td>
+                        </tr>
+                      ) : null
+                    )}
+                  </tbody>
+                </table>
+
               </div>
             </div>
           )}
@@ -348,15 +375,29 @@ function PlacedStudent() {
             ) : previousSubmits.length > 0 ? (
               <div>
                 <h3>Previous Submits</h3>
-                <ul>
-                  {previousSubmits.map((submit) => (
-                    <li key={submit._id}>
-                      Company Name: {submit.companyName}, Year: {submit.year},
-                      Stream: {submit.stream}, Package: {submit.salary}, Status:{' '}
-                      {submit.approved ? 'Approved' : 'Pending'}
-                    </li>
-                  ))}
-                </ul>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Company Name</th>
+                      <th>Year</th>
+                      <th>Stream</th>
+                      <th>Package (LPA)</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {previousSubmits.map((submit) => (
+                      <tr key={submit._id}>
+                        <td>{submit.companyName}</td>
+                        <td>{submit.year}</td>
+                        <td>{submit.stream}</td>
+                        <td>{submit.salary}</td>
+                        <td>{submit.approved ? 'Approved' : 'Pending'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
               </div>
             ) : (
               <div className='stu-pre'>No previous submits.</div>
