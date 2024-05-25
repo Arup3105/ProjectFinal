@@ -348,6 +348,7 @@ function PlacedStudent() {
               value={formData.companyName}
               onChange={handleInputChange}
               required
+              placeholder='companyName'
             />
             <label htmlFor="year">Year:</label>
             <input
@@ -357,6 +358,7 @@ function PlacedStudent() {
               value={formData.year}
               onChange={handleInputChange}
               required
+              placeholder='Passing year'
             />
             <label htmlFor="package">Package (LPA):</label>
             <input
@@ -366,6 +368,7 @@ function PlacedStudent() {
               value={formData.package}
               onChange={handleInputChange}
               required
+              placeholder='Only Number'
             />
             <button type="submit" className='stu-btn'>Submit</button>
           </form>

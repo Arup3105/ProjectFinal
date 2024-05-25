@@ -30,13 +30,13 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  // const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  const [validationError, setValidationError] = useState(null);
   let isAdmin = localStorage.getItem('isAdmin') === 'true'; 
 
   useEffect(() => {
     const fetchData = async () => {
-      setUserData(null); // Reset userData to null before fetching new data
-      setLoading(true); // Set loading state to true while fetching data
+      setUserData(null); 
+      setLoading(true); 
       try {
         const data = await ApiService.getProfileData();
         setUserData(data);
@@ -44,7 +44,7 @@ const Profile = () => {
         console.error('Error fetching user data:', error);
         setError(error);
       } finally {
-        setLoading(false); // Set loading state to false after fetching data (whether success or error)
+        setLoading(false); 
       }
     };
 
@@ -57,9 +57,16 @@ const Profile = () => {
       ...prevData,
       [name]: value,
     }));
+    setValidationError(null); // Reset validation error on input change
   };
 
   const handleUpdate = async () => {
+    const hasEmptyFields = Object.values(userData).some(value => value === '' || value === null);
+    if (hasEmptyFields) {
+      setValidationError('All fields must be filled out.');
+      return;
+    }
+
     try {
       const updatedData = { ...userData };
 
@@ -97,8 +104,6 @@ const Profile = () => {
     return <div>Error: {error.message}</div>;
   }
 
- 
-
   return (
     <div className="profile-container">
       <div className="bg-image">
@@ -126,19 +131,16 @@ const Profile = () => {
         </div>
       )}
 
-
-
       <div className="profile-details">
-        {/* Personal Details Section */}
         <div className={`flex ${isAdmin ? 'admin-flex' : 'flex'}`}>
           <div className={`profile-info-section ${isAdmin ? 'admin-info-section' : 'profile-info-section'}`}>
 
-          <div className={`profile-info ${isAdmin ? 'admin-info' : 'profile-info'}`} >
+            <div className={`profile-info ${isAdmin ? 'admin-info' : 'profile-info'}`} >
               <h3>Personal Details</h3>
               {userData && Object.entries(userData).map(([key, value]) => (
                 key !== 'password' && key !== 'stream' && !key.endsWith('Sheet') && key !== 'cv' && key !== 'photo' && (
                   <div key={key} className="profile-field" style={{ marginBottom:"10px"}}>
-                    <label >{key.toUpperCase()}:  </label>
+                    <label>{key.toUpperCase()}:  </label>
                     {editMode ? (
                       <input
                         className="text-input"
@@ -146,6 +148,7 @@ const Profile = () => {
                         name={key}
                         value={value}
                         onChange={handleInputChange}
+                        required
                       />
                     ) : (
                       <span className="user-data" style={{ fontSize: "1.5em"}}>{value}</span>
@@ -156,11 +159,8 @@ const Profile = () => {
             </div>
           </div>
 
-
-          {/* Render Documents section only if isAdmin is false */}
           {!isAdmin && (
             <div className="profile-docs-section">
-
               <h3>Documents</h3>
               <div className="profile-docs">
                 {userData && Object.entries(userData).map(([key, value]) => (
@@ -180,10 +180,8 @@ const Profile = () => {
           )}
 
         </div>
-        {/* Render Photo section only if isAdmin is false */}
       </div>
 
-      {/* Edit/Save Buttons */}
       <div className="profile-buttons">
         {editMode ? (
           <>
@@ -194,6 +192,8 @@ const Profile = () => {
           <button className="edit-button" onClick={() => setEditMode(true)}>Edit Profile</button>
         )}
       </div>
+
+      {validationError && <div className="validation-error">{validationError}</div>}
     </div>
   );
 };

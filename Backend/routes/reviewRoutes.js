@@ -37,9 +37,9 @@ router.post('/placed',authMiddleware, async (req, res) => {
 router.get('/prev-submission',authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id;
-    console.log("userid",userId)
+    //console.log("userid",userId)
     const previousSubmits = await PlacedStudent.find({ userId: userId });
-    console.log(previousSubmits)
+    //console.log(previousSubmits)
     res.status(200).json(previousSubmits);
   } catch (error) {
     console.error('Error fetching previous submissions:', error);
