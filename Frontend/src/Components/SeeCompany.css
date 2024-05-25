@@ -9,9 +9,17 @@
     display: block;
     border: 2px solid #ccc;
     border-radius: 10px;
-    padding: 30px;
+    margin-bottom: 15px;
+    padding: 30px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.seeCompanyCard ul li{
+    color: #6c7679;
+    padding: 0;
 }
 
 .seeCompanyCard:hover {

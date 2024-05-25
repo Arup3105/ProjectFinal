@@ -11,6 +11,7 @@
     left: 35%;
     width: 400px;
     z-index: -2;
+    border-radius: 50%;
 }
 
 .card {
