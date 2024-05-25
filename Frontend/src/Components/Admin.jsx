@@ -54,7 +54,7 @@ const Admin = () => {
             </div>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className="admin-btn">
-              <button onClick={handleLogin}>
+              <button onClick={handleLogin} className='admin-log'>
                 Login
               </button>
             </div>

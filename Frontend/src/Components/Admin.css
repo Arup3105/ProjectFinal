@@ -16,7 +16,7 @@
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     height: auto;
-    width: 40%;
+    width: 50%;
     border-radius: 15px;
     padding: 20px;
 }
@@ -77,4 +77,22 @@ button:hover::before{
 .admin-formstyle p span{
     color: black;
     padding: 0 5px ;
+}
+
+.fpassword{
+    color: #000;
+}
+
+@media (max-width: 576px) {
+    .admin-log{
+        padding: 10px 30px;
+    }
+
+    .signin{
+        font-size: 15px;
+    }
+
+    .fpassword{
+        font-size: 15px;
+    }
 }

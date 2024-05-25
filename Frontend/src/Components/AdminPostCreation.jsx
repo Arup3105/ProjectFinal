@@ -237,11 +237,11 @@ const AdminPostCreation = () => {
                 </button>
               </div>
             ))}
-            <button type="button" onClick={handleAddField}>
+            <button type="button" onClick={handleAddField} className="add-field">
               Add Field
             </button>
           </div>
-          <button type="submit">Add Post</button>
+          <button type="submit" className="add-post">Add Post</button>
         </form>
         {loading && (
           <p style={{ color: "blue" }}>This may take a while. Please wait...</p>

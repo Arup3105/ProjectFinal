@@ -37,11 +37,7 @@
 
 .admin-info-section{
   margin-top: 50px;
- margin-left: 510px;
-}
-
-.admin-info{
-  /* margin: 0px 300px; */
+  margin-left: 510px;
 }
 
 .profile-photo-section {
@@ -292,5 +288,10 @@
 
   .edit-button{
     padding: 10px 40px;
+  }
+
+  .admin-info-section{
+    margin-top: 50px;
+    margin-left: 5px;
   }
 }

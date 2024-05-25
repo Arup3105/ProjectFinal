@@ -75,6 +75,7 @@ const AdminRegister = () => {
       <div className='container'>
         <form onSubmit={handleRegister}>
           <div className='formstyle'>
+            <h2>Register Here</h2>
             <div className='username'>
               <div className='name'>
                 <label htmlFor='username'>Name</label>
@@ -109,7 +110,7 @@ const AdminRegister = () => {
             </div>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className='admin-regbtn'>
-              <button type='submit'>Register</button>
+              <button type='submit' className='admin-reg1'>Register</button>
             </div>
             <p>
               <Link to="/admin" className="signin">

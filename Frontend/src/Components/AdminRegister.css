@@ -1,12 +1,23 @@
 .admin-reg{
     position: relative;
     width: 100%;
-    height: 100vh;
     background: linear-gradient(180deg, #fff, #999797);
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.admin-reg form{
+    margin: 20px 0;
+}
+
+.admin-reg h2{
+    color: black;
+}
+
+.admin-reg .container{
+    margin: 20px 0;
 }
 
 .admin-regbtn{
@@ -21,4 +32,21 @@
 .admin-reg p a span{
     color: black;
     padding: 0 5px ;
+}
+
+@media (max-width: 576px){
+    .admin-reg1{
+        padding: 10px 30px;
+    }
+
+    .admin-reg{
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(180deg, #fff, #999797);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }

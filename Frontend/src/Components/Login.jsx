@@ -41,17 +41,6 @@ const Login = () => {
     <div>
       <main className='log-main'>
         <div className="container">
-          {/* <div className="left">
-            <div className="login-imagecontainer">
-              <div className="overlay">
-                <h2>Welcome Back</h2>
-                <p>
-                  Lorem ipsum dolor sit amet, Lorem, ipsum dolor sit <br /> amet
-                  consectetur adipisicing elit. Quae, id!
-                </p>
-              </div>
-            </div>
-          </div> */}
           <div className="form">
             <form onSubmit={handleLogin}>
               <h2>Login Here</h2>
@@ -79,7 +68,9 @@ const Login = () => {
                 </Link>{' '}
                 <br />
                 {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit">Login</button> <br />
+                <div className='log-btn'>
+                <button type="submit" className='user-log'>Login</button> <br />
+                </div>
                 <p>
                   Don't have an account{' '}
                   <Link to='/Register' className='signin'>

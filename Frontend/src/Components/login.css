@@ -56,6 +56,12 @@ nav .logo{
 
 .form h2{
     color: black;
+    margin-top: 20px;
+}
+
+.log-btn{
+    display: flex;
+    justify-content: center;
 }
 
 
@@ -132,24 +138,20 @@ a {
 }
 
 @media screen and (max-width:500px) {
-
+    .log-main{
+        height: 60vh;
+    }
 
     .login-formstyle {
         padding: 20px 40px;
     
     }
-
-     input {
-        border: none;
-        background: transparent;
-        border-bottom: 1px solid;
-        margin-top: 5px;
-        width: 60%;
-        height: 5vh;
-        font-size: 1.3rem;
-    }
     
      input::placeholder {
         font-size: 1rem;
+    }
+
+    .user-log{
+        padding: 10px 30px;
     }
 }

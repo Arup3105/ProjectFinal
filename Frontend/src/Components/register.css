@@ -1,5 +1,4 @@
 main {
-    /* position: relative; */
     width: 100%;
     height: 190vh;
     background: linear-gradient(180deg, #fff, #999797);
@@ -11,41 +10,16 @@ main {
     z-index: -3;
 }
 
+form {
+    display: block;
+}
+
 .container {
     border: .2px solid #fff;
 }
 
-.imagecontainer {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-image: url(/login.jpg);
-    background-size: cover;
-    background-position: center;
-    color: #ffffff;
-    text-align: center;
-}
-
-.overlay {
-    padding: 60% 5%;
-}
-
-
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-
 form h2 {
     text-align: center;
-    /* margin-top: -30px; */
     margin: 1%;
     color: #fff;
     font-weight: bolder;
@@ -53,16 +27,12 @@ form h2 {
 
 .formstyle {
     padding: 10px 60px;
-
-
 }
 
-.username {
+.username,
+.Re-password,
+.password {
     margin: 20px 0;
-}
-
-.Re-password {
-    margin-top: 20px;
 }
 
 label {
@@ -86,9 +56,6 @@ input::placeholder {
     color: #fff;
 }
 
-
-
-
 .form p,
 a {
     color: white;
@@ -101,47 +68,77 @@ a {
     margin-left: 5px;
 }
 
-.numbers {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin: 20px 0;
-}
-
-.contact {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.tenth {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin: 20px 0;
-}
-
-.twelve {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
+.numbers,
+.contact,
+.tenth,
+.twelve,
 .sem-marks {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 15px;
-    row-gap: 20px;
-}
-
-.password {
-    margin-top: 20px;
+    gap: 15px;
+    margin: 20px 0;
 }
 
 .reg-btn {
     padding: 10px 300px;
     display: flex;
     justify-content: center;
+}
+
+@media (max-width: 576px) {
+    main {
+        width: 100%;
+        height: 150vh;
+        position: absolute;
+        z-index: -3;
+    }
+
+    .formstyle {
+        padding: 10px 10px;
+    }
+
+    .reg-btn {
+        padding: 10px 50px;
+    }
+
+    input {
+        border: none;
+        background: transparent;
+        border-bottom: 1px solid;
+        margin-top: 5px;
+        width: 100%;
+        height: 3vh;
+        color: #ffff;
+        font-size: 1rem;
+    }
+
+    label {
+        font-size: 1rem;
+        padding-right: 10px;
+    }
+
+    input::placeholder {
+        font-size: .8rem;
+        color: #fff;
+    }
+
+    .form p,
+    a {
+        font-size: 16px;
+    }
+
+    .numbers,
+    .contact,
+    .tenth,
+    .twelve,
+    .sem-marks {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin: 20px 0;
+    }
+}
+
+.user-btn {
+    padding: 10px 30px;
 }
