@@ -120,7 +120,7 @@ const AdminPostCreation = () => {
           </div>
           <div className="input-box">
           <label>Content</label>
-            <input
+            <textarea
               type="text"
               value={content}
               required="required"
@@ -240,14 +240,15 @@ const AdminPostCreation = () => {
             <button type="button" onClick={handleAddField} className="add-field">
               Add Field
             </button>
-          </div>
-          <button type="submit" className="add-post">Add Post</button>
-        </form>
-        {loading && (
+            {loading && (
           <p style={{ color: "blue" }}>This may take a while. Please wait...</p>
         )}
         {message && <p style={{ color: "green" }}>{message}</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
+          </div>
+          <button type="submit" className="add-post">Add Post</button>
+        </form>
+        
       </div>
     </div>
   );

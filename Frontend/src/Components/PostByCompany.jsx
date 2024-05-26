@@ -30,6 +30,7 @@ const PostsByCompany = () => {
     )
       .then((data) => {
         if (Array.isArray(data)) {
+          console.log(data)
           setPosts(data.reverse());
           setLoading(false);
 
@@ -110,47 +111,70 @@ const PostsByCompany = () => {
     setEditPostId(null);
   };
 
-  const handleFormSubmitClick = async () => {
-    try {
-      const formDataToSend = {};
-      console.log(formDataValues);
-      Object.keys(formDataValues).forEach((postId) => {
-        const postData = formDataValues[postId];
-        formDataToSend["id"] = postId;
-        Object.keys(postData).forEach((fieldName) => {
-          formDataToSend[fieldName] = postData[fieldName];
-        });
-      });
-      console.log(formDataToSend);
-      await ApiService.formSubmit(formDataToSend);
-      alert("Form submitted successfully.");
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Error submitting form.");
+  const handleFormSubmitClick = async (e, postId) => {
+    e.preventDefault();
+    const postData = formDataValues[postId] || {};
+
+    const formDataToSend = {
+        id: postId,
+        ...postData,
+    };
+
+    // Validate required fields
+    const requiredFields = Object.keys(formField);
+    const missingFields = requiredFields.filter((field) => !formDataToSend[field]);
+
+    if (missingFields.length > 0) {
+        alert(`Please fill out all required fields: ${missingFields.join(", ")}`);
+        return; // Prevent form submission
     }
-  };
 
-  const handleFormInputChange = (e, fieldName, postid) => {
+    try {
+        await ApiService.formSubmit(formDataToSend);
+        alert("Form submitted successfully.");
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    } catch (error) {
+        console.error("Error submitting form:", error);
+        alert("Error submitting form.");
+    }
+};
+
+const handleFormInputChange = (e, fieldName, postId) => {
     setFormDataValues((prevValues) => {
-      const currentPostValues = prevValues[postid] || {};
-
-      const updatedPostValues = {
-        ...currentPostValues,
-        [fieldName]: e.target.value,
-      };
-
-      const updatedValues = {
-        ...prevValues,
-        [postid]: updatedPostValues,
-      };
-
-      console.log("Updated FormDataValues:", updatedValues);
-      return updatedValues;
+        const currentPostValues = prevValues[postId] || {};
+        const updatedPostValues = {
+            ...currentPostValues,
+            [fieldName]: e.target.value,
+        };
+        const updatedValues = {
+            ...prevValues,
+            [postId]: updatedPostValues,
+        };
+        console.log("Updated FormDataValues:", updatedValues);
+        return updatedValues;
     });
-  };
+};
+
+  // const handleFormInputChange = (e, fieldName, postid) => {
+  //   setFormDataValues((prevValues) => {
+  //     const currentPostValues = prevValues[postid] || {};
+
+  //     const updatedPostValues = {
+  //       ...currentPostValues,
+  //       [fieldName]: e.target.value,
+  //     };
+
+  //     const updatedValues = {
+  //       ...prevValues,
+  //       [postid]: updatedPostValues,
+  //     };
+
+  //     console.log("Updated FormDataValues:", updatedValues);
+  //     return updatedValues;
+  //   });
+  // };
 
   const handleDownloadResponse = async (postId) => {
     try {
@@ -180,6 +204,14 @@ const PostsByCompany = () => {
     }
   };
 
+  const convertContentToHTML = (content) => {
+    const htmlContent = content
+      .replace(/\n/g, "<br />")
+      .replace(/\s\s+/g, (match) => {
+        return "&nbsp;".repeat(match.length - 1) + " ";
+      });
+    return { __html: htmlContent };
+  };
 
   if (loading) {
     return <div className='load-body'>
@@ -238,7 +270,7 @@ const PostsByCompany = () => {
           ) : (
             <>
               <h4>{post.title}</h4>
-              <p>{post.content}</p>
+              <div dangerouslySetInnerHTML={convertContentToHTML(post.content)}></div>
             </>
           )}
           <p>Created by: {post.CreatedBy?.adminName || "Unknown"}</p>
@@ -327,35 +359,45 @@ const PostsByCompany = () => {
 
           {!localStorage.getItem("isAdmin") &&
             (post.formData || post.submittedStatus) && (
-              <div className="form-container attach-form">
+              <div className="form-containeAattach-form">
+                <h2>_________________________________</h2>
                 <h2>Form for Interested Student</h2>
                 {post.submittedStatus ? (
-                  <p>Form already submitted.</p>
-                ) : (
-                  <form>
-                    {Object.keys(formField).map((fieldName) =>
-                      post.formData[fieldName] !== undefined ? (
-                        <div key={`${post._id}-${fieldName}`}>
-                          <label htmlFor={fieldName}>{fieldName}</label>
-                          <input
-                            type="text"
-                            id={fieldName}
-                            name={fieldName}
-                            value={
-                              (formDataValues[post._id] &&
-                                formDataValues[post._id][fieldName]) ||
-                              ""
-                            }
-                            onChange={(e) =>
-                              handleFormInputChange(e, fieldName, post._id)
-                            }
-                          />
-                        </div>
-                      ) : null
-                    )}
-                    <button onClick={handleFormSubmitClick} className="save-btn">Save Form</button>
-                  </form>
-                )}
+    <p>Form already submitted.</p>
+) : (
+  <form>
+      {Object.keys(formField).map((fieldName) =>
+          post.formData[fieldName] !== undefined ? (
+              <div key={`${post._id}-${fieldName}`}>
+                  <label htmlFor={fieldName}>{fieldName}</label>
+                  <input
+                      type="text"
+                      id={fieldName}
+                      name={fieldName}
+                      value={
+                          (formDataValues[post._id] &&
+                              formDataValues[post._id][fieldName]) ||
+                          ""
+                      }
+                      onChange={(e) =>
+                          handleFormInputChange(e, fieldName, post._id)
+                      }
+                  />
+              </div>
+          ) : null
+      )}
+      <button
+          onClick={(e) => handleFormSubmitClick(e, post._id)}
+          className="save-btn"
+          disabled={Object.values(formDataValues[post._id] || {}).some(
+              (value) => !value || value.trim() === ""
+          )}
+      >
+          Submit Response
+      </button>
+  </form>
+)}
+
               </div>
             )}
 

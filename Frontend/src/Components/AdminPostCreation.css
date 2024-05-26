@@ -63,6 +63,12 @@ a {
   position: relative;
   /* width: 250px; */
 }
+.input-box textarea {
+  position: relative;
+  width: 100%; /* Adjust as necessary */
+  height: 150px; /* Adjust as necessary */
+  resize: vertical; /* Allows the user to resize the textarea vertically */
+}
 
 .input-box input{
   width: 100%;

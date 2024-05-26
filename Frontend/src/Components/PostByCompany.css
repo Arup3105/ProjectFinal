@@ -27,6 +27,11 @@
 .post:hover {
     transform: translateY(-5px);
 }
+.form-containeAattach-form input{
+    padding: 10px;
+    width: 250px;
+    margin: 20px;
+}
 
 .post h4 {
     margin-bottom: 10px;
