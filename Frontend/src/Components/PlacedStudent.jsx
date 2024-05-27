@@ -246,7 +246,6 @@ function PlacedStudent() {
                     <option value="username">Username</option>
                     <option value="stream">Stream</option>
                     <option value="companyName">Company Name</option>
-                    <option value="multipleOffers">Multiple Offers</option>
                   </select>
                   {selectedValue === 'username' && (
                     <input className='Search-value'
