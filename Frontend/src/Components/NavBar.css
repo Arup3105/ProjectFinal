@@ -331,3 +331,8 @@
   .notification-item button:hover {
     background-color: #0056b3;
   }
+
+  .logo img{
+    width: 60px;
+    border-radius: 50%;
+  }

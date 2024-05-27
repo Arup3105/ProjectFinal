@@ -144,10 +144,8 @@ const NavBar = ({ isAdmin }) => {
     <div>
       {!landingpage && (
         <nav>
-          <Link to="/" onClick={handleLogoClick}>
-            <Link to="/home" className="logo">
-              <div className="spinner"></div>Logo
-            </Link>
+          <Link to="/" className="logo" onClick={handleLogoClick}>
+                <img src="/apc.png" alt="" />
           </Link>
           {!isRestrictedPage && (
             <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>

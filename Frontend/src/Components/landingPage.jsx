@@ -12,7 +12,9 @@ function LandingPage() {
     <div className='landingpage'>
       <div>
         <nav>
-          <div className="logo">Logo</div>
+        <div className="logo">
+          <img src="/apc.png" alt="" />
+          </div>
           <div className="menu" onClick={() => setMenuopen(!menuopen)}>
             <span></span>
             <span></span>
