@@ -61,7 +61,7 @@ function LandingPage() {
         <div className="right">
           <h1>Get <span>Placed</span> With Us</h1>
           <h1>Get <span>Trained</span> By The Industry Experts</h1>
-          <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas minus eos enim impedit corrupti sapiente nostrum, ipsa, saepe, tempore excepturi obcaecati inventore distinctio dicta accusantium provident qui. Dolores, accusantium quidem.</p>
+          <p>The Placement Cell is integral to securing job opportunities for both undergraduate and postgraduate students. By maintaining strong connections with reputable firms and industrial establishments, the Placement Cell operates year-round to facilitate interactions between companies and graduates. The success rate of students securing positions through campus interviews continues to grow steadily.</p>
           <div className="landing-btn">
             <Link to='/Login'><button className="get-started">Get Started With Us</button></Link>
             <button className="get-started">Our Success Stories</button>
